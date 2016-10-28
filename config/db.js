@@ -1,21 +1,26 @@
-var mysql = require('mysql');
+var Sequelize = require('sequelize');
 
 var secret = require('./secret.json');
 
-var connection = mysql.createConnection({
-  host     : secret.host,
-  user     : secret.user,
-  password : secret.password,
-  database : secret.database
-});
 
-connection.connect(function(err) {
-  if (err) {
-    console.error('error connecting: ' + err.stack);
-    return;
-  }
+var sequelize = new Sequelize('cookiebook', 'root', 'f4b8SWtgSvd7swej@', {
+  host: secret.host,
+  port: secret.port,
+  dialect: 'mysql',
+  logging: false
+})
 
-  console.log('connected as id ' + connection.threadId);
-});
+sequelize
+  .authenticate()
+  .then(function(err) {
+    console.log('Sequelize connection has been established successfully.');
+  })
+  .catch(function (err) {
+    console.log('Unable to connect to the database:', err);
+  });
 
-module.exports = connection;
+var db = {};
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;

@@ -5,19 +5,18 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
 var app = express();
 
 var mysql = require('mysql');
 
-var seqDb = require('./config/sequelize');
+var db = require('./config/db');
 
-// var db = require('./config/db');
+require('./app/routes')(app);
+
+// var mysqldb = require('./config/old_db');
 
 // THIS IS HOW TO QUERY USING MYSQL
-// db.query('SELECT * FROM `User`', function(err, results, fields) {
+// mysqldb.query('SELECT * FROM `User`', function(err, results, fields) {
 //   if (err) {
 //     console.log('error querying: ' + err);
 //     return;
@@ -36,9 +35,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', routes);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
