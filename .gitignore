@@ -1,0 +1,18 @@
+# Github Node Default
+
+*.log
+
+logs
+results
+
+npm-debug.log
+node_modules
+
+node_modules/
+public/lib
+
+# Configuration Files
+/config/secret.json
+
+*.local
+

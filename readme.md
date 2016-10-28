@@ -1,0 +1,1 @@
+set DEBUG=cookiebook:* & npm start
