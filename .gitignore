@@ -1,6 +1,10 @@
-# Github Node Default
-
+*.seed
 *.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
 
 logs
 results
@@ -9,10 +13,9 @@ npm-debug.log
 node_modules
 
 node_modules/
-public/lib
+public/libs
 
 # Configuration Files
 /config/secret.json
 
 *.local
-
