@@ -1,52 +1,47 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Person', {
-    personId: {
+  return sequelize.define('Advertisement', {
+    advertisementId: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
-      field: 'personId'
+      field: 'advertisementId'
     },
-    lastName: {
+    adType: {
       type: DataTypes.STRING,
       allowNull: true,
-      field: 'lastName'
+      field: 'adType'
     },
-    firstName: {
+    company: {
       type: DataTypes.STRING,
       allowNull: true,
-      field: 'firstName'
+      field: 'company'
     },
-    address: {
+    itemName: {
       type: DataTypes.STRING,
       allowNull: true,
-      field: 'address'
+      field: 'itemName'
     },
-    city: {
+    content: {
       type: DataTypes.STRING,
       allowNull: true,
-      field: 'city'
+      field: 'content'
     },
-    state: {
-      type: DataTypes.CHAR(2),
+    unitPrice: {
+      type: DataTypes.FLOAT,
       allowNull: true,
-      field: 'state'
+      field: 'unitPrice'
     },
-    zipCode: {
+    availableUnits: {
       type: DataTypes.INTEGER(11),
       allowNull: true,
-      field: 'zipCode'
-    },
-    telephone: {
-      type: DataTypes.BIGINT,
-      allowNull: true,
-      field: 'telephone'
+      field: 'availableUnits'
     }
   }, 
   {
     timestamps: false,
-    tableName: 'Person'
+    tableName: 'Advertisement'
   });
 };

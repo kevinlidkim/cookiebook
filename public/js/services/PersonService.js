@@ -2,13 +2,13 @@ angular.module('PersonService', []).factory('Person', ['$http', function($http) 
   
   return {
     get : function() {
-      return $http.get('/api/persons');
+      return $http.get('/api/oldpersons');
     },
-    create : function(personData) {
-      return $http.post('/api/persons', personData);
+    create : function(oldPersonData) {
+      return $http.post('/api/oldpersons', oldPersonData);
     },
     delete : function(id) {
-      return $http.delete('/api/persons' + id);
+      return $http.delete('/api/oldpersons' + id);
     }
   }
 
