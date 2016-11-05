@@ -18,20 +18,10 @@ module.exports = function(sequelize, DataTypes) {
       },
       field: 'personId'
     },
-    accountNumber: {
-      type: DataTypes.INTEGER(11),
-      allowNull: true,
-      field: 'accountNumber'
-    },
     accountCreateDate: {
       type: DataTypes.DATE,
       allowNull: false,
       field: 'accountCreateDate'
-    },
-    creditCard: {
-      type: DataTypes.BIGINT,
-      allowNull: true,
-      field: 'creditCard'
     },
     adPreferences: {
       type: DataTypes.STRING,

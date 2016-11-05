@@ -32,7 +32,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER(11),
       allowNull: true,
       references: {
-        model: 'User',
+        model: 'PurchaseAccount',
         key: 'accountNumber'
       },
       field: 'accountNumber'

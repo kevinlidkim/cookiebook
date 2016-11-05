@@ -5,11 +5,10 @@ var db = require('../config/db'),
 
 module.exports = function(app) {
 
-  // app.get('/api/oldpersons', function(req, res) {
-  //   OldPerson.findAll().then(function(oldpersons) {
-  //     res.json(oldpersons);
-  //   })
-  // });
+  var persons = require('./controllers/persons');
+  app.get('/persons/find', persons.findAll);
+  app.get('/persons/:id', persons.show);
+  app.post('/persons/signup', persons.create);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');
