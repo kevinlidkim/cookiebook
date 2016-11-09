@@ -2,9 +2,9 @@ var db = require('../../config/db');
 
 exports.findAll = function(req, res) {
 
-  db.Person.findAll()
-    .then(function (persons) {
-      res.status(200).json(persons);
+  db.Advertisement.findAll()
+    .then(function (advertisements) {
+      res.status(200).json(advertisements);
     })
     .catch(function (err) {
       res.status(500).json(err);
@@ -13,9 +13,9 @@ exports.findAll = function(req, res) {
 
 exports.show = function(req, res) {
 
-  db.Person.findById(req.params.id)
-    .then(function (person) {
-      res.status(200).json(person);
+  db.Advertisement.findById(req.params.id)
+    .then(function (advertisement) {
+      res.status(200).json(advertisement);
     })
     .catch(function (err) {
       res.status(500).json(err);
@@ -24,20 +24,18 @@ exports.show = function(req, res) {
 
 exports.create = function(req, res) {
 
-  var person = db.Person.create(req.body)
-    .then(function (newPerson) {
-      res.status(200).json(newPerson);
-      return newPerson;
+  var advertisement = db.Advertisement.create(req.body)
+    .then(function (newAdvertisement) {
+      res.status(200).json(newAdvertisement);
     })
     .catch(function (err) {
       res.status(500).json(err);
-      return err;
     });
 }
 
 exports.update = function(req, res) {
 
-  db.Person.update(req.body, {
+  db.Advertisement.update(req.body, {
     where: {
       id: req.params.id
     }
@@ -52,7 +50,7 @@ exports.update = function(req, res) {
 
 exports.delete = function(req, res) {
 
-  db.Person.destroy({
+  db.Advertisement.destroy({
     where: {
       id: req.params.id
     }

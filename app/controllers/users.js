@@ -2,9 +2,9 @@ var db = require('../../config/db');
 
 exports.findAll = function(req, res) {
 
-  db.Person.findAll()
-    .then(function (persons) {
-      res.status(200).json(persons);
+  db.User.findAll()
+    .then(function (users) {
+      res.status(200).json(users);
     })
     .catch(function (err) {
       res.status(500).json(err);
@@ -13,9 +13,9 @@ exports.findAll = function(req, res) {
 
 exports.show = function(req, res) {
 
-  db.Person.findById(req.params.id)
-    .then(function (person) {
-      res.status(200).json(person);
+  db.User.findById(req.params.id)
+    .then(function (user) {
+      res.status(200).json(user);
     })
     .catch(function (err) {
       res.status(500).json(err);
@@ -24,20 +24,18 @@ exports.show = function(req, res) {
 
 exports.create = function(req, res) {
 
-  var person = db.Person.create(req.body)
-    .then(function (newPerson) {
-      res.status(200).json(newPerson);
-      return newPerson;
+  var user = db.User.create(req.body)
+    .then(function (newUser) {
+      res.status(200).json(newUser);
     })
     .catch(function (err) {
       res.status(500).json(err);
-      return err;
     });
 }
 
 exports.update = function(req, res) {
 
-  db.Person.update(req.body, {
+  db.User.update(req.body, {
     where: {
       id: req.params.id
     }
@@ -52,7 +50,7 @@ exports.update = function(req, res) {
 
 exports.delete = function(req, res) {
 
-  db.Person.destroy({
+  db.User.destroy({
     where: {
       id: req.params.id
     }
