@@ -4,8 +4,14 @@ angular.module('UserServ', []).factory('UserService', ['$http', function($http) 
     get : function() {
       return $http.get('/api/persons');
     },
-    create : function(person) {
-      return $http.post('/signup', person)
+    create : function(user) {
+      return $http.post('/signup', user)
+        .then(function(res) {
+          return res.data;
+      });
+    },
+    login : function(user) {
+      return $http.post('/login', user)
         .then(function(res) {
           return res.data;
       });

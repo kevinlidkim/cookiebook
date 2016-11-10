@@ -13,7 +13,7 @@ var session        = require('express-session');
   
 // config files
 var db = require('./config/db');
-// require('./config/passport')(passport);
+require('./config/passport')(passport);
 
 app.use(session({ secret: 'secretsecret' })); // session secret
 app.use(passport.initialize());

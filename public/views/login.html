@@ -14,9 +14,13 @@
         <input type="password" id="password" class="form-control" ng-model="user.password"/>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary">Login</button>
+        <button class="btn btn-primary" ng-click="login(user)">Login</button>
       </div>
     </form>
   </div>
+
+  <p>Need an account? <a href="/signup">Sign up</a></p>
+
+  <p>{{ tagline }}</p>
 
 </div>
