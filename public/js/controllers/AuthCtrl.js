@@ -1,22 +1,23 @@
 angular.module('AuthCtrl', []).controller('AuthController', ['$scope', '$window', 'UserService', function($scope, $window, UserService) {
 
   $scope.signUp = function(user) {
-    UserService.create($scope.user);
+    UserService.create(user);
   }
 
   $scope.login = function(user) {
-    $scope.tagline = $scope.user.email;
-    UserService.login($scope.user).
-      then(function(res) {
+    UserService.login(user)
+      .then(function(res) {
         if(res.data.status === 'success') {
-          $window.location.href = '/';
+          UserService.storeUser(user);
+
+          // redirecting will cause all information on the page to be lost;
+          // $window.location.href = '/profile';
         }
         else {
-          $window.location.href = '/login';
+          // alert("bad credentials");
         }
       })
       .catch(function(err) {
-        console.log('didnt log in correctly');
       });
   }
   

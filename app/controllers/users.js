@@ -27,6 +27,17 @@ exports.login = function(req, res) {
   return res.send({status: 'success', message: 'User login successfully.'});
 }
 
+exports.logout = function(req, res) {
+  req.logout();
+  return res.send({status: 'success', message: 'User logout successfully.'});
+}
+
+exports.profile = function(req, res) {
+
+  // console.log(req);
+  // return res.send({status: 'success', message: 'LOGINGINGIGNIGNIGN.'});
+}
+
 exports.create = function(req, res) {
 
   var person = db.Person.create(req.body)
