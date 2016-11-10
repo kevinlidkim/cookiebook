@@ -13,19 +13,16 @@ module.exports = function(app, passport) {
   app.post('/api/persons', persons.create);
 
   app.get('/yo', users.findAll); // lists all users
-  // app.get('/signup', function(req, res) {
-  //   res.redirect('/');
-  // });
+  
   app.post('/signup', users.create);
 
-  // app.get('login', function(req, res) {
-  //   res.redirect('/');
-  // })
   app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/login',
-    failureRedirect: '/signup',
+    failureRedirect: '/login',
     failureFlash: true
   }), users.login);
+
+
+  // app.post('/login', passport.authenticate('local-login'), users.login);
 
 
   app.get('*', function(req, res) {

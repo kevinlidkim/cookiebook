@@ -24,13 +24,6 @@ exports.show = function(req, res) {
 
 exports.login = function(req, res) {
 
-  console.log('req');
-  console.log(req);
-  console.log('');
-  console.log('res');
-  console.log(res);
-
-  // res.status(200);
   return res.send({status: 'success', message: 'User login successfully.'});
 }
 

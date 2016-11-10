@@ -13,7 +13,8 @@ angular.module('UserServ', []).factory('UserService', ['$http', function($http) 
     login : function(user) {
       return $http.post('/login', user)
         .then(function(res) {
-          return res.data;
+          console.log('it gets a response');
+          return res;
       });
     },
     delete : function(id) {

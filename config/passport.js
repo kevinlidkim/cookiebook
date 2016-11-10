@@ -5,7 +5,7 @@ var LocalStrategy = require('passport-local').Strategy;
 module.exports = function(passport) {
 
   passport.serializeUser(function(user, done) {
-    done(null, user.userId);
+    return done(null, user.userId);
   });
 
   passport.deserializeUser(function(id, done) {
@@ -27,11 +27,12 @@ module.exports = function(passport) {
   },
   function(req, email, password, done) {
     db.User.find({ where: { email: email }}).then(function(user) {
+
       if (!user) {
-        return done(null, false, req.flash('signinMessage', 'Unknown user'));
+        return done(null, false, { message: 'Unknown user' });
       } 
       else if (user.hashedPassword != password) {
-        return done(null, false, req.flash('signinMessage', 'Invalid password'));
+        return done(null, false, { message: 'Invalid password' });
       } 
       else {
         return done(null, user);
@@ -42,26 +43,4 @@ module.exports = function(passport) {
 
   }));
 
-  // passport.use('local-login', new LocalStrategy({
-  //   usernameField : 'email',
-  //   passwordField : 'password',
-  //   passReqToCallback : true
-  // },
-  // function(req, email, password, done) {
-
-  //   db.User.find({ where: { email: email }}).then(function(user) {
-
-  //     if (!user) {
-  //       return done(null, false, req.flash('signinMessage', 'Unknown user'));
-  //     } 
-  //     else if (!user.authenticate(password)) {
-  //       return done(null, false, req.flash('signinMessage', 'Invalid password'));
-  //     } 
-  //     else {
-  //       return done(null, user);
-  //     }
-
-  //   });
-
-  // }));
 };
