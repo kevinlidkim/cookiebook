@@ -3,7 +3,7 @@ var db = require('../config/db'),
     sequelize = db.sequelize;
     Sequelize = db.Sequelize;
 
-module.exports = function(app) {
+module.exports = function(app, passport) {
 
   var persons = require('./controllers/persons');
   var users = require('./controllers/users');
@@ -18,5 +18,14 @@ module.exports = function(app) {
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');
   });
+
+  function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    else {
+      res.redirect('/');
+    }
+  }
 
 };
