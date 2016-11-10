@@ -1,11 +1,11 @@
-angular.module('PersonServ', []).factory('PersonService', ['$http', function($http) {
+angular.module('UserServ', []).factory('UserService', ['$http', function($http) {
   
   return {
     get : function() {
       return $http.get('/api/persons');
     },
     create : function(person) {
-      return $http.post('/api/persons', person)
+      return $http.post('/signup', person)
         .then(function(res) {
           return res.data;
       });

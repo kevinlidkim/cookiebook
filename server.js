@@ -3,12 +3,22 @@ var express        = require('express');
 var app            = express();
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
+var flash          = require('connect-flash');
+var mysql          = require('mysql');
+var passport       = require('passport');
+var session        = require('express-session');
+
 
 // configuration ===========================================
   
 // config files
-var mysql = require('mysql');
 var db = require('./config/db');
+// require('./config/passport')(passport);
+
+app.use(session({ secret: 'secretsecret' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 var port = process.env.PORT || 8001; // set our port
 
@@ -21,7 +31,7 @@ app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-M
 app.use(express.static(__dirname + '/public')); // set the static files location /public/img will be /img for users
 
 // routes ==================================================
-require('./app/routes')(app); // pass our application into our routes
+require('./app/routes')(app, passport); // pass our application into our routes
 
 // start app ===============================================
 app.listen(port); 

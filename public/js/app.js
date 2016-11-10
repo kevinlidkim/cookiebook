@@ -1,1 +1,1 @@
-angular.module('sampleApp', ['ngRoute', 'appRoutes', 'MainCtrl', 'PersonCtrl', 'PersonServ']);
+angular.module('sampleApp', ['ngRoute', 'appRoutes', 'MainCtrl', 'PersonCtrl', 'PersonServ', 'UserServ']);

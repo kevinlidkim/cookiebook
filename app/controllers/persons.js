@@ -1,5 +1,6 @@
 var db = require('../../config/db');
 
+
 exports.findAll = function(req, res) {
 
   db.Person.findAll()
@@ -26,12 +27,23 @@ exports.create = function(req, res) {
 
   var person = db.Person.create(req.body)
     .then(function (newPerson) {
-      res.status(200).json(newPerson);
-      return newPerson;
+
+      var date = new Date();
+      var userData = {
+        email: req.body.email,
+        hashedPassword: req.body.password,
+        accountCreateDate: date,
+        personId: newPerson.personId,
+      };
+      var user = db.User.create(userData)
+
+      return user;
+    })
+    .then(function (newUser) {
+      res.status(200).json(newUser);
     })
     .catch(function (err) {
       res.status(500).json(err);
-      return err;
     });
 }
 

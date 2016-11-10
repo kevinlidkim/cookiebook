@@ -24,7 +24,20 @@ exports.show = function(req, res) {
 
 exports.create = function(req, res) {
 
-  var user = db.User.create(req.body)
+  var person = db.Person.create(req.body)
+    .then(function (newPerson) {
+
+      var date = new Date();
+      var userData = {
+        email: req.body.email,
+        hashedPassword: req.body.password,
+        accountCreateDate: date,
+        personId: newPerson.personId,
+      };
+      var user = db.User.create(userData)
+
+      return user;
+    })
     .then(function (newUser) {
       res.status(200).json(newUser);
     })
