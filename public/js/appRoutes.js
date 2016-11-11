@@ -5,32 +5,36 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 		// home page
 		.when('/', {
 			templateUrl: 'views/home.html',
-			controller: 'MainController'
-		})
-
-		.when('/persons', {
-			templateUrl: 'views/person.html',
-			controller: 'PersonController'
+			controller: 'MainController',
+			access: {restricted: true}
 		})
 
 		.when('/signup', {
 			templateUrl: 'views/signup.html',
-			controller: 'SignUpController'
+			controller: 'SignUpController',
+			access: {restricted: false}
 		})
 
 		.when('/login', {
 			templateUrl: 'views/login.html',
-			controller: 'LoginController'
+			controller: 'LoginController',
+			access: {restricted: false}
 		})
 
 		.when('/logout', {
-			controller: 'LogOutController'
+			controller: 'LogoutController',
+			access: {restricted: true}
 		})
 
 		.when('/profile', {
 			templateUrl: 'views/profile.html',
-			controller: 'UserController'
-		});
+			controller: 'UserController',
+			access: {restricted: true}
+		})
+
+		.otherwise({
+      redirectTo: '/'
+    });
 
 	$locationProvider.html5Mode(true);
 
@@ -41,12 +45,9 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 .run(function ($rootScope, $location, $route, UserService) {
   $rootScope.$on('$routeChangeStart',
     function (event, next, current) {
-    if (UserService.isLoggedIn() === false) {
-    	console.log('not loggedin');
-      // $location.path('/login');
-    } else {
-			console.log('logged in');
+    if (next.access.restricted && UserService.isLoggedIn() === false) {
+      $location.path('/login');
+      $route.reload();
     }
-    
   });
 });

@@ -3,15 +3,6 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
   var user = null;
 
   return {
-    storeUser : function(data) {
-      localStorage.setItem('user', data.email);
-    },
-    getUser : function() {
-      return localStorage.getItem('user');
-    },
-    delete : function(id) {
-      return $http.delete('/api/persons' + id);
-    },
     signup : function(userData) {
       var deferred = $q.defer();
 
@@ -63,7 +54,6 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     },
     isLoggedIn : function() {
       if (user) {
-        console.log(user);
         return true;
       } else {
         return false;
