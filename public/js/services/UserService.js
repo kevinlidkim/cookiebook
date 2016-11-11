@@ -83,8 +83,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
       return loggedInUser;
     },
     getPersonalPageId : function(userId) {
-
-      return $http.get('/page/me', userId)
+      return $http.get('/page/me')
         .success(function(data) {
           return data.data;
         })
@@ -93,7 +92,14 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         });
     },
     postStatus : function(data) {
-
+      return $http.post('/post', data)
+        .success(function(data) {
+        })
+        .error(function(data) {
+          return null;
+        });
+    },
+    loadPage : function(data) {
       return $http.post('/page', data)
         .success(function(data) {
           console.log(data);
@@ -101,7 +107,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         .error(function(data) {
           console.log(data);
           return null;
-        });
+        })
     }
   }
 

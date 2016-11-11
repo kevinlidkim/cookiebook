@@ -30,8 +30,8 @@ module.exports = function(app, passport) {
   app.get('/status', users.auth);
 
 
-  // app.get('/page', pages.getPersonalPage);
-  app.post('/page', users.makePost);
+  app.post('/page', pages.loadPage);
+  app.post('/post', users.makePost);
   app.get('/page/me', pages.getPersonalPageId);
 
   app.get('*', function(req, res) {

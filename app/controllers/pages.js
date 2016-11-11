@@ -1,32 +1,5 @@
 var db = require('../../config/db');
-
-// exports.getPersonalPage = function(req, res) {
-
-//   db.OwnsPage.find({ where: {personId: req.personId} })
-//     .then(function(relation) {
-//       var pageId = relation.page;
-//       return db.Page.find({ where: {pageId: pageId} });
-//     })
-//     .then(function(personalPage) {
-//       var pageData;
-//       pageData.pageId = pageId;
-//       return db.PostedOn.find({ where: {page: pageId} });
-//     })
-//     .then(function(arrayOfPostRelation) {
-//       var arrayOfPostId = [];
-//       _.forEach(arrayOfPostRelation, function(getPostId) {
-//         var postId = getPostId.postId
-//         arrayOfPostId.push(return db.Post.find({ where: {postId: postId} }));
-//       })
-//       pageData.posts = arrayOfPostId;
-//       return pageData;
-//     });
-
-//     return res.status(200).json({
-//       status: 'Personal Page',
-//       data: pageData
-//     });
-// }
+var _ = require('lodash');
 
 exports.findAll = function(req, res) {
 
@@ -50,6 +23,79 @@ exports.findAll2 = function(req, res) {
     });
 }
 
+// exports.getPersonalPage = function(req, res) {
+
+//   db.OwnsPage.find({ where: {personId: req.personId} })
+//     .then(function(relation) {
+//       var pageId = relation.page;
+//       return db.Page.find({ where: {pageId: pageId} });
+//     })
+//     .then(function(personalPage) {
+//       var pageData;
+//       pageData.pageId = pageId;
+//       return db.PostedOn.find({ where: {page: pageId} });
+//     })
+//     .then(function(arrayOfPostRelation) {
+//       var arrayOfPostId = [];
+//       _.forEach(arrayOfPostRelation, function(getPostId) {
+//         var postId = getPostId.postId
+//         // SHOULDNT I RETURN THE dbPost.find? ISNT IT A PROMISE?
+//         arrayOfPostId.push(db.Post.find({ where: {postId: postId} }));
+//       });
+//       pageData.posts = arrayOfPostId;
+//       return pageData;
+//     });
+
+//     console.log('yooooooooo');
+//     console.log(pageData);
+
+//     return res.status(200).json({
+//       status: 'Personal Page',
+//       data: pageData
+//     });
+// }
+
+exports.loadPage = function(req, res) {
+
+  var pageData = {
+    page: req.body.page
+  }
+  db.PostedOn.findAll({ where: {page: req.body.page} })
+    .then(function(relation) {
+
+      var newArray = [];
+      var array = _.forEach(relation, function(getPost) {
+        db.Post.find({ where: {postId: getPost.post} })
+          .then(function(post) {
+            newArray.push(post);
+            console.log('correct content');
+            console.log(post.content);
+          });
+      });
+
+      console.log(newArray);
+      console.log('asdasdasdjoasfhioejrowejirowejiorewo');
+      console.log(array);
+      return array;
+
+    })
+    .then(function(arrayOfPosts) {
+
+      pageData.arrayOfPosts = arrayOfPosts;
+
+      return res.status(200).json({
+        status: 'Successfully retrieved all posts',
+        pageData: pageData
+      });
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'There was an error retrieving all the posts'
+      });
+    })
+}
+
 exports.getPersonalPageId = function(req, res) {
 
   db.OwnsPage.find({ where: {owner: req.user.userId} })
@@ -62,7 +108,7 @@ exports.getPersonalPageId = function(req, res) {
     })
     .catch(function(err) {
       return res.status(500).json({
-        status: 'Error retreiving personal page'
+        status: 'Error retrieving personal page'
       });
     });
 }

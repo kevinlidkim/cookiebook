@@ -13,6 +13,12 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     UserService.getPersonalPageId(userId)
       .then(function(pageId) {
         $scope.storage.personalPageId = pageId.data.data;
+
+        var data = {
+          page: $scope.storage.personalPageId,
+          user: $scope.storage.user.userId
+        }
+        UserService.loadPage(data);
       });
   }
 
