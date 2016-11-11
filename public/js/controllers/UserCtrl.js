@@ -25,12 +25,15 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   }
 
   $scope.postStatus = function() {
-    // need to somehow get PAGEID as param to pass in
-    // other params needed: user Id, newStatus text
+    var data = {
+      page: $scope.storage.personalPageId,
+      user: $scope.storage.user.userId,
+      content: $scope.newStatus,
+      commentCount: 0,
+      likes: 0
+    };
 
-    console.log($scope.storage.personalPageId);
-
-    console.log($scope.newStatus);
+    UserService.postStatus(data);
   }
   
 }]);

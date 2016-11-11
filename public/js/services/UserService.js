@@ -94,6 +94,14 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     },
     postStatus : function(data) {
 
+      return $http.post('/page', data)
+        .success(function(data) {
+          console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+          return null;
+        });
     }
   }
 
