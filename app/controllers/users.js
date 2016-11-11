@@ -34,7 +34,6 @@ exports.login = function(req, res) {
       });
     }
   })
-  // return res.send({status: 'success', message: 'User login successfully.'});
 }
 
 exports.logout = function(req, res) {
@@ -42,7 +41,6 @@ exports.logout = function(req, res) {
   return res.status(200).json({
     status: 'Bye!'
   });
-  // return res.send({status: 'success', message: 'User logout successfully.'});
 }
 
 // exports.profile = function(req, res) {
@@ -52,8 +50,6 @@ exports.logout = function(req, res) {
 // }
 
 exports.create = function(req, res) {
-   // return res.send({status: 'success', message: 'Sign up successful.'});
-
    return res.status(200).json({
     status: 'Registration successful!'
    });

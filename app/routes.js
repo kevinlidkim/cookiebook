@@ -13,7 +13,6 @@ module.exports = function(app, passport) {
 
 
   app.get('/logout', users.logout);
-  // app.post('/signup', users.create);
 
   app.post('/signup', passport.authenticate('local-signup', {
     failureRedirect: '/signup',
@@ -25,20 +24,11 @@ module.exports = function(app, passport) {
     failureFlash: true
   }), users.login);
 
-  // app.get('/profile', isLoggedIn, users.profile);
+  // app.get('/profile', users.profile);
 
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');
   });
-
-  function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    else {
-      res.redirect('/');
-    }
-  }
 
 };

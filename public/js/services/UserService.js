@@ -12,10 +12,10 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     delete : function(id) {
       return $http.delete('/api/persons' + id);
     },
-    signup : function(user) {
+    signup : function(userData) {
       var deferred = $q.defer();
 
-      $http.post('/signup', user)
+      $http.post('/signup', userData)
         .success(function(data, status) {
           if (status === 200 && data.status) {
             deferred.resolve();
@@ -28,10 +28,10 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         })
         return deferred.promise;
     },
-    login : function(user) {
+    login : function(userData) {
       var deferred = $q.defer();
 
-      $http.post('/login', user)
+      $http.post('/login', userData)
         .success(function(data, status) {
           if (status === 200 && data.status) {
             user = true;
@@ -63,6 +63,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     },
     isLoggedIn : function() {
       if (user) {
+        console.log(user);
         return true;
       } else {
         return false;

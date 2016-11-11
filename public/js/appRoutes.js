@@ -34,4 +34,19 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 
 	$locationProvider.html5Mode(true);
 
-}]);
+
+
+}])
+
+.run(function ($rootScope, $location, $route, UserService) {
+  $rootScope.$on('$routeChangeStart',
+    function (event, next, current) {
+    if (UserService.isLoggedIn() === false) {
+    	console.log('not loggedin');
+      // $location.path('/login');
+    } else {
+			console.log('logged in');
+    }
+    
+  });
+});
