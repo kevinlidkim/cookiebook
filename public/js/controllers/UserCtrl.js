@@ -5,5 +5,11 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', 'UserServ
   $scope.logout = function(user) {
     UserService.logout(user);
   }
+
+  $scope.isLoggedIn = function() {
+    return UserService.isLoggedIn();
+  }
+
+  $scope.name = "yo";
   
 }]);
