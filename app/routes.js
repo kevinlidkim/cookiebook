@@ -13,7 +13,12 @@ module.exports = function(app, passport) {
 
 
   app.get('/logout', users.logout);
-  app.post('/signup', users.create);
+  // app.post('/signup', users.create);
+
+  app.post('/signup', passport.authenticate('local-signup', {
+    failureRedirect: '/signuup',
+    failureFlash: true
+  }), users.create);
 
   app.post('/login', passport.authenticate('local-login', {
     failureRedirect: '/login',

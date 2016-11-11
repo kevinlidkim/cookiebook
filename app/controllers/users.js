@@ -23,13 +23,26 @@ exports.show = function(req, res) {
 }
 
 exports.login = function(req, res) {
-
-  return res.send({status: 'success', message: 'User login successfully.'});
+  req.logIn(req.user, function(err) {
+    if (err) {
+      return res.status(500).json({
+        status: 'Could not log in user'
+      });
+    } else {
+      return res.status(200).json({
+        status: 'Login successful'
+      });
+    }
+  })
+  // return res.send({status: 'success', message: 'User login successfully.'});
 }
 
 exports.logout = function(req, res) {
   req.logout();
-  return res.send({status: 'success', message: 'User logout successfully.'});
+  return res.status(200).json({
+    status: 'Bye!'
+  });
+  // return res.send({status: 'success', message: 'User logout successfully.'});
 }
 
 exports.profile = function(req, res) {
@@ -39,27 +52,10 @@ exports.profile = function(req, res) {
 }
 
 exports.create = function(req, res) {
-
-  var person = db.Person.create(req.body)
-    .then(function (newPerson) {
-
-      var date = new Date();
-      var userData = {
-        email: req.body.email,
-        hashedPassword: req.body.password,
-        accountCreateDate: date,
-        personId: newPerson.personId,
-      };
-      var user = db.User.create(userData)
-
-      return user;
-    })
-    .then(function (newUser) {
-      res.status(200).json(newUser);
-    })
-    .catch(function (err) {
-      res.status(500).json(err);
-    });
+   // return res.send({status: 'success', message: 'Sign up successful.'});
+   return res.status(200).json({
+    status: 'Registration successful!'
+   });
 }
 
 exports.update = function(req, res) {

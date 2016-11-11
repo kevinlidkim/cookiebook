@@ -1,4 +1,4 @@
-angular.module('UserServ', []).factory('UserService', ['$http', function($http) {
+angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http', function($q, $timeout, $http) {
 
   return {
     storeUser : function(data) {

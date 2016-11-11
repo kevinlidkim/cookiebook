@@ -43,4 +43,41 @@ module.exports = function(passport) {
 
   }));
 
+  passport.use('local-signup', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true
+  },
+  function(req, email, password, done) {
+    db.User.find({ where: { email: email }}).then(function(user) {
+
+      if (user) {
+        return done(null, false, { message: 'Email already in use' });
+      } 
+      else {
+        var person = db.Person.create(req.body)
+          .then(function(newPerson) {
+            var date = new Date();
+            var userData = {
+              email: req.body.email,
+              hashedPassword: req.body.password,
+              accountCreateDate: date,
+              personId: newPerson.personId,
+            };
+
+            var newUser = db.User.create(userData);
+            return newUser;
+          })
+          .then(function(returnUser) {
+            return(null, returnUser);
+          })
+
+        // return done(null, newUser);
+      }
+    }).catch(function(err) {
+      return done(err);
+    });
+
+  }));
+
 };
