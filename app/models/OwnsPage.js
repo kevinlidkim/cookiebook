@@ -2,7 +2,7 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('OwnsPage', {
-    pageId: {
+    page: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
@@ -10,7 +10,7 @@ module.exports = function(sequelize, DataTypes) {
         model: 'Page',
         key: 'pageId'
       },
-      field: 'pageId'
+      field: 'page'
     },
     owner: {
       type: DataTypes.INTEGER(11),

@@ -63,9 +63,21 @@ exports.logout = function(req, res) {
 
 
 exports.create = function(req, res) {
-   return res.status(200).json({
-    status: 'Registration successful!'
-   });
+  
+  db.Page.create()
+    .then(function(page) {
+      page.postCount = 0;
+      var relation = {
+        page: page.pageId,
+        owner: req.body.userId
+      };
+
+      return db.OwnsPage.create(relation);
+    })
+
+  return res.status(200).json({
+   status: 'Registration successful!'
+  });
 }
 
 exports.auth = function(req, res) {

@@ -2,7 +2,7 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('OwnsGroup', {
-    ownerId: {
+    owner: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
@@ -10,9 +10,9 @@ module.exports = function(sequelize, DataTypes) {
         model: 'User',
         key: 'userId'
       },
-      field: 'ownerId'
+      field: 'owner'
     },
-    groupId: {
+    group: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       primaryKey: true,
@@ -20,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
         model: 'Group',
         key: 'groupId'
       },
-      field: 'groupId'
+      field: 'group'
     }
   }, 
   {
