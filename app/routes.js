@@ -13,19 +13,16 @@ module.exports = function(app, passport) {
 
 
   app.get('/logout', users.logout);
-
   app.post('/signup', passport.authenticate('local-signup', {
     failureRedirect: '/signup',
     failureFlash: true
   }), users.create);
-
   app.post('/login', passport.authenticate('local-login', {
     failureRedirect: '/login',
     failureFlash: true
   }), users.login);
 
-  // app.get('/profile', users.profile);
-
+  app.get('/status', users.auth);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');

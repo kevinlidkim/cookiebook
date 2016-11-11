@@ -60,7 +60,17 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
       }
     },
     getUserStatus : function() {
-      return user;
+      return $http.get('/status')
+        .success(function(data) {
+          if (data.status) {
+            user = true;
+          } else {
+            user = false;
+          }
+        })
+        .error(function(data) {
+          user = false;
+        });
     }
   }
 

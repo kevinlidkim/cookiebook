@@ -45,9 +45,12 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 .run(function ($rootScope, $location, $route, UserService) {
   $rootScope.$on('$routeChangeStart',
     function (event, next, current) {
-    if (next.access.restricted && UserService.isLoggedIn() === false) {
-      $location.path('/login');
-      $route.reload();
-    }
+      UserService.getUserStatus()
+        .then(function() {
+          if (next.access.restricted && UserService.isLoggedIn() === false) {
+            $location.path('/login');
+            $route.reload();
+          }
+        });
   });
 });
