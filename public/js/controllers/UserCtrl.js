@@ -8,6 +8,12 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     var user = UserService.getUserData();
     $scope.storage.user = user;
     $scope.storage.name = user.firstName + " " + user.lastName;
+
+    var userId = $scope.storage.user.userId;
+    UserService.getPersonalPageId(userId)
+      .then(function(pageId) {
+        $scope.storage.personalPageId = pageId.data.data;
+      });
   }
 
   $scope.logout = function(user) {
@@ -22,7 +28,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     // need to somehow get PAGEID as param to pass in
     // other params needed: user Id, newStatus text
 
-    // retrieve personalpageid right after login?
+    console.log($scope.storage.personalPageId);
 
     console.log($scope.newStatus);
   }

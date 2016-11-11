@@ -63,13 +63,17 @@ exports.logout = function(req, res) {
 
 
 exports.create = function(req, res) {
-  
-  db.Page.create()
+
+  var newPage = {
+    postCount: 0
+  }
+
+  db.Page.create(newPage)
     .then(function(page) {
-      page.postCount = 0;
+
       var relation = {
         page: page.pageId,
-        owner: req.body.userId
+        owner: req.user.userId
       };
 
       return db.OwnsPage.create(relation);

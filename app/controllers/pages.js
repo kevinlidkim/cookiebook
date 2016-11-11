@@ -1,30 +1,69 @@
 var db = require('../../config/db');
 
-exports.getPersonalPage = function(req, res) {
+// exports.getPersonalPage = function(req, res) {
 
-  db.OwnsPage.find({ where: {personId: req.personId} })
+//   db.OwnsPage.find({ where: {personId: req.personId} })
+//     .then(function(relation) {
+//       var pageId = relation.page;
+//       return db.Page.find({ where: {pageId: pageId} });
+//     })
+//     .then(function(personalPage) {
+//       var pageData;
+//       pageData.pageId = pageId;
+//       return db.PostedOn.find({ where: {page: pageId} });
+//     })
+//     .then(function(arrayOfPostRelation) {
+//       var arrayOfPostId = [];
+//       _.forEach(arrayOfPostRelation, function(getPostId) {
+//         var postId = getPostId.postId
+//         arrayOfPostId.push(return db.Post.find({ where: {postId: postId} }));
+//       })
+//       pageData.posts = arrayOfPostId;
+//       return pageData;
+//     });
+
+//     return res.status(200).json({
+//       status: 'Personal Page',
+//       data: pageData
+//     });
+// }
+
+exports.findAll = function(req, res) {
+
+  db.Page.findAll()
+    .then(function (users) {
+      res.status(200).json(users);
+    })
+    .catch(function (err) {
+      res.status(500).json(err);
+    });
+}
+
+exports.findAll2 = function(req, res) {
+
+  db.OwnsPage.findAll()
+    .then(function (users) {
+      res.status(200).json(users);
+    })
+    .catch(function (err) {
+      res.status(500).json(err);
+    });
+}
+
+exports.getPersonalPageId = function(req, res) {
+
+  db.OwnsPage.find({ where: {owner: req.user.userId} })
     .then(function(relation) {
       var pageId = relation.page;
-      return db.Page.find({ where: {pageId: pageId} });
+      return res.status(200).json({
+        status: 'Personal Page Id',
+        data: pageId
+      });
     })
-    .then(function(personalPage) {
-      var pageData;
-      pageData.pageId = pageId;
-      return db.PostedOn.find({ where: {page: pageId} });
-    })
-    .then(function(arrayOfPostRelation) {
-      var arrayOfPostId = [];
-      _.forEach(arrayOfPostRelation, function(getPostId) {
-        var postId = getPostId.postId
-        arrayOfPostId.push(return db.Post.find({ where: {postId: postId} }));
-      })
-      pageData.posts = arrayOfPostId;
-      return pageData;
-    });
-
-    return res.status(200).json({
-      status: 'Personal Page',
-      data: pageData
+    .catch(function(err) {
+      return res.status(500).json({
+        status: 'Error retreiving personal page'
+      });
     });
 }
 
@@ -89,4 +128,4 @@ exports.getPersonalPage = function(req, res) {
 //     .catch(function (err) {
 //       res.status(500).json(err);
 //     });
-}
+// }

@@ -82,6 +82,16 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     getUserData : function() {
       return loggedInUser;
     },
+    getPersonalPageId : function(userId) {
+
+      return $http.get('/page/me', userId)
+        .success(function(data) {
+          return data.data;
+        })
+        .error(function() {
+          return null;
+        });
+    },
     postStatus : function(data) {
 
     }
