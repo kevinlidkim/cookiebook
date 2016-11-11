@@ -92,6 +92,22 @@ exports.auth = function(req, res) {
   }
 }
 
+exports.post = function(req, res) {
+
+  db.Post.create(req.body.post)
+    .then(function(post) {
+      var date = new Date();
+      var relation = {
+        post: postId,
+        page: req.body.pageId,
+        user: req.body.userId,
+        dateTimePosted: new Date()
+      };
+
+      return db.PostedOn.create(relation);
+    })
+}
+
 // exports.update = function(req, res) {
 
 //   db.User.update(req.body, {

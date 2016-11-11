@@ -19,6 +19,11 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   }
 
   $scope.postStatus = function() {
+    // need to somehow get PAGEID as param to pass in
+    // other params needed: user Id, newStatus text
+
+    // retrieve personalpageid right after login?
+
     console.log($scope.newStatus);
   }
   

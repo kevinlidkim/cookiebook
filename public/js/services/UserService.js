@@ -81,6 +81,9 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     },
     getUserData : function() {
       return loggedInUser;
+    },
+    postStatus : function(data) {
+
     }
   }
 

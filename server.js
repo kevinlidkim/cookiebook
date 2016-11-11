@@ -7,6 +7,9 @@ var flash          = require('connect-flash');
 var mysql          = require('mysql');
 var passport       = require('passport');
 var session        = require('express-session');
+var _              = require('lodash');
+var _              = require('lodash/core');
+var fp             = require('lodash/fp');
 
 
 // configuration ===========================================

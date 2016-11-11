@@ -21,8 +21,11 @@ module.exports = function(app, passport) {
     failureRedirect: '/login',
     failureFlash: true
   }), users.login);
-
   app.get('/status', users.auth);
+
+
+  // app.get('/page', pages.getPersonalPage)
+  // app.post('/page', users.post);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');
