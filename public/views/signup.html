@@ -3,26 +3,27 @@
   <h2>Sign Up</h2>
   <br>
 
+  <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
   <div class="form-container">
-    <form method="post">
+    <form class="form" ng-submit="register()">
       <div class="form-group">
         <label for="firstName">First Name</label>
-        <input type="text" id="firstName" class="form-control" ng-model="user.firstName"/>
+        <input type="text" id="firstName" class="form-control" ng-model="registerForm.firstName"/>
       </div>
       <div class="form-group">
         <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" class="form-control" ng-model="user.lastName"/>
+        <input type="text" id="lastName" class="form-control" ng-model="registerForm.lastName"/>
       </div>
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" class="form-control" ng-model="user.email"/>
+        <input type="email" id="email" class="form-control" ng-model="registerForm.email"/>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" class="form-control" ng-model="user.password"/>
+        <input type="password" id="password" class="form-control" ng-model="registerForm.password"/>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" ng-click="signUp(user)">Sign Up</button>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
       </div>
     </form>
   </div>

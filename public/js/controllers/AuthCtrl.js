@@ -1,7 +1,7 @@
 angular.module('AuthCtrl', []).controller('AuthController', ['$scope', '$window', 'UserService', function($scope, $window, UserService) {
 
   $scope.signUp = function(user) {
-    UserService.create(user);
+    UserService.signup(user);
   }
 
   $scope.login = function(user) {

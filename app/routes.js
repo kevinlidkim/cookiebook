@@ -16,7 +16,7 @@ module.exports = function(app, passport) {
   // app.post('/signup', users.create);
 
   app.post('/signup', passport.authenticate('local-signup', {
-    failureRedirect: '/signuup',
+    failureRedirect: '/signup',
     failureFlash: true
   }), users.create);
 
@@ -25,7 +25,7 @@ module.exports = function(app, passport) {
     failureFlash: true
   }), users.login);
 
-  app.get('/profile', isLoggedIn, users.profile);
+  // app.get('/profile', isLoggedIn, users.profile);
 
 
   app.get('*', function(req, res) {

@@ -4,6 +4,8 @@
   <br>
   <p>Welcome, {{ user }}</p>
 
-  <button class="btn btn-primary" ng-click="logout()">Logout</button>
+  <div ng-controller="logoutController">
+    <a ng-click='logout()' class="btn btn-default">Logout</a>
+  </div>
 
 </div>

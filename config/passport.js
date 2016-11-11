@@ -50,7 +50,6 @@ module.exports = function(passport) {
   },
   function(req, email, password, done) {
     db.User.find({ where: { email: email }}).then(function(user) {
-
       if (user) {
         return done(null, false, { message: 'Email already in use' });
       } 
@@ -69,7 +68,7 @@ module.exports = function(passport) {
             return newUser;
           })
           .then(function(returnUser) {
-            return(null, returnUser);
+            return done(null, returnUser);
           })
 
         // return done(null, newUser);

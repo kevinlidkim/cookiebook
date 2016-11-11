@@ -15,12 +15,16 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 
 		.when('/signup', {
 			templateUrl: 'views/signup.html',
-			controller: 'AuthController'
+			controller: 'SignUpController'
 		})
 
 		.when('/login', {
 			templateUrl: 'views/login.html',
-			controller: 'AuthController'
+			controller: 'LoginController'
+		})
+
+		.when('/logout', {
+			controller: 'LogOutController'
 		})
 
 		.when('/profile', {

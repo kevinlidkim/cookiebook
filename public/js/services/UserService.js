@@ -1,5 +1,7 @@
 angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http', function($q, $timeout, $http) {
 
+  var user = null;
+
   return {
     storeUser : function(data) {
       localStorage.setItem('user', data.email);
@@ -7,26 +9,67 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     getUser : function() {
       return localStorage.getItem('user');
     },
-    create : function(user) {
-      return $http.post('/signup', user)
-        .then(function(res) {
-          return res.data;
-      });
-    },
-    login : function(user) {
-      return $http.post('/login', user)
-        .then(function(res) {
-          return res;
-      });
-    },
-    logout : function() {
-      return $http.post('/logout')
-        .then(function(res) {
-          return res;
-        })
-    },
     delete : function(id) {
       return $http.delete('/api/persons' + id);
+    },
+    signup : function(user) {
+      var deferred = $q.defer();
+
+      $http.post('/signup', user)
+        .success(function(data, status) {
+          if (status === 200 && data.status) {
+            deferred.resolve();
+          } else {
+            deferred.reject();
+          }
+        })
+        .error(function(data) {
+          deferred.reject();
+        })
+        return deferred.promise;
+    },
+    login : function(user) {
+      var deferred = $q.defer();
+
+      $http.post('/login', user)
+        .success(function(data, status) {
+          if (status === 200 && data.status) {
+            user = true;
+            deferred.resolve();
+          } else {
+            user = false;
+            deferred.reject();
+          }
+        })
+        .error(function(data) {
+          user = false;
+          deferred.reject();
+        });
+        return deferred.promise;
+    },
+    logout : function() {
+      var deferred = $q.defer();
+
+      $http.get('/logout')
+        .success(function(data) {
+          user = false;
+          deferred.resolve();
+        })
+        .error(function(data) {
+          user = false;
+          deferred.reject();
+        })
+        return deferred.promise;
+    },
+    isLoggedIn : function() {
+      if (user) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    getUserStatus : function() {
+      return user;
     }
   }
 
