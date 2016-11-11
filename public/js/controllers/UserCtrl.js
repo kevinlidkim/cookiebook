@@ -1,6 +1,14 @@
-angular.module('UserCtrl', []).controller('UserController', ['$scope', 'UserService', function($scope, UserService) {
+angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', function($scope, $localStorage, $sessionStorage, UserService) {
 
-  // $scope.user = get user by querying server
+
+  $scope.storage = $localStorage;
+  $scope.newStatus = "";
+
+  $scope.getUserData = function() {
+    var user = UserService.getUserData();
+    $scope.storage.user = user;
+    $scope.storage.name = user.firstName + " " + user.lastName;
+  }
 
   $scope.logout = function(user) {
     UserService.logout(user);
@@ -10,6 +18,8 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', 'UserServ
     return UserService.isLoggedIn();
   }
 
-  $scope.name = "yo";
+  $scope.postStatus = function() {
+    console.log($scope.newStatus);
+  }
   
 }]);

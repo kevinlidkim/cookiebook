@@ -16,6 +16,7 @@
 	<script src="libs/material-design-lite/material.min.js"></script>
 	<script src="libs/angular/angular.min.js"></script>
 	<script src="libs/angular-route/angular-route.min.js"></script>
+	<script src="libs/ngstorage/ngStorage.min.js"></script>
 
 	<!-- ANGULAR CUSTOM -->
 	<script src="js/controllers/MainCtrl.js"></script>
@@ -38,9 +39,12 @@
 			<a class="navbar-brand" href="/">CookieBook</a>
 		</div>
 		<ul class="nav navbar-nav">
-			<li ng-show="isLoggedIn()"><a href="/profile">Profile</a></li>
-			<li ng-show="isLoggedIn()"><a href="/">{{ name }}</a></li>
-			<li ng-show="isLoggedIn()"><a ng-controller="LogoutController" ng-click='logout()' href="">Logout</a></li>
+			<li ng-show="isLoggedIn()"><a href="/profile" ng-click="getUserData()">Profile</a></li>
+			<li ng-show="isLoggedIn()"><a ng-href="/page" ng-click="getUserData()">Your Page</a></li>
+			<li ng-show="isLoggedIn()"><a ng-href="/group" ng-click="getUserData()">Groups</a></li>
+			<li ng-show="isLoggedIn()"><a ng-href="/friend" ng-click="getUserData()">Friends</a></li>
+			<li ng-show="isLoggedIn()"><a ng-href="/message" ng-click="getUserData()">Messages</a></li>
+			<li ng-show="isLoggedIn()"><a ng-controller="LogoutController" ng-click="logout()" href="">Logout</a></li>
 		</ul>
 	</nav>
 

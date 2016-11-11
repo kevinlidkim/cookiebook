@@ -1,8 +1,10 @@
 angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http', function($q, $timeout, $http) {
 
   var user = null;
+  var loggedInUser = null;
 
   return {
+
     signup : function(userData) {
       var deferred = $q.defer();
 
@@ -25,14 +27,17 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
       $http.post('/login', userData)
         .success(function(data, status) {
           if (status === 200 && data.status) {
+            loggedInUser = JSON.parse(JSON.stringify(data.user));
             user = true;
             deferred.resolve();
           } else {
+            loggedInUser = null;
             user = false;
             deferred.reject();
           }
         })
         .error(function(data) {
+          loggedInUser = null;
           user = false;
           deferred.reject();
         });
@@ -43,10 +48,12 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
 
       $http.get('/logout')
         .success(function(data) {
+          loggedInUser = null;
           user = false;
           deferred.resolve();
         })
         .error(function(data) {
+          loggedInUser = null;
           user = false;
           deferred.reject();
         })
@@ -71,6 +78,9 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         .error(function(data) {
           user = false;
         });
+    },
+    getUserData : function() {
+      return loggedInUser;
     }
   }
 

@@ -25,15 +25,31 @@ exports.findAll = function(req, res) {
 // }
 
 exports.login = function(req, res) {
+
   req.logIn(req.user, function(err) {
     if (err) {
       return res.status(500).json({
         status: 'Could not log in user'
       });
     } else {
-      return res.status(200).json({
-        status: 'Login successful'
-      });
+
+      db.Person.find({ where: {personId: req.user.personId} })
+        .then(function(person) {
+
+          var data = {
+            personId: req.user.personId,
+            userId: req.user.userId,
+            adPreferences: req.user.adPreferences,
+            firstName: person.firstName,
+            lastName: person.lastName
+          }
+
+          return res.status(200).json({
+            status: 'Login successful',
+            user: data
+          });
+
+        });
     }
   })
 }

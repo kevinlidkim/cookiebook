@@ -1,6 +1,23 @@
 var db = require('./db');
+var crypto = require('crypto');
 
 var LocalStrategy = require('passport-local').Strategy;
+
+var makeSalt = function() {
+  return crypto.randomBytes(16).toString('base64');
+}
+
+var encryptPassword = function(password, salt) {
+  if (!password || !salt) {
+    return '';
+  }
+  salt = new Buffer(salt, 'base64');
+  return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
+}
+
+var authenticate = function(password, salt, hashedPassword) {
+  return encryptPassword(password, salt) === hashedPassword;
+}
 
 module.exports = function(passport) {
 
@@ -9,7 +26,7 @@ module.exports = function(passport) {
   });
 
   passport.deserializeUser(function(id, done) {
-    db.User.find({where: {userId: id}}).then(function(user) {
+    db.User.find({ where: {userId: id} }).then(function(user) {
       if (!user) {
         console.log('Logged in user not in database');
         return done(null, false);
@@ -31,7 +48,7 @@ module.exports = function(passport) {
       if (!user) {
         return done(null, false, { message: 'Unknown user' });
       } 
-      else if (user.hashedPassword != password) {
+      else if (!authenticate(password, user.salt, user.hashedPassword)) {
         return done(null, false, { message: 'Invalid password' });
       } 
       else {
@@ -57,11 +74,15 @@ module.exports = function(passport) {
         var person = db.Person.create(req.body)
           .then(function(newPerson) {
             var date = new Date();
+            var salt = makeSalt();
+            var hashedPassword = encryptPassword(req.body.password, salt);
+
             var userData = {
               email: req.body.email,
-              hashedPassword: req.body.password,
               accountCreateDate: date,
               personId: newPerson.personId,
+              salt: salt,
+              hashedPassword: hashedPassword
             };
 
             var newUser = db.User.create(userData);

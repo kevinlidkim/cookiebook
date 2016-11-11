@@ -32,6 +32,27 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			access: {restricted: true}
 		})
 
+    .when('/page', {
+      templateUrl: 'views/page.html',
+      controller: 'UserController',
+      access: {restricted: true}
+    })
+
+    .when('/group/:groupId?', {
+      templateUrl: 'views/group.html',
+      access: {restricted: true}
+    })
+
+    .when('/friend/:friend?', {
+      templateUrl: 'views/friend.html',
+      access: {restricted: true}
+    })
+
+    .when('/message', {
+      templateUrl: 'views/message.html',
+      access: {restricted: true}
+    })
+
 		.otherwise({
       redirectTo: '/'
     });
