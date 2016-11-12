@@ -84,46 +84,6 @@ exports.loadPage = function(req, res) {
 
 }
 
-// exports.loadPage = function(req, res) {
-
-//   var pageData = {
-//     page: req.body.page
-//   }
-//   db.PostedOn.findAll({ where: {page: req.body.page} })
-//     .then(function(relation) {
-
-//       var newArray = [];
-//       var array = _.forEach(relation, function(getPost) {
-//         return db.Post.find({ where: {postId: getPost.post} })
-//           .then(function(post) {
-//             newArray.push(post);
-//             console.log('correct content');
-//             console.log(post.content);
-//           })
-//       })
-
-//       console.log(newArray);
-//       console.log('asdasdasdjoasfhioejrowejirowejiorewo');
-//       return array;
-
-//     })
-//     .then(function(arrayOfPosts) {
-
-//       pageData.arrayOfPosts = arrayOfPosts;
-
-//       return res.status(200).json({
-//         status: 'Successfully retrieved all posts',
-//         pageData: pageData
-//       });
-//     })
-//     .catch(function(err) {
-//       console.log(err);
-//       return res.status(500).json({
-//         status: 'There was an error retrieving all the posts'
-//       });
-//     })
-// }
-
 exports.getPersonalPageId = function(req, res) {
 
   db.OwnsPage.find({ where: {owner: req.user.userId} })

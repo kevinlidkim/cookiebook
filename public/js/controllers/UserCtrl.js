@@ -1,4 +1,4 @@
-angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', function($scope, $localStorage, $sessionStorage, UserService) {
+angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', function($scope, $localStorage, $sessionStorage, UserService, PageService) {
 
 
   $scope.storage = $localStorage;
@@ -18,7 +18,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
           page: $scope.storage.personalPageId,
           user: $scope.storage.user.userId
         }
-        UserService.loadPage(data);
+        PageService.loadPage(data);
       });
   }
 
