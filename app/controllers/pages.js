@@ -63,38 +63,66 @@ exports.loadPage = function(req, res) {
   db.PostedOn.findAll({ where: {page: req.body.page} })
     .then(function(relation) {
 
-      var newArray = [];
-      var array = _.forEach(relation, function(getPost) {
-        db.Post.find({ where: {postId: getPost.post} })
-          .then(function(post) {
-            newArray.push(post);
-            console.log('correct content');
-            console.log(post.content);
-          });
-      });
+      var promiseArray = [];
+      _.forEach(relation, function(getPost) {
+        promiseArray.push(db.Post.find({ where: {postId: getPost.post} }));
+      })
 
-      console.log(newArray);
-      console.log('asdasdasdjoasfhioejrowejirowejiorewo');
-      console.log(array);
-      return array;
-
-    })
-    .then(function(arrayOfPosts) {
-
-      pageData.arrayOfPosts = arrayOfPosts;
-
-      return res.status(200).json({
-        status: 'Successfully retrieved all posts',
-        pageData: pageData
+      Promise.all(promiseArray).then(values => {
+        pageData.arrayOfPosts = values;
+        return res.status(200).json({
+          status: 'Successfully retrieved all posts',
+          pageData: pageData
+        })
+      })
+      .catch(function(err) {
+        return res.status(500).json({
+          status: 'Error retireving posts'
+        })
       });
     })
-    .catch(function(err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'There was an error retrieving all the posts'
-      });
-    })
+
 }
+
+// exports.loadPage = function(req, res) {
+
+//   var pageData = {
+//     page: req.body.page
+//   }
+//   db.PostedOn.findAll({ where: {page: req.body.page} })
+//     .then(function(relation) {
+
+//       var newArray = [];
+//       var array = _.forEach(relation, function(getPost) {
+//         return db.Post.find({ where: {postId: getPost.post} })
+//           .then(function(post) {
+//             newArray.push(post);
+//             console.log('correct content');
+//             console.log(post.content);
+//           })
+//       })
+
+//       console.log(newArray);
+//       console.log('asdasdasdjoasfhioejrowejirowejiorewo');
+//       return array;
+
+//     })
+//     .then(function(arrayOfPosts) {
+
+//       pageData.arrayOfPosts = arrayOfPosts;
+
+//       return res.status(200).json({
+//         status: 'Successfully retrieved all posts',
+//         pageData: pageData
+//       });
+//     })
+//     .catch(function(err) {
+//       console.log(err);
+//       return res.status(500).json({
+//         status: 'There was an error retrieving all the posts'
+//       });
+//     })
+// }
 
 exports.getPersonalPageId = function(req, res) {
 
