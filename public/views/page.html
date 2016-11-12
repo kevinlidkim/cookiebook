@@ -4,12 +4,16 @@
   <br>
   <p>User personal page</p>
 
-    <div class="mdl-textfield mdl-js-textfield">
+    <div class="mdl-textfield mdl-js-textfield" style="width: 600px">
       <label for="newStatus">What's on your mind?</label>
       <textarea class="mdl-textfield__input" type="text" ng-model="newStatus"></textarea>
     </div>
     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" ng-click="postStatus()">
       Post
     </button>
+
+    <div ng-controller="PageController">
+      <p ng-repeat="item in storage.page.data.pageData.arrayOfPosts">{{item.content}}</p>
+    </div>
 
 </div>
