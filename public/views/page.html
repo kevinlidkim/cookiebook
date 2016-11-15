@@ -4,6 +4,7 @@
   <br>
   <p>User personal page</p>
 
+    <!-- Post status here -->
     <div class="mdl-textfield mdl-js-textfield">
       <label for="newStatus">What's on your mind?</label>
       <textarea class="mdl-textfield__input" type="text" ng-model="newStatus"></textarea>
@@ -12,13 +13,15 @@
       Post
     </button>
 
+    <!-- PageController used to load posts and comments -->
     <div ng-controller="PageController">
-      <p ng-repeat="item in storage.page.data.pageData.arrayOfPosts">{{item.content}}</p>
 
-      <div class="post-card-wide mdl-card mdl-shadow--2dp">
+      <!-- Load up posts -->
+      <div class="post-card-wide mdl-card mdl-shadow--2dp" ng-repeat="item in storage.page.data.pageData.arrayOfPosts">
         <div class="mdl-card__title">
-          <h2 class="mdl-card__title-text">POSTS HERE</h2>
+          <h2 class="mdl-card__title-text">{{item.content}}</h2>
         </div>
+         
         <div class="mdl-card__supporting-text">
         COMMENTS HERE
         </div>
