@@ -96,32 +96,32 @@ exports.auth = function(req, res) {
   }
 }
 
-exports.makePost = function(req, res) {
+// exports.makePost = function(req, res) {
 
-  db.Post.create(req.body)
-    .then(function(post) {
-      var date = new Date();
-      var relation = {
-        post: post.postId,
-        page: req.body.page,
-        user: req.body.user,
-        dateTimePosted: new Date()
-      };
-      return db.PostedOn.create(relation);
-    })
-    .then(function(newRelation) {
-      return res.status(200).json({
-        status: 'Successfully created post',
-        data: newRelation
-      });
-    })
-    .catch(function(err) {
-      return res.status(500).json({
-        status: 'Error posting'
-      });
-    });
+//   db.Post.create(req.body)
+//     .then(function(post) {
+//       var date = new Date();
+//       var relation = {
+//         post: post.postId,
+//         page: req.body.page,
+//         user: req.body.user,
+//         dateTimePosted: new Date()
+//       };
+//       return db.PostedOn.create(relation);
+//     })
+//     .then(function(newRelation) {
+//       return res.status(200).json({
+//         status: 'Successfully created post',
+//         data: newRelation
+//       });
+//     })
+//     .catch(function(err) {
+//       return res.status(500).json({
+//         status: 'Error posting'
+//       });
+//     });
 
-}
+// }
 
 // exports.update = function(req, res) {
 

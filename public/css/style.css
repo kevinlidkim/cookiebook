@@ -3,20 +3,26 @@ body {
 }
 
 
-.post-card-wide.mdl-card {
+.post_card_wide.mdl-card {
   width: 512px;
   min-height: 50px;
   margin-bottom: 30px;
 }
-.post-card-wide > .mdl-card__title {
+.post_card_wide > .mdl-card__title {
 /*  color: #fff;*/
   height: 50px;
 /*  background: url('../assets/demos/welcome_card.jpg') center / cover;*/
 }
-.post-card-wide > .mdl-card__menu {
+.post_card_wide > .mdl-card__menu {
   color: #fff;
 }
 
 .mdl-textfield.mdl-js-textfield {
   width: 600px;
+}
+
+.like_button {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
 }

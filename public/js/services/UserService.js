@@ -90,15 +90,15 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         .error(function() {
           return null;
         });
-    },
-    postStatus : function(data) {
-      return $http.post('/post', data)
-        .success(function(data) {
-        })
-        .error(function(data) {
-          return null;
-        });
     }
+    // postStatus : function(data) {
+    //   return $http.post('/post', data)
+    //     .success(function(data) {
+    //     })
+    //     .error(function(data) {
+    //       return null;
+    //     });
+    // }
   }
 
 }]);

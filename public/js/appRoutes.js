@@ -34,7 +34,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 
     .when('/page', {
       templateUrl: 'views/page.html',
-      controller: 'UserController',
+      controller: 'PageController',
       access: {restricted: true}
     })
 

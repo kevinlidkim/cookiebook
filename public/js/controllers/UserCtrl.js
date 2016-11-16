@@ -1,7 +1,8 @@
 angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', function($scope, $localStorage, $sessionStorage, UserService, PageService) {
 
   $scope.storage = $localStorage;
-  $scope.newStatus = "";
+  // $scope.newStatus = "";
+  // $scope.newComment = [];
 
   $scope.getUserData = function() {
     var user = UserService.getUserData();
@@ -11,24 +12,6 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     }
   }
 
-  // $scope.getUserPage = function() {
-  //   var user = UserService.getUserData();
-  //   $scope.storage.user = user;
-  //   $scope.storage.name = user.firstName + " " + user.lastName;
-
-  //   var userId = $scope.storage.user.userId;
-  //   UserService.getPersonalPageId(userId)
-  //     .then(function(pageId) {
-  //       $scope.storage.personalPageId = pageId.data.data;
-
-  //       var data = {
-  //         page: $scope.storage.personalPageId,
-  //         user: $scope.storage.user.userId
-  //       }
-  //       $scope.storage.page = PageService.loadPage(data);
-  //     });
-  // }
-
   $scope.logout = function(user) {
     UserService.logout(user);
   }
@@ -37,18 +20,24 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     return UserService.isLoggedIn();
   }
 
-  $scope.postStatus = function() {
-    if ($scope.newStatus != "") {
-      var data = {
-        page: $scope.storage.personalPageId,
-        user: $scope.storage.user.userId,
-        content: $scope.newStatus,
-        commentCount: 0,
-        likes: 0
-      };
+  // $scope.postStatus = function() {
+  //   if ($scope.newStatus != "") {
+  //     var data = {
+  //       page: $scope.storage.personalPageId,
+  //       user: $scope.storage.user.userId,
+  //       content: $scope.newStatus,
+  //       commentCount: 0,
+  //       likes: 0
+  //     };
 
-      UserService.postStatus(data);
-    }
-  }
+  //     UserService.postStatus(data)
+  //       .then(function() {
+  //         PageService.loadPage(data)
+  //           .then(function(pageData) {
+  //             $scope.storage.page = pageData;
+  //           })
+  //       });
+  //   }
+  // }
   
 }]);

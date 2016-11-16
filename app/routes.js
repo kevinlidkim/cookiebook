@@ -9,6 +9,7 @@ module.exports = function(app, passport) {
   var users = require('./controllers/users');
   var pages = require('./controllers/pages');
   var posts = require('./controllers/posts');
+  var comments = require('./controllers/comments');
   
   app.get('/persons/find', persons.findAll); // lists all persons
   app.get('/yo', users.findAll); // lists all users
@@ -31,7 +32,8 @@ module.exports = function(app, passport) {
 
 
   app.post('/page', pages.loadPage);
-  app.post('/post', users.makePost);
+  app.post('/post', posts.makePost);
+  app.post('/comment', comments.makeComment);
   app.get('/page/me', pages.getPersonalPageId);
 
   app.get('*', function(req, res) {

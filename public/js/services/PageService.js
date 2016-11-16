@@ -4,8 +4,8 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
 
   return {
 
-    loadPage : function(data) {
-      return $http.post('/page', data)
+    loadPage : function(sendData) {
+      return $http.post('/page', sendData)
         .success(function(data) {
           currentPage = data;
           return currentPage;
@@ -18,6 +18,26 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
 
     getCurrentPage : function() {
       return currentPage;
+    },
+
+    postStatus : function(sendData) {
+      return $http.post('/post', sendData)
+        .success(function(data) {
+        })
+        .error(function(data) {
+          return null;
+        });
+    },
+
+    postComment : function(sendData) {
+      return $http.post('/comment', sendData)
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
+          // console.log(data);
+          return null;
+        });
     }
   }
 
