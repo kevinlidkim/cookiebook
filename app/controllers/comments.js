@@ -1,6 +1,19 @@
 var db = require('../../config/db');
 
+exports.findAll = function(req, res) {
+
+  db.Comment.findAll()
+    .then(function (users) {
+      res.status(200).json(users);
+    })
+    .catch(function (err) {
+      res.status(500).json(err);
+    });
+}
+
 exports.makeComment = function(req, res) {
+
+  // need to increase comment count of post by 1
 
   db.Comment.create(req.body)
     .then(function(comment) {

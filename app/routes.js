@@ -17,6 +17,7 @@ module.exports = function(app, passport) {
   app.get('/yoyopages', pages.findAll2);
   app.get('/yoposts', posts.findAll);
   app.get('/yoyoposts', posts.findAll2);
+  app.get('/yocom', comments.findAll);
 
 
   app.get('/logout', users.logout);

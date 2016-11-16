@@ -23,36 +23,33 @@ exports.findAll2 = function(req, res) {
     });
 }
 
-// exports.getPersonalPage = function(req, res) {
+// exports.loadPage = function(req, res) {
 
-//   db.OwnsPage.find({ where: {personId: req.personId} })
+//   var pageData = {
+//     page: req.body.page
+//   }
+//   db.PostedOn.findAll({ where: {page: req.body.page} })
 //     .then(function(relation) {
-//       var pageId = relation.page;
-//       return db.Page.find({ where: {pageId: pageId} });
-//     })
-//     .then(function(personalPage) {
-//       var pageData;
-//       pageData.pageId = pageId;
-//       return db.PostedOn.find({ where: {page: pageId} });
-//     })
-//     .then(function(arrayOfPostRelation) {
-//       var arrayOfPostId = [];
-//       _.forEach(arrayOfPostRelation, function(getPostId) {
-//         var postId = getPostId.postId
-//         // SHOULDNT I RETURN THE dbPost.find? ISNT IT A PROMISE?
-//         arrayOfPostId.push(db.Post.find({ where: {postId: postId} }));
+
+//       var promiseArray = [];
+//       _.forEach(relation, function(getPost) {
+//         promiseArray.push(db.Post.find({ where: {postId: getPost.post} }));
+//       })
+
+//       Promise.all(promiseArray).then(values => {
+//         pageData.arrayOfPosts = values;
+//         return res.status(200).json({
+//           status: 'Successfully retrieved all posts',
+//           pageData: pageData
+//         })
+//       })
+//       .catch(function(err) {
+//         return res.status(500).json({
+//           status: 'Error retireving posts'
+//         })
 //       });
-//       pageData.posts = arrayOfPostId;
-//       return pageData;
-//     });
+//     })
 
-//     console.log('yooooooooo');
-//     console.log(pageData);
-
-//     return res.status(200).json({
-//       status: 'Personal Page',
-//       data: pageData
-//     });
 // }
 
 exports.loadPage = function(req, res) {
@@ -60,26 +57,68 @@ exports.loadPage = function(req, res) {
   var pageData = {
     page: req.body.page
   }
+
+  // Find all posts on the page
   db.PostedOn.findAll({ where: {page: req.body.page} })
-    .then(function(relation) {
+    .then(function(postRelation) {
 
       var promiseArray = [];
-      _.forEach(relation, function(getPost) {
-        promiseArray.push(db.Post.find({ where: {postId: getPost.post} }));
+
+      // Get all the posts
+      var promiseArrayPosts = [];
+      _.forEach(postRelation, function(getPost) {
+        promiseArrayPosts.push(db.Post.find({ where: {postId: getPost.post} }));
       })
 
-      Promise.all(promiseArray).then(values => {
+      // Resolve the promise --> now we have the posts
+      Promise.all(promiseArrayPosts).then(values => {
         pageData.arrayOfPosts = values;
+
+        // Find all the comments for each post
+        _.forEach(values, function(post) {
+          db.CommentedOn.findAll({ where: {post: values.postId} })
+            .then(function(commentRelation) {
+
+              // Get all the comments
+              var promiseArrayComments = [];
+              _.forEach(commentRelation, function(getComment) {
+                promiseArrayComments.push(db.Post.find({ where: {commentId: getComment.comment} }));
+              })
+
+              // Resolve the promise --> now we have all comments for that post
+              Promise.all(promiseArrayComments).then(values2 => {
+                promiseArray.push(values2);
+                console.log('yoooooo');
+              })
+
+            })       
+        })
+
+
+      })
+
+      // Resolve all promises --> now we have all the data we need
+      Promise.all(promiseArray).then(allData => {
+        var x = 0;
+        _.forEach(allData, function(arrayOfData) {
+          pageData.arrayOfPosts[x].comments = arrayOfData;
+          console.log(x);
+          x++;
+        })
+        return pageData;
+      })
+      .then(function(stuff) {
         return res.status(200).json({
-          status: 'Successfully retrieved all posts',
+          status: 'Retrieved all data',
           pageData: pageData
         })
       })
       .catch(function(err) {
         return res.status(500).json({
-          status: 'Error retireving posts'
+          status: 'Error retrieving all data'
         })
-      });
+      })
+
     })
 
 }
