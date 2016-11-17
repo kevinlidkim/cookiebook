@@ -3,6 +3,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   $scope.storage = $localStorage;
   $scope.errorMessage = "";
   $scope.error = false;
+  $scope.homeSearch = "";
 
   $scope.getUserData = function() {
     var user = UserService.getUserData();
@@ -47,6 +48,16 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
       UserService.updateProfile(obj);
     }
 
+  }
+
+  $scope.searchAll = function() {
+    var query = {
+      query: $scope.homeSearch
+    }
+
+    if ($scope.homeSearch != "") {
+      UserService.searchAll(query);
+    }
   }
 
   

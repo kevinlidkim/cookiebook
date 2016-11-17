@@ -111,13 +111,6 @@ exports.auth = function(req, res) {
 
 exports.updateProfile = function(req, res) {
 
-  if (req.body.userObj.password) {
-    var salt = makeSalt();
-    var hashedPassword = encryptPassword(req.body.userObj.password, salt);
-    req.body.userObj.salt = salt;
-    req.body.userObj.hashedPassword = hashedPassword;
-  }
-
   if (req.body.personObj) {
     db.Person.update(req.body.personObj, {
       where: {
@@ -126,6 +119,12 @@ exports.updateProfile = function(req, res) {
     })
       .then(function() {
         if (req.body.userObj) {
+          if (req.body.userObj.password) {
+            var salt = makeSalt();
+            var hashedPassword = encryptPassword(req.body.userObj.password, salt);
+            req.body.userObj.salt = salt;
+            req.body.userObj.hashedPassword = hashedPassword;
+          }
           db.User.update(req.body.userObj, {
             where: {
               userId: req.body.idObj.userId
@@ -154,6 +153,12 @@ exports.updateProfile = function(req, res) {
         })
       })
   } else if (req.body.userObj) {
+    if (req.body.userObj.password) {
+      var salt = makeSalt();
+      var hashedPassword = encryptPassword(req.body.userObj.password, salt);
+      req.body.userObj.salt = salt;
+      req.body.userObj.hashedPassword = hashedPassword;
+    }
     db.User.update(req.body.userObj, {
       where: {
         userId: req.body.idObj.userId
@@ -170,6 +175,21 @@ exports.updateProfile = function(req, res) {
         })
       })
   }
+
+}
+
+exports.queryAll = function(req, res) {
+
+  console.log(req.body.query);
+
+  var data = {};
+  db.Person.findAll({ where: Sequelize.or(
+    ["firstName like ?", '%' + req.body.query + '%'],
+    ["lastName like ?", '%' + req.body.query + '%']
+    ) })
+    .then(function(persons) {
+      console.log(persons);
+    })
 
 }
 

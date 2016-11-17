@@ -99,6 +99,15 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         .error(function(data) {
           console.log(data);
         })
+    },
+    searchAll : function(query) {
+      return $http.post('/query/all', query)
+        .success(function(data) {
+          console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
     }
   }
 
