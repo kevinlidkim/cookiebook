@@ -118,7 +118,7 @@ exports.loadPage = function(req, res) {
             // Add all the comments into finalData
             _.forEach(pageData.postCommentRelation, function(relation) {
               var postId = relation.post;
-              finalData[postId].comments.push(relation.comment);
+              finalData[postId].comments.push(comments[relation.comment]);
             })
 
             return res.status(200).json({

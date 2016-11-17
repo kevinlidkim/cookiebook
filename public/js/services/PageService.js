@@ -7,12 +7,12 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
     loadPage : function(sendData) {
       return $http.post('/page', sendData)
         .success(function(data) {
-          console.log(data);
+          // console.log(data);
           currentPage = data;
           return currentPage;
         })
         .error(function(data) {
-          console.log(data);
+          // console.log(data);
           currentPage = null;
           return currentPage;
         })

@@ -23,6 +23,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         PageService.loadPage(data)
           .then(function(pageData) {
             $scope.storage.page = pageData;
+            console.log(pageData);
           })
       });
   }

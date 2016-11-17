@@ -17,6 +17,12 @@ body {
   color: #fff;
 }
 
+.comment_card_wide.mdl-card {
+  width: 512px;
+  min-height: 20px;
+  margin-bottom: 10px;
+}
+
 .mdl-textfield.mdl-js-textfield {
   width: 600px;
 }
