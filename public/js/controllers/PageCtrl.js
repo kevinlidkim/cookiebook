@@ -1,5 +1,6 @@
 angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', function($scope, $localStorage, $sessionStorage, UserService, PageService) {
-  
+
+
   $scope.storage = $localStorage;
   $scope.newStatus = "";
   $scope.newComment = [];
@@ -23,7 +24,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         PageService.loadPage(data)
           .then(function(pageData) {
             $scope.storage.page = pageData;
-            console.log(pageData);
+            // console.log(pageData);
           })
       });
   }
@@ -52,6 +53,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.postComment = function(index, postId) {
     if ($scope.newComment[index] !="") {
       var data = {
+        page: $scope.storage.personalPageId,
         post: postId,
         user: $scope.storage.user.userId,
         content: $scope.newComment[index],
@@ -60,7 +62,11 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
 
       PageService.postComment(data)
         .then(function() {
-
+          PageService.loadPage(data)
+            .then(function(pageData) {
+              $scope.storage.page = pageData;
+              $scope.newComment[index] = "";
+            })
         })
 
     }

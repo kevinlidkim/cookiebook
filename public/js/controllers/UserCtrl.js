@@ -1,8 +1,8 @@
 angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', function($scope, $localStorage, $sessionStorage, UserService, PageService) {
 
   $scope.storage = $localStorage;
-  // $scope.newStatus = "";
-  // $scope.newComment = [];
+  $scope.errorMessage = "";
+  $scope.error = false;
 
   $scope.getUserData = function() {
     var user = UserService.getUserData();
@@ -20,24 +20,34 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     return UserService.isLoggedIn();
   }
 
-  // $scope.postStatus = function() {
-  //   if ($scope.newStatus != "") {
-  //     var data = {
-  //       page: $scope.storage.personalPageId,
-  //       user: $scope.storage.user.userId,
-  //       content: $scope.newStatus,
-  //       commentCount: 0,
-  //       likes: 0
-  //     };
+  $scope.updateProfile = function() {
+    var personObj = $scope.profilePerson;
+    var userObj = $scope.profileUser;
 
-  //     UserService.postStatus(data)
-  //       .then(function() {
-  //         PageService.loadPage(data)
-  //           .then(function(pageData) {
-  //             $scope.storage.page = pageData;
-  //           })
-  //       });
-  //   }
-  // }
+    if (userObj) {
+      if ($scope.profileUser.password == $scope.profileUser.confirmPassword) {
+        $scope.error = false;
+        var obj = {
+          personObj: personObj,
+          userObj: userObj,
+          idObj: $scope.storage.user
+        }
+        UserService.updateProfile(obj);
+      } else {
+        $scope.errorMessage = "Passwords do not match";
+        $scope.error = true;
+      }
+    } else {
+      $scope.error = false;
+      var obj = {
+        personObj: personObj,
+        userObj: userObj,
+        idObj: $scope.storage.user
+      }
+      UserService.updateProfile(obj);
+    }
+
+  }
+
   
 }]);

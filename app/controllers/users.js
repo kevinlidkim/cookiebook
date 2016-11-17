@@ -1,4 +1,17 @@
 var db = require('../../config/db');
+var crypto = require('crypto');
+
+var makeSalt = function() {
+  return crypto.randomBytes(16).toString('base64');
+}
+
+var encryptPassword = function(password, salt) {
+  if (!password || !salt) {
+    return '';
+  }
+  salt = new Buffer(salt, 'base64');
+  return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
+}
 
 exports.findAll = function(req, res) {
 
@@ -96,32 +109,70 @@ exports.auth = function(req, res) {
   }
 }
 
-// exports.makePost = function(req, res) {
+exports.updateProfile = function(req, res) {
 
-//   db.Post.create(req.body)
-//     .then(function(post) {
-//       var date = new Date();
-//       var relation = {
-//         post: post.postId,
-//         page: req.body.page,
-//         user: req.body.user,
-//         dateTimePosted: new Date()
-//       };
-//       return db.PostedOn.create(relation);
-//     })
-//     .then(function(newRelation) {
-//       return res.status(200).json({
-//         status: 'Successfully created post',
-//         data: newRelation
-//       });
-//     })
-//     .catch(function(err) {
-//       return res.status(500).json({
-//         status: 'Error posting'
-//       });
-//     });
+  if (req.body.userObj.password) {
+    var salt = makeSalt();
+    var hashedPassword = encryptPassword(req.body.userObj.password, salt);
+    req.body.userObj.salt = salt;
+    req.body.userObj.hashedPassword = hashedPassword;
+  }
 
-// }
+  if (req.body.personObj) {
+    db.Person.update(req.body.personObj, {
+      where: {
+        personId: req.body.idObj.personId
+      }
+    })
+      .then(function() {
+        if (req.body.userObj) {
+          db.User.update(req.body.userObj, {
+            where: {
+              userId: req.body.idObj.userId
+            }
+          })
+            .then(function(data) {
+              return res.status(200).json({
+                status: 'Update profile successful'
+              })
+            })
+            .catch(function(err) {
+              return res.status(500).json({
+                status: 'Error updating profile'
+              })
+            })
+        } else {
+          return res.status(200).json({
+            status: 'Update person successful'
+          })
+        }
+
+      })
+      .catch(function(err) {
+        return res.status(200).json({
+          status: 'Error updating person'
+        })
+      })
+  } else if (req.body.userObj) {
+    db.User.update(req.body.userObj, {
+      where: {
+        userId: req.body.idObj.userId
+      }
+    })
+      .then(function(data) {
+        return res.status(200).json({
+          status: 'Update user successful'
+        })
+      })
+      .catch(function(err) {
+        return res.status(500).json({
+          status: 'Error updating user'
+        })
+      })
+  }
+
+}
+
 
 // exports.update = function(req, res) {
 

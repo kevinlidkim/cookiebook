@@ -37,6 +37,8 @@ module.exports = function(app, passport) {
   app.post('/comment', comments.makeComment);
   app.get('/page/me', pages.getPersonalPageId);
 
+  app.post('/update', users.updateProfile);
+
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');
   });
