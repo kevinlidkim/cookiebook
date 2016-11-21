@@ -4,6 +4,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   $scope.errorMessage = "";
   $scope.error = false;
   $scope.homeSearch = "";
+  $scope.searched = false;
 
   $scope.getUserData = function() {
     var user = UserService.getUserData();
@@ -56,7 +57,12 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     }
 
     if ($scope.homeSearch != "") {
-      UserService.searchAll(query);
+      UserService.searchAll(query)
+        .then(function(data) {
+         $scope.searchResults = data.data.data;
+         $scope.searched = true;
+         $scope.homeSearch = "";
+        })
     }
   }
 

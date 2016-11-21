@@ -179,8 +179,7 @@ exports.updateProfile = function(req, res) {
 }
 
 exports.queryAll = function(req, res) {
-
-  console.log(req.body.query);
+  // search for persons, users(email), groups
 
   var data = {};
   db.Person.findAll({ where: Sequelize.or(
@@ -188,7 +187,31 @@ exports.queryAll = function(req, res) {
     ["lastName like ?", '%' + req.body.query + '%']
     ) })
     .then(function(persons) {
-      console.log(persons);
+      data.persons = persons;
+
+      db.Group.findAll({ where: ["groupName like ?", '%' + req.body.query + '%'] })
+      .then(function(groups) {
+        data.groups = groups;
+
+        // remove email query -- change to get user id
+        db.User.findAll({ where: ["email like ?", '%' + req.body.query + '%'] })
+        .then(function(users) {
+          data.users = users;
+        })
+        .then(function(results) {
+          return res.status(200).json({
+            status: 'Frontpage query successful',
+            data: data
+          })
+        })
+        .catch(function(err) {
+          return res.status(500).json({
+            status: 'Frontpage query failed'
+          })
+        })
+
+      })
+      
     })
 
 }
