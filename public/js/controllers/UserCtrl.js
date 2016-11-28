@@ -62,6 +62,8 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
          $scope.searchResults = data.data.data;
          $scope.searched = true;
          $scope.homeSearch = "";
+
+         // console.log(data.data.data);
         })
     }
   }

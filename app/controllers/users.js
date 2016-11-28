@@ -1,5 +1,6 @@
 var db = require('../../config/db');
 var crypto = require('crypto');
+var _ = require('lodash');
 
 var makeSalt = function() {
   return crypto.randomBytes(16).toString('base64');
@@ -178,35 +179,78 @@ exports.updateProfile = function(req, res) {
 
 }
 
+// exports.queryAll = function(req, res) {
+//   // search for persons, users(email), groups
+
+//   var array = [];
+//   var data = {};
+//   db.Person.findAll({ where: Sequelize.or(
+//     ["firstName like ?", '%' + req.body.query + '%'],
+//     ["lastName like ?", '%' + req.body.query + '%']
+//     ) })
+//     .then(function(persons) {
+//       data.persons = persons;
+
+//       db.Group.findAll({ where: ["groupName like ?", '%' + req.body.query + '%'] })
+//       .then(function(groups) {
+//         data.groups = groups;
+
+//         // remove email query -- change to get user id
+//         db.User.findAll({ where: ["email like ?", '%' + req.body.query + '%'] })
+//         .then(function(users) {
+//           data.users = users;
+//         })
+//         .then(function(results) {
+//           return res.status(200).json({
+//             status: 'Frontpage query successful',
+//             data: data
+//           })
+//         })
+//         .catch(function(err) {
+//           return res.status(500).json({
+//             status: 'Frontpage query failed'
+//           })
+//         })
+
+//       })
+      
+//     })
+
+// }
+
 exports.queryAll = function(req, res) {
   // search for persons, users(email), groups
 
+  var array = [];
   var data = {};
-  db.Person.findAll({ where: Sequelize.or(
-    ["firstName like ?", '%' + req.body.query + '%'],
-    ["lastName like ?", '%' + req.body.query + '%']
-    ) })
-    .then(function(persons) {
-      data.persons = persons;
+  
+    db.Group.findAll({ where: ["groupName like ?", '%' + req.body.query + '%'] })
+    .then(function(groups) {
+      data.groups = groups;
 
-      db.Group.findAll({ where: ["groupName like ?", '%' + req.body.query + '%'] })
-      .then(function(groups) {
-        data.groups = groups;
-
-        // remove email query -- change to get user id
-        db.User.findAll({ where: ["email like ?", '%' + req.body.query + '%'] })
-        .then(function(users) {
-          data.users = users;
+      db.Person.findAll({ where: Sequelize.or(
+        ["firstName like ?", '%' + req.body.query + '%'],
+        ["lastName like ?", '%' + req.body.query + '%']
+        ) })
+      .then(function(persons) {
+        
+        _.forEach(persons, function(person) {
+          array.push(db.User.find({ where: {personId: person.personId} }))
         })
-        .then(function(results) {
+        
+        Promise.all(array).then(arrayOfUsers => {
+          data.users = arrayOfUsers;
+        })
+        .then(function() {
           return res.status(200).json({
             status: 'Frontpage query successful',
             data: data
           })
         })
         .catch(function(err) {
+          console.log(err);
           return res.status(500).json({
-            status: 'Frontpage query failed'
+            status: 'Error querying frontpage'
           })
         })
 
