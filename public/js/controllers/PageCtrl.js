@@ -4,6 +4,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.storage = $localStorage;
   $scope.newStatus = "";
   $scope.newComment = [];
+  $scope.newFriendComment = [];
 
   $scope.getUserPage = function() {
     var user = UserService.getUserData()
@@ -21,9 +22,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
           page: $scope.storage.personalPageId,
           user: $scope.storage.user.userId
         }
-
-        console.log('my page');
-        console.log(data);
 
         PageService.loadPage(data)
           .then(function(pageData) {
@@ -49,13 +47,10 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
           user: $scope.storage.friend.userId
         }
 
-        console.log('friend page');
-        console.log(data);
-
         PageService.loadPage(data)
           .then(function(pageData) {
             $scope.storage.friendPage = pageData;
-            console.log(pageData);
+            // console.log(pageData);
           })
       });
   }
@@ -97,6 +92,28 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
             .then(function(pageData) {
               $scope.storage.page = pageData;
               $scope.newComment[index] = "";
+            })
+        })
+
+    }
+  }
+
+  $scope.postFriendComment = function(index, postId) {
+    if ($scope.newFriendComment[index] !="" && $scope.newFriendComment[index]) {
+      var data = {
+        page: $scope.storage.friendPageId,
+        post: postId,
+        user: $scope.storage.user.userId,
+        content: $scope.newFriendComment[index],
+        likes: 0
+      };
+
+      PageService.postComment(data)
+        .then(function() {
+          PageService.loadPage(data)
+            .then(function(pageData) {
+              $scope.storage.friendPage = pageData;
+              $scope.newFriendComment[index] = "";
             })
         })
 

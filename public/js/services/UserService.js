@@ -92,7 +92,6 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         });
     },
     getFriendPageId : function(obj) {
-      console.log(obj);
       return $http.post('/page/friend', obj)
         .success(function(data) {
           return data.data;
@@ -134,7 +133,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     getFriendData : function(userId) {
       return $http.post('/friend/get', userId)
         .success(function(data) {
-          console.log(data);
+          // console.log(data);
           return data;
         })
         .error(function(data) {

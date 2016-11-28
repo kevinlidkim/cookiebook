@@ -26,12 +26,12 @@
         </div>
 
         <div class="mdl-textfield mdl-js-textfield">
-          <label for="newComment">Post a comment (post index {{$index}})</label>
-          <textarea class="mdl-textfield__input" type="text" ng-model="newComment[$index]"></textarea>
+          <label for="newFriendComment">Post a comment (post index {{$index}})</label>
+          <textarea class="mdl-textfield__input" type="text" ng-model="newFriendComment[$index]"></textarea>
         </div>
 
         <div class="mdl-card__actions mdl-card--border">
-          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="postComment($index, posts.postId)">
+          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="postFriendComment($index, posts.postId)">
           Comment
           </a>
         </div>
