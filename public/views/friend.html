@@ -20,7 +20,7 @@
   <h3>Your Friend Requests</h3>
     <div ng-repeat="requests in storage.friendData.requests">
       <p class="in-line_add">{{requests.firstName}}</p>
-      <button type="submit" class="btn btn-default">Accept</button>
+      <button type="submit" class="btn btn-default" ng-click="acceptFriendRequest(requests.userId)">Accept</button>
     </div>
 
 </div>

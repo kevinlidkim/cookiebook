@@ -391,76 +391,41 @@ exports.getFriendData = function(req, res) {
 
         })
 
-
-        // db.FriendsRequest.findAll({ where: {friend: req.body.you} })
-        //   .then(function(friendsRequest) {
-
-        //     var promiseArrayRequest = [];
-        //     _.forEach(friendsRequest, function(getRequest) {
-        //       promiseArrayRequest.push(db.User.find({ where: {userId: getRequest.user} }))
-        //     })
-
-        //     Promise.all(promiseArrayRequest).then(requests => {
-        //       data.requests = requests;
-        //     })
-        //     .then(function() {
-        //       return res.status(200).json({
-        //         status: 'Retrieved friends list',
-        //         data: data
-        //       })
-        //     })
-        //     .catch(function(err) {
-        //       console.log(err);
-        //       return res.status(500).json({
-        //         status: 'Failed to retrieve friends list'
-        //       })
-        //     })
-        //   })
       })
 
     })
 }
 
-// exports.getFriendData = function(req, res) {
+exports.acceptFriendRequest = function(req, res) {
+  
+  var obj = {
+    user: req.body.you,
+    friend: req.body.friend
+  }
+  var friendObj = {
+    user: req.body.friend,
+    friend: req.body.you
+  }
 
-//   var data = {};
+  db.FriendsWith.create(obj)
+    .then(function() {
+      return db.FriendsWith.create(friendObj);
+    })
+    .then(function() {
+      return db.FriendsRequest.find({ where: {user: req.body.friend, friend: req.body.you } });
+    })
+    .then(function(request) {
+      return request.destroy();
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Friend added'
+      })
+    })
+    .catch(function(err) {
+      return res.status(500).json({
+        status: 'Error adding friend'
+      })
+    })
 
-//   db.FriendsWith.findAll({ where: {user: req.body.you} })
-//     .then(function(friendsWith) {
-
-//       var promiseArrayFriends = [];
-//       _.forEach(friendsWith, function(getFriend) {
-//         promiseArrayFriends.push(db.User.find({ where: {userId: getFriend.friend} }))
-//       })
-
-//       Promise.all(promiseArrayFriends).then(values => {
-//         data.friends = values;
-
-//         db.FriendsRequest.findAll({ where: {friend: req.body.you} })
-//           .then(function(friendsRequest) {
-
-//             var promiseArrayRequest = [];
-//             _.forEach(friendsRequest, function(getRequest) {
-//               promiseArrayRequest.push(db.User.find({ where: {userId: getRequest.user} }))
-//             })
-
-//             Promise.all(promiseArrayRequest).then(requests => {
-//               data.requests = requests;
-//             })
-//             .then(function() {
-//               return res.status(200).json({
-//                 status: 'Retrieved friends list',
-//                 data: data
-//               })
-//             })
-//             .catch(function(err) {
-//               console.log(err);
-//               return res.status(500).json({
-//                 status: 'Failed to retrieve friends list'
-//               })
-//             })
-//           })
-//       })
-
-//     })
-// }
+}

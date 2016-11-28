@@ -45,6 +45,7 @@ module.exports = function(app, passport) {
 
   app.post('/friend/request', users.sendFriendRequest);
   app.post('/friend/get', users.getFriendData);
+  app.post('/friend/accept', users.acceptFriendRequest);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');

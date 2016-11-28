@@ -98,5 +98,16 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
       })
   }
 
+  $scope.acceptFriendRequest = function(friendId) {
+    var obj = {
+      you: $scope.storage.user.userId,
+      friend: friendId
+    }
+    UserService.acceptFriendRequest(obj)
+      .then(function(data) {
+        $scope.getFriendData();
+      })
+  }
+
   
 }]);

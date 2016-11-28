@@ -130,6 +130,16 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         .error(function(data) {
           console.log(data);
         })
+    },
+    acceptFriendRequest : function(obj) {
+      return $http.post('/friend/accept', obj)
+        .success(function(data) {
+          console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
     }
   }
 
