@@ -46,7 +46,12 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
         userObj: userObj,
         idObj: $scope.storage.user
       }
-      UserService.updateProfile(obj);
+      UserService.updateProfile(obj)
+        .then(function() {
+          var user = UserService.getUserData();
+          $scope.storage.user = user;
+          $scope.storage.name = user.firstName + " " + user.lastName;
+        })
     }
 
   }

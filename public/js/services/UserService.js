@@ -95,6 +95,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
       return $http.post('/update', obj)
         .success(function(data) {
           console.log(data);
+          loggedInUser = JSON.parse(JSON.stringify(data.data));
         })
         .error(function(data) {
           console.log(data);

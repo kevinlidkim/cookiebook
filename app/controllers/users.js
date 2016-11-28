@@ -110,7 +110,81 @@ exports.auth = function(req, res) {
   }
 }
 
+// exports.updateProfile = function(req, res) {
+
+//   if (req.body.personObj) {
+//     db.Person.update(req.body.personObj, {
+//       where: {
+//         personId: req.body.idObj.personId
+//       }
+//     })
+//       .then(function() {
+//         if (req.body.userObj) {
+//           if (req.body.userObj.password) {
+//             var salt = makeSalt();
+//             var hashedPassword = encryptPassword(req.body.userObj.password, salt);
+//             req.body.userObj.salt = salt;
+//             req.body.userObj.hashedPassword = hashedPassword;
+//           }
+//           db.User.update(req.body.userObj, {
+//             where: {
+//               userId: req.body.idObj.userId
+//             }
+//           })
+//             .then(function() {
+//               return res.status(200).json({
+//                 data: obj,
+//                 status: 'Update profile successful'
+//               })
+//             })
+//             .catch(function(err) {
+//               return res.status(500).json({
+//                 status: 'Error updating profile'
+//               })
+//             })
+//         } else {
+//           return res.status(200).json({
+//             data: obj,
+//             status: 'Update person successful'
+//           })
+//         }
+
+//       })
+//       .catch(function(err) {
+//         return res.status(200).json({
+//           status: 'Error updating person'
+//         })
+//       })
+//   } else if (req.body.userObj) {
+//     if (req.body.userObj.password) {
+//       var salt = makeSalt();
+//       var hashedPassword = encryptPassword(req.body.userObj.password, salt);
+//       req.body.userObj.salt = salt;
+//       req.body.userObj.hashedPassword = hashedPassword;
+//     }
+//     db.User.update(req.body.userObj, {
+//       where: {
+//         userId: req.body.idObj.userId
+//       }
+//     })
+//       .then(function() {
+//         return res.status(200).json({
+//           data: obj,
+//           status: 'Update user successful'
+//         })
+//       })
+//       .catch(function(err) {
+//         return res.status(500).json({
+//           status: 'Error updating user'
+//         })
+//       })
+//   }
+
+// }
+
 exports.updateProfile = function(req, res) {
+
+  var obj = {};
 
   if (req.body.personObj) {
     db.Person.update(req.body.personObj, {
@@ -131,8 +205,20 @@ exports.updateProfile = function(req, res) {
               userId: req.body.idObj.userId
             }
           })
-            .then(function(data) {
+            .then(function() {
+              return db.Person.find({ where: {personId: req.body.idObj.personId} })
+            })
+            .then(function(person) {
+              obj.personId = person.personId;
+              obj.firstName = person.firstName;
+              obj.lastName = person.lastName;
+              return db.User.find({ where: {personId: person.personId} })
+            })
+            .then(function(user) {
+              obj.adPreferences = user.adPreferences;
+              obj.userId = user.userId;
               return res.status(200).json({
+                data: obj,
                 status: 'Update profile successful'
               })
             })
@@ -142,9 +228,21 @@ exports.updateProfile = function(req, res) {
               })
             })
         } else {
-          return res.status(200).json({
-            status: 'Update person successful'
-          })
+          db.Person.find({ where: {personId: req.body.idObj.personId} })
+            .then(function(person) {
+              obj.personId = person.personId;
+              obj.firstName = person.firstName;
+              obj.lastName = person.lastName;
+              return db.User.find({ where: {personId: person.personId} })
+            })
+            .then(function(user) {
+              obj.adPreferences = user.adPreferences;
+              obj.userId = user.userId;
+              return res.status(200).json({
+                data: obj,
+                status: 'Update person successful'
+              })
+            })
         }
 
       })
@@ -165,8 +263,22 @@ exports.updateProfile = function(req, res) {
         userId: req.body.idObj.userId
       }
     })
-      .then(function(data) {
+      .then(function() {
+        return db.User.find({ where: {userId: req.body.idObj.userId} })
+      })
+      .then(function(user) {
+        obj.adPreferences = user.adPreferences;
+        obj.userId = user.userId;
+        return db.Person.find({ where: {personId: user.personId} })
+      })
+      .then(function(person) {
+        obj.firstName = person.firstName,
+        obj.lastName = person.lastName,
+        obj.personId = person.personId
+      })
+      .then(function() {
         return res.status(200).json({
+          data: obj,
           status: 'Update user successful'
         })
       })
@@ -223,6 +335,8 @@ exports.queryAll = function(req, res) {
 
   var array = [];
   var data = {};
+  var arrayOfPersons;
+  var users = [];
   
     db.Group.findAll({ where: ["groupName like ?", '%' + req.body.query + '%'] })
     .then(function(groups) {
@@ -233,13 +347,30 @@ exports.queryAll = function(req, res) {
         ["lastName like ?", '%' + req.body.query + '%']
         ) })
       .then(function(persons) {
-        
+        arrayOfPersons = persons;
+
         _.forEach(persons, function(person) {
           array.push(db.User.find({ where: {personId: person.personId} }))
         })
         
         Promise.all(array).then(arrayOfUsers => {
           data.users = arrayOfUsers;
+
+          var people = _.keyBy(arrayOfPersons, 'personId');
+
+          _.forEach(arrayOfUsers, function(user) {
+            var result = {
+              email: user.email,
+              userId: user.userId,
+              personId: user.personId,
+              firstName: people[user.personId].firstName,
+              lastName: people[user.personId].lastName
+            }
+            users.push(result);
+          })
+
+          data.users = users;
+
         })
         .then(function() {
           return res.status(200).json({

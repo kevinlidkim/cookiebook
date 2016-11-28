@@ -17,7 +17,7 @@
 
     <h3>Users</h3>
     <div ng-repeat="users in searchResults.users">
-      <p>{{users.email}}</p>
+      <p><a ng-href="/user/{{users.userId}}">{{users.firstName}} {{users.lastName}}</a></p>
     </div>
 
     <h3>Groups</h3>
