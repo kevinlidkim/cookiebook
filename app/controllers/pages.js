@@ -23,35 +23,6 @@ exports.findAll2 = function(req, res) {
     });
 }
 
-// exports.loadPage = function(req, res) {
-
-//   var pageData = {
-//     page: req.body.page
-//   }
-//   db.PostedOn.findAll({ where: {page: req.body.page} })
-//     .then(function(relation) {
-
-//       var promiseArray = [];
-//       _.forEach(relation, function(getPost) {
-//         promiseArray.push(db.Post.find({ where: {postId: getPost.post} }));
-//       })
-
-//       Promise.all(promiseArray).then(values => {
-//         pageData.arrayOfPosts = values;
-//         return res.status(200).json({
-//           status: 'Successfully retrieved all posts',
-//           pageData: pageData
-//         })
-//       })
-//       .catch(function(err) {
-//         return res.status(500).json({
-//           status: 'Error retireving posts'
-//         })
-//       });
-//     })
-
-// }
-
 exports.loadPage = function(req, res) {
 
   var pageData = {

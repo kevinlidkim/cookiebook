@@ -18,6 +18,8 @@ module.exports = function(app, passport) {
   app.get('/yoposts', posts.findAll);
   app.get('/yoyoposts', posts.findAll2);
   app.get('/yocom', comments.findAll);
+  app.get('/yofr', persons.findAll2);
+  app.get('/yofw', persons.findAll3);
 
 
   app.get('/logout', users.logout);
@@ -40,6 +42,9 @@ module.exports = function(app, passport) {
   app.post('/update', users.updateProfile);
 
   app.post('/query/all', users.queryAll);
+
+  app.post('/friend/request', users.sendFriendRequest);
+  app.post('/friend/get', users.getFriendData);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');

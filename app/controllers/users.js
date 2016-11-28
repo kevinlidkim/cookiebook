@@ -25,19 +25,6 @@ exports.findAll = function(req, res) {
     });
 }
 
-// findById doesn't even exist in sequelize lol (its a mongoose function)
-
-// exports.show = function(req, res) {
-
-//   db.User.findById(req.params.id)
-//     .then(function (user) {
-//       res.status(200).json(user);
-//     })
-//     .catch(function (err) {
-//       res.status(500).json(err);
-//     });
-// }
-
 exports.login = function(req, res) {
 
   req.logIn(req.user, function(err) {
@@ -75,7 +62,6 @@ exports.logout = function(req, res) {
   });
 }
 
-
 exports.create = function(req, res) {
 
   var newPage = {
@@ -109,78 +95,6 @@ exports.auth = function(req, res) {
     })
   }
 }
-
-// exports.updateProfile = function(req, res) {
-
-//   if (req.body.personObj) {
-//     db.Person.update(req.body.personObj, {
-//       where: {
-//         personId: req.body.idObj.personId
-//       }
-//     })
-//       .then(function() {
-//         if (req.body.userObj) {
-//           if (req.body.userObj.password) {
-//             var salt = makeSalt();
-//             var hashedPassword = encryptPassword(req.body.userObj.password, salt);
-//             req.body.userObj.salt = salt;
-//             req.body.userObj.hashedPassword = hashedPassword;
-//           }
-//           db.User.update(req.body.userObj, {
-//             where: {
-//               userId: req.body.idObj.userId
-//             }
-//           })
-//             .then(function() {
-//               return res.status(200).json({
-//                 data: obj,
-//                 status: 'Update profile successful'
-//               })
-//             })
-//             .catch(function(err) {
-//               return res.status(500).json({
-//                 status: 'Error updating profile'
-//               })
-//             })
-//         } else {
-//           return res.status(200).json({
-//             data: obj,
-//             status: 'Update person successful'
-//           })
-//         }
-
-//       })
-//       .catch(function(err) {
-//         return res.status(200).json({
-//           status: 'Error updating person'
-//         })
-//       })
-//   } else if (req.body.userObj) {
-//     if (req.body.userObj.password) {
-//       var salt = makeSalt();
-//       var hashedPassword = encryptPassword(req.body.userObj.password, salt);
-//       req.body.userObj.salt = salt;
-//       req.body.userObj.hashedPassword = hashedPassword;
-//     }
-//     db.User.update(req.body.userObj, {
-//       where: {
-//         userId: req.body.idObj.userId
-//       }
-//     })
-//       .then(function() {
-//         return res.status(200).json({
-//           data: obj,
-//           status: 'Update user successful'
-//         })
-//       })
-//       .catch(function(err) {
-//         return res.status(500).json({
-//           status: 'Error updating user'
-//         })
-//       })
-//   }
-
-// }
 
 exports.updateProfile = function(req, res) {
 
@@ -291,47 +205,7 @@ exports.updateProfile = function(req, res) {
 
 }
 
-// exports.queryAll = function(req, res) {
-//   // search for persons, users(email), groups
-
-//   var array = [];
-//   var data = {};
-//   db.Person.findAll({ where: Sequelize.or(
-//     ["firstName like ?", '%' + req.body.query + '%'],
-//     ["lastName like ?", '%' + req.body.query + '%']
-//     ) })
-//     .then(function(persons) {
-//       data.persons = persons;
-
-//       db.Group.findAll({ where: ["groupName like ?", '%' + req.body.query + '%'] })
-//       .then(function(groups) {
-//         data.groups = groups;
-
-//         // remove email query -- change to get user id
-//         db.User.findAll({ where: ["email like ?", '%' + req.body.query + '%'] })
-//         .then(function(users) {
-//           data.users = users;
-//         })
-//         .then(function(results) {
-//           return res.status(200).json({
-//             status: 'Frontpage query successful',
-//             data: data
-//           })
-//         })
-//         .catch(function(err) {
-//           return res.status(500).json({
-//             status: 'Frontpage query failed'
-//           })
-//         })
-
-//       })
-      
-//     })
-
-// }
-
 exports.queryAll = function(req, res) {
-  // search for persons, users(email), groups
 
   var array = [];
   var data = {};
@@ -391,33 +265,202 @@ exports.queryAll = function(req, res) {
 
 }
 
+exports.sendFriendRequest = function(req, res) {
 
-// exports.update = function(req, res) {
+  db.FriendsWith.find({ where: {user: req.body.you, friend: req.body.friend} })
+    .then(function(friendsWith) {
 
-//   db.User.update(req.body, {
-//     where: {
-//       id: req.params.id
-//     }
-//   })
-//     .then(function (updatedRecords) {
-//       res.status(200).json(updatedRecords);
+      if (friendsWith == null) {
+        db.FriendsRequest.find({ where: {user: req.body.you, friend: req.body.friend} })
+          .then(function(friendsRequest) {
+
+            if (friendsRequest == null) {
+              var newRequest = {
+                user: req.body.you,
+                friend: req.body.friend
+              }
+              db.FriendsRequest.create(newRequest)
+                .then(function() {
+                  return res.status(200).json({
+                    status: 'Friend request sent'
+                  })
+                })
+                .catch(function(err) {
+                  return res.status(500).json({
+                    status: 'Error sending friend request'
+                  })
+                })
+
+            } else {
+              return res.status(200).json({
+                status: 'Friend request already sent'
+              })
+            }
+          })
+
+
+      } else {
+        return res.status(200).json({
+          status: 'Already friends'
+        })
+      }
+    })
+
+}
+
+exports.getFriendData = function(req, res) {
+
+  var data = {};
+  var arrayOfFriends = [];
+  var arrayOfFriendRequests = [];
+
+  db.FriendsWith.findAll({ where: {user: req.body.you} })
+    .then(function(friendsWith) {
+
+      var promiseArrayFriends = [];
+      _.forEach(friendsWith, function(getFriend) {
+        promiseArrayFriends.push(db.User.find({ where: {userId: getFriend.friend} }))
+      })
+
+      Promise.all(promiseArrayFriends).then(values => {
+        data.friends = values;
+
+        var arrayOfPersons = [];
+        _.forEach(values, function(getPerson) {
+          arrayOfPersons.push(db.Person.find({ where: {personId: getPerson.personId} }))
+        })
+
+        var friendData = _.keyBy(data.friends, 'personId');
+
+        Promise.all(arrayOfPersons).then(persons => {
+          _.forEach(persons, function(person) {
+            var result = {
+              firstName: person.firstName,
+              lastName: person.lastName,
+              personId: person.personId,
+              userId: friendData[person.personId].userId
+            }
+            arrayOfFriends.push(result);
+          })
+        })
+        .then(function() {
+          return db.FriendsRequest.findAll({ where: {friend: req.body.you} })
+        })
+        .then(function(friendsRequest) {
+
+          var promiseArrayRequest = [];
+          _.forEach(friendsRequest, function(getRequest) {
+            promiseArrayRequest.push(db.User.find({ where: {userId: getRequest.user} }))
+          })
+
+          Promise.all(promiseArrayRequest).then(requests => {
+            data.requests = requests;
+
+            var arrayOfRequests = [];
+            _.forEach(requests, function(request) {
+              arrayOfRequests.push(db.Person.find({ where: {personId: request.personId} }))
+            })
+
+            var requestData = _.keyBy(data.requests, 'personId');
+
+            Promise.all(arrayOfRequests).then(personRequests => {
+              _.forEach(personRequests, function(personRequest) {
+                var result = {
+                  firstName: personRequest.firstName,
+                  lastName: personRequest.lastName,
+                  personId: personRequest.personId,
+                  userId: requestData[personRequest.personId].userId
+                }
+                arrayOfFriendRequests.push(result);
+              })
+            })
+            .then(function() {
+              return res.status(200).json({
+                status: 'Retrieve friends list',
+                friends: arrayOfFriends,
+                requests: arrayOfFriendRequests
+              })
+            })
+            .catch(function(err) {
+              console.log(err);
+              return res.status(500).json({
+                status: 'Failed to retrieve friends list'
+              })
+            })
+          })
+
+        })
+
+
+        // db.FriendsRequest.findAll({ where: {friend: req.body.you} })
+        //   .then(function(friendsRequest) {
+
+        //     var promiseArrayRequest = [];
+        //     _.forEach(friendsRequest, function(getRequest) {
+        //       promiseArrayRequest.push(db.User.find({ where: {userId: getRequest.user} }))
+        //     })
+
+        //     Promise.all(promiseArrayRequest).then(requests => {
+        //       data.requests = requests;
+        //     })
+        //     .then(function() {
+        //       return res.status(200).json({
+        //         status: 'Retrieved friends list',
+        //         data: data
+        //       })
+        //     })
+        //     .catch(function(err) {
+        //       console.log(err);
+        //       return res.status(500).json({
+        //         status: 'Failed to retrieve friends list'
+        //       })
+        //     })
+        //   })
+      })
+
+    })
+}
+
+// exports.getFriendData = function(req, res) {
+
+//   var data = {};
+
+//   db.FriendsWith.findAll({ where: {user: req.body.you} })
+//     .then(function(friendsWith) {
+
+//       var promiseArrayFriends = [];
+//       _.forEach(friendsWith, function(getFriend) {
+//         promiseArrayFriends.push(db.User.find({ where: {userId: getFriend.friend} }))
+//       })
+
+//       Promise.all(promiseArrayFriends).then(values => {
+//         data.friends = values;
+
+//         db.FriendsRequest.findAll({ where: {friend: req.body.you} })
+//           .then(function(friendsRequest) {
+
+//             var promiseArrayRequest = [];
+//             _.forEach(friendsRequest, function(getRequest) {
+//               promiseArrayRequest.push(db.User.find({ where: {userId: getRequest.user} }))
+//             })
+
+//             Promise.all(promiseArrayRequest).then(requests => {
+//               data.requests = requests;
+//             })
+//             .then(function() {
+//               return res.status(200).json({
+//                 status: 'Retrieved friends list',
+//                 data: data
+//               })
+//             })
+//             .catch(function(err) {
+//               console.log(err);
+//               return res.status(500).json({
+//                 status: 'Failed to retrieve friends list'
+//               })
+//             })
+//           })
+//       })
+
 //     })
-//     .catch(function (err) {
-//       res.status(500).json(err);
-//     });
-// }
-
-// exports.delete = function(req, res) {
-
-//   db.User.destroy({
-//     where: {
-//       id: req.params.id
-//     }
-//   })
-//     .then(function (deletedRecords) {
-//       res.status(200).json(deletedRecords);
-//     })
-//     .catch(function (err) {
-//       res.status(500).json(err);
-//     });
 // }

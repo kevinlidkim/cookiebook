@@ -57,6 +57,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   }
 
   $scope.searchAll = function() {
+    $scope.getUserData();
     var query = {
       query: $scope.homeSearch
     }
@@ -71,6 +72,30 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
          // console.log(data.data.data);
         })
     }
+  }
+
+  $scope.sendFriendRequest = function(userId) {
+    if (userId == $scope.storage.user.userId) {
+      console.log('you cant add yourself');
+    } else {
+      obj = {
+        you: $scope.storage.user.userId,
+        friend: userId
+      }
+      UserService.sendFriendRequest(obj);
+    }
+  }
+
+  $scope.getFriendData = function() {
+    $scope.getUserData();
+    var obj = {
+      you: $scope.storage.user.userId
+    }
+    UserService.getFriendData(obj)
+      .then(function(data) {
+        $scope.storage.friendData = data.data;
+        // console.log($scope.storage.friendData);
+      })
   }
 
   

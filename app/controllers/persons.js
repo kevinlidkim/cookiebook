@@ -76,3 +76,25 @@ exports.delete = function(req, res) {
       res.status(500).json(err);
     });
 }
+
+exports.findAll3 = function(req, res) {
+
+  db.FriendsWith.findAll()
+    .then(function (users) {
+      res.status(200).json(users);
+    })
+    .catch(function (err) {
+      res.status(500).json(err);
+    });
+}
+
+exports.findAll2 = function(req, res) {
+
+  db.FriendsRequest.findAll()
+    .then(function (users) {
+      res.status(200).json(users);
+    })
+    .catch(function (err) {
+      res.status(500).json(err);
+    });
+}

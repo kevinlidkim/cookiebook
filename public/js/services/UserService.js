@@ -110,6 +110,26 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         .error(function(data) {
           // console.log(data);
         })
+    },
+    sendFriendRequest : function(obj) {
+      return $http.post('/friend/request', obj)
+        .success(function(data) {
+          console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    getFriendData : function(userId) {
+      return $http.post('/friend/get', userId)
+        .success(function(data) {
+          console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
     }
   }
 
