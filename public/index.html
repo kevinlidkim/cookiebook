@@ -32,12 +32,12 @@
 	<script src="js/app.js"></script>
 </head>
 <body ng-app="myApp" ng-controller="UserController">
-<div class="container">
+<div class="container app_container">
 	
 	<!-- HEADER -->
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse navbar-fixed-top navbar_custom">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="/">CookieBook</a>
+			<a class="navbar-brand navbrand_custom" href="/">CookieBook</a>
 		</div>
 		<ul class="nav navbar-nav">
 			<li ng-show="isLoggedIn()"><a href="/profile" ng-click="getUserData()">Profile</a></li>
@@ -45,8 +45,15 @@
 			<li ng-show="isLoggedIn()"><a ng-href="/group" ng-click="getUserData()">Groups</a></li>
 			<li ng-show="isLoggedIn()"><a ng-href="/friend" ng-click="getFriendData()">Friends</a></li>
 			<li ng-show="isLoggedIn()"><a ng-href="/message" ng-click="getUserData()">Messages</a></li>
-			<li ng-show="isLoggedIn()"><a ng-controller="LogoutController" ng-click="logout()" href="">Logout</a></li>
 		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li ng-show="isLoggedIn()">
+				<a href="/profile" ng-click="getUserData()"" class="nav-usericon" "><span class="glyphicon glyphicon-user"></span></a> 
+			</li>
+			<li ng-show="isLoggedIn()">
+				<a id="nav-logout" ng-controller="LogoutController" ng-click="logout()" href="">Logout</a>
+			</li>
+      </ul>
 	</nav>
 
 	<!-- ANGULAR DYNAMIC CONTENT -->
