@@ -1,24 +1,38 @@
-<div class="jumbotron text-center">
-
-  <h2>Login</h2>
-  <br>
-  <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
-  <div class="form-container">
-    <form class="form" ng-submit="login()">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" class="form-control" ng-model="loginForm.email"/>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" class="form-control" ng-model="loginForm.password"/>
-      </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary">Login</button>
-      </div>
-    </form>
+<div class="row">
+  <div class="col-sm-9" style="padding-right:0px">
+    <img src="images/cookie_emoji.jpg" class=".img-thumbnail" id="login_pic">
   </div>
 
-  <p>Need an account? <a href="/signup">Sign up</a></p>
+  <div class="col-sm-3" style="padding-left:0px">
 
+    <div class="login_prompt_container">
+      <div class="jumbotron login_prompt">
+
+        <h2>Login</h2>
+        <br>
+        <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+        <div class="form-container">
+          <form class="form" ng-submit="login()">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" class="form-control" ng-model="loginForm.email"/>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" class="form-control" ng-model="loginForm.password"/>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary login_btn">Login</button>
+            </div>
+          </form>
+        </div>
+
+        <p>Need an account? <a href="/signup">Sign up</a></p>
+
+      </div>
+    </div>
+  </div>
 </div>
+
+
+
