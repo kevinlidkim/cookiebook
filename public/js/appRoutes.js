@@ -43,8 +43,14 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
-    .when('/friend/:friend?', {
+    .when('/friend/', {
       templateUrl: 'views/friend.html',
+      controller: 'PageController',
+      access: {restricted: true}
+    })
+
+    .when('/user/:friend?', {
+      templateUrl: 'views/friendPage.html',
       access: {restricted: true}
     })
 

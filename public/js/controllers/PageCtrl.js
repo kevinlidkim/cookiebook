@@ -21,10 +21,41 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
           page: $scope.storage.personalPageId,
           user: $scope.storage.user.userId
         }
+
+        console.log('my page');
+        console.log(data);
+
         PageService.loadPage(data)
           .then(function(pageData) {
             $scope.storage.page = pageData;
             // console.log(pageData);
+          })
+      });
+  }
+
+  $scope.getFriendPage = function(friend) {
+    $scope.storage.friend = friend;
+    // var friendId = $scope.storage.friend.userId;
+    var obj = {
+      id: friend.userId
+    }
+
+    UserService.getFriendPageId(obj)
+      .then(function(pageId) {
+        $scope.storage.friendPageId = pageId.data.data;
+
+        var data = {
+          page: $scope.storage.friendPageId,
+          user: $scope.storage.friend.userId
+        }
+
+        console.log('friend page');
+        console.log(data);
+
+        PageService.loadPage(data)
+          .then(function(pageData) {
+            $scope.storage.friendPage = pageData;
+            console.log(pageData);
           })
       });
   }
@@ -51,7 +82,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   }
 
   $scope.postComment = function(index, postId) {
-    if ($scope.newComment[index] !="") {
+    if ($scope.newComment[index] !="" && $scope.newComment[index]) {
       var data = {
         page: $scope.storage.personalPageId,
         post: postId,
