@@ -1,33 +1,34 @@
-<div class="jumbotron text-center">
+<div class="jumbotron">
+  <div class= "cookie_body">
+    <h2>Welcome to CookieBook</h2>
+    <br>
 
-  <h2>Welcome to CookieBook</h2>
-  <br>
+    <p>Search for groups/users</p>
 
-  <p>Search for groups/users</p>
-  
-  <form class="navbar-form" role="search">
-    <div class="form-group">
-      <input type="text" class="form-control" placeholder="Search" ng-model="homeSearch">
-    </div>
-    <button type="submit" class="btn btn-default" ng-click="searchAll()">Submit</button>
-  </form>
+    <form class="navbar-form" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search" ng-model="homeSearch">
+      </div>
+      <button type="submit" class="btn btn-default" ng-click="searchAll()">Submit</button>
+    </form>
 
-  <div ng-show="searched">
-    <h2>Search Results</h2>
+    <div ng-show="searched">
+      <h2>Search Results</h2>
 
-    <h3>Persons</h3>
-    <div ng-repeat="persons in searchResults.persons">
-      <p>{{persons.firstName}} {{persons.lastName}}</p>
-    </div>
+      <h3>Persons</h3>
+      <div ng-repeat="persons in searchResults.persons">
+        <p>{{persons.firstName}} {{persons.lastName}}</p>
+      </div>
 
-    <h3>Users</h3>
-    <div ng-repeat="users in searchResults.users">
-      <p>{{users.email}}</p>
-    </div>
+      <h3>Users</h3>
+      <div ng-repeat="users in searchResults.users">
+        <p>{{users.email}}</p>
+      </div>
 
-    <h3>Groups</h3>
-    <div ng-repeat="groups in searchResults.groups">
-      <p>{{groups.groupName}}</p>
+      <h3>Groups</h3>
+      <div ng-repeat="groups in searchResults.groups">
+        <p>{{groups.groupName}}</p>
+      </div>
     </div>
   </div>
 
