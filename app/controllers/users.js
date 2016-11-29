@@ -214,7 +214,7 @@ exports.queryAll = function(req, res) {
   
     db.Group.findAll({ where: Sequelize.or(
       ["groupName like ?", '%' + req.body.query + '%'],
-      ["groupName like ?", '%' + req.body.query + '%']
+      ["type like ?", '%' + req.body.query + '%']
       ) })
     .then(function(groups) {
       data.groups = groups;

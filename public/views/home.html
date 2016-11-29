@@ -3,7 +3,7 @@
     <h2>Welcome to CookieBook</h2>
     <br>
 
-    <p>Search for groups/users</p>
+    <p>Search for Groups and Users</p>
 
     <form class="navbar-form" role="search">
       <div class="form-group">
@@ -23,7 +23,7 @@
 
       <h3>Groups</h3>
       <div ng-repeat="groups in searchResults.groups">
-        <p class="in-line_add">{{groups.groupName}}</p>
+        <p class="in-line_add">{{groups.groupName}} ({{groups.type}})</p>
         <button type="submit" class="btn btn-default" ng-click="sendGroupRequest(groups.groupId)">Join</button>
       </div>
     </div>
