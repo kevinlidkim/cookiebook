@@ -78,20 +78,31 @@ exports.getGroupData = function(req, res) {
 
         Promise.all(promiseArrayMemberGroup).then(groups => {
           data.allGroup = groups;
-        })
-        .then(function() {
           data.memberOfGroup = _.differenceWith(data.allGroup, data.ownsGroup, _.isEqual);
         })
         .then(function() {
-          return res.status(200).json({
-            status: 'Successfully retrieved groups',
-            data: data
+
+          var superPromiseArray = [];
+          for (var i = 0; i < data.ownsGroup.length; i++) {
+            superPromiseArray.push(db.JoinGroupRequest.findAll({ where: {group: data.ownsGroup[i].groupId} }));
+          }
+
+          Promise.all(superPromiseArray).then(results => {
+            var flattenRequests = [].concat.apply([], results);
+            data.JoinRequests = flattenRequests;
+            // need to get user and then person so you can display => person name wants to join group name
           })
-        })
-        .catch(function(err) {
-          console.log(err);
-          return res.status(500).json({
-            status: 'Failed to retrieve groups'
+          .then(function() {
+            return res.status(200).json({
+              status: 'Successfully retrieve groups',
+              data: data
+            })
+          })
+          .catch(function(err) {
+            console.log(err)
+            return res.status(500).json({
+              status: 'Failed to retrieve groups'
+            })
           })
         })
       })
@@ -99,6 +110,48 @@ exports.getGroupData = function(req, res) {
     })
 
 }
+
+// exports.getGroupData = function(req, res) {
+
+//   var data = {};
+
+//   db.OwnsGroup.findAll({ where: {owner: req.body.you} })
+//     .then(function(ownsGroup) {
+
+//       console.log(ownsGroup[0]);
+//       console.log(ownsGroup[0].owner);
+//       console.log(ownsGroup[0].group);
+
+//       var promiseArrayOwnsGroup = [];
+//       _.forEach(ownsGroup, function(getGroup) {
+//         // console.log(ownsGroup);
+//         promiseArrayOwnsGroup.push(db.Group.find({ where: {groupId: getGroup.group} }));
+//       })
+
+//       Promise.all(promiseArrayOwnsGroup).then(values => {
+//         data.ownsGroup = values;
+
+//         var superPromiseArray = [];
+//         var i = 0;
+//         _.forEach(values, function(getRequests) {
+//           superPromiseArray.push(db.JoinGroupRequest.findAll({ where: {group: values.groupId} }))
+//         })
+
+//         Promise.all(superPromiseArray).then(results => {
+//           data.joinRequests = results;
+//           console.log(results);
+//         })
+
+//       })
+
+//       .then(function() {
+
+//       })
+      
+
+//     })
+
+// }
 
 exports.joinGroupRequest = function(req, res) {
 

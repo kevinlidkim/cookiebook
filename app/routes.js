@@ -22,7 +22,7 @@ module.exports = function(app, passport) {
   app.get('/yofr', persons.findAll2);
   app.get('/yofw', persons.findAll3);
   app.get('/yogroup', persons.findAll4);
-
+  app.get('/yogroupreq', persons.findgroupreq);
 
   app.get('/logout', users.logout);
   app.post('/signup', passport.authenticate('local-signup', {

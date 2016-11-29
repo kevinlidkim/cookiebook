@@ -133,7 +133,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     }
     UserService.getGroupData(obj)
       .then(function(data) {
-        // console.log(data);
+        console.log(data);
         $scope.storage.groupData = data.data.data;
       })
   }
@@ -153,7 +153,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
 
   // this is a group page owner sending a request for a user to join
   $scope.sendGroupRequest = function() {
-    
+
   }
 
   

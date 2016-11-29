@@ -19,3 +19,5 @@ public/libs
 /config/secret.json
 
 *.local
+
+login_info.txt
