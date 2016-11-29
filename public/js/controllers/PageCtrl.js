@@ -5,6 +5,8 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.newStatus = "";
   $scope.newComment = [];
   $scope.newFriendComment = [];
+  $scope.newGroupStatus = "";
+  $scope.newGroupComment = [];
 
   $scope.getUserPage = function() {
     var user = UserService.getUserData()
@@ -138,6 +140,53 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
             .then(function(pageData) {
               $scope.storage.friendPage = pageData;
               $scope.newFriendComment[index] = "";
+            })
+        })
+
+    }
+  }
+
+  $scope.postGroupStatus = function() {
+    if ($scope.newGroupStatus != "") {
+      var data = {
+        page: $scope.storage.groupPageId,
+        user: $scope.storage.user.userId,
+        content: $scope.newGroupStatus,
+        commentCount: 0,
+        likes: 0
+      };
+
+      PageService.postStatus(data)
+        .then(function() {
+          PageService.loadPage(data)
+            .then(function(pageData) {
+              $scope.storage.groupPage = pageData;
+              $scope.newGroupStatus = "";
+            })
+        });
+    }
+  }
+
+  $scope.postGroupComment = function(index, postId) {
+
+    console.log(index);
+    console.log(postId);
+
+    if ($scope.newGroupComment[index] !="" && $scope.newGroupComment[index]) {
+      var data = {
+        page: $scope.storage.groupPageId,
+        post: postId,
+        user: $scope.storage.user.userId,
+        content: $scope.newGroupComment[index],
+        likes: 0
+      };
+
+      PageService.postComment(data)
+        .then(function() {
+          PageService.loadPage(data)
+            .then(function(pageData) {
+              $scope.storage.groupPage = pageData;
+              $scope.newGroupComment[index] = "";
             })
         })
 

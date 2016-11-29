@@ -76,7 +76,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
 
   $scope.sendFriendRequest = function(userId) {
     if (userId == $scope.storage.user.userId) {
-      console.log('you cant add yourself');
+      // console.log('you cant add yourself');
     } else {
       obj = {
         you: $scope.storage.user.userId,
@@ -120,7 +120,8 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
         .then(function(data) {
           $scope.newGroup.groupName = "";
           $scope.newGroup.type = "";
-          // console.log(data);
+          
+          $scope.getGroupData();
         })
     }
   }
@@ -132,7 +133,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     }
     UserService.getGroupData(obj)
       .then(function(data) {
-        console.log(data);
+        // console.log(data);
         $scope.storage.groupData = data.data.data;
       })
   }

@@ -15,12 +15,13 @@ module.exports = function(app, passport) {
   app.get('/persons/find', persons.findAll); // lists all persons
   app.get('/yo', users.findAll); // lists all users
   app.get('/yopages', pages.findAll);
-  app.get('/yoyopages', pages.findAll2);
+  app.get('/relpages', pages.findAll2);
   app.get('/yoposts', posts.findAll);
   app.get('/yoyoposts', posts.findAll2);
   app.get('/yocom', comments.findAll);
   app.get('/yofr', persons.findAll2);
   app.get('/yofw', persons.findAll3);
+  app.get('/yogroup', persons.findAll4);
 
 
   app.get('/logout', users.logout);

@@ -98,3 +98,14 @@ exports.findAll2 = function(req, res) {
       res.status(500).json(err);
     });
 }
+
+exports.findAll4 = function(req, res) {
+
+  db.Group.findAll()
+    .then(function (users) {
+      res.status(200).json(users);
+    })
+    .catch(function (err) {
+      res.status(500).json(err);
+    });
+}
