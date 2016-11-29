@@ -41,4 +41,14 @@
     </div>
   </div>
 
+  <!-- show only if group owner -->
+  <div ng-show="isGroupOwner()">
+    <h3>Join Requests</h3>
+    <p ng-repeat="joinRequests in storage.groupRequest">{{joinRequests.firstName}} {{joinRequests.lastName}}<p>
+    <div ng-repeat="joinRequests in storage.groupRequest">
+      <p class="in-line_add">{{joinRequests.firstName}} {{joinRequests.lastName}}</p>
+      <button type="submit" class="btn btn-default" ng-click="approveJoinRequest(joinRequests.userId)">Approve</button>
+    </div>
+  </div>
+
 </div>

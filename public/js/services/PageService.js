@@ -70,6 +70,16 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
         .error(function() {
           return null;
         });
+    },
+
+    loadGroupRequests : function(obj) {
+      return $http.post('/page/groupRequests', obj)
+        .success(function(data) {
+          return data.data;
+        })
+        .error(function() {
+          return null;
+        });
     }
   }
 

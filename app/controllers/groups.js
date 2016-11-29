@@ -111,47 +111,6 @@ exports.getGroupData = function(req, res) {
 
 }
 
-// exports.getGroupData = function(req, res) {
-
-//   var data = {};
-
-//   db.OwnsGroup.findAll({ where: {owner: req.body.you} })
-//     .then(function(ownsGroup) {
-
-//       console.log(ownsGroup[0]);
-//       console.log(ownsGroup[0].owner);
-//       console.log(ownsGroup[0].group);
-
-//       var promiseArrayOwnsGroup = [];
-//       _.forEach(ownsGroup, function(getGroup) {
-//         // console.log(ownsGroup);
-//         promiseArrayOwnsGroup.push(db.Group.find({ where: {groupId: getGroup.group} }));
-//       })
-
-//       Promise.all(promiseArrayOwnsGroup).then(values => {
-//         data.ownsGroup = values;
-
-//         var superPromiseArray = [];
-//         var i = 0;
-//         _.forEach(values, function(getRequests) {
-//           superPromiseArray.push(db.JoinGroupRequest.findAll({ where: {group: values.groupId} }))
-//         })
-
-//         Promise.all(superPromiseArray).then(results => {
-//           data.joinRequests = results;
-//           console.log(results);
-//         })
-
-//       })
-
-//       .then(function() {
-
-//       })
-      
-
-//     })
-
-// }
 
 exports.joinGroupRequest = function(req, res) {
 
@@ -194,4 +153,68 @@ exports.joinGroupRequest = function(req, res) {
       }
     })
 
+}
+
+exports.loadGroupRequest = function(req, res) {
+
+  var data = {};
+
+  db.JoinGroupRequest.findAll({ where: {group: req.body.group} })
+    .then(function(joinRequests) {
+
+      var userPromiseArray = [];
+      _.forEach(joinRequests, function(user) {
+        // console.log(user.user);
+        userPromiseArray.push(db.User.find({ where: {userId: user.user} }));
+      })
+
+      Promise.all(userPromiseArray).then(values => {
+        data.users = values;
+
+        var personPromiseArray = [];
+        // _.forEach(data.users, function(person) {
+        //   personPromiseArray.push(db.Person.find({ where: {personId: person.personId} }));
+        // })
+        for (var i = 0; i < data.users.length; i++) {
+          personPromiseArray.push(db.Person.find({ where: {personId: data.users[i].personId} }));
+        }
+
+        Promise.all(personPromiseArray).then(results => {
+          data.persons = results;
+
+          var userMap = _.keyBy(data.users, 'personId');
+          var personMap = _.keyBy(data.persons, 'personId');
+
+          // console.log(userMap);
+
+          var requests = [];
+          _.forEach(personMap, function(obj) {
+            var request = {
+              group: req.body.group,
+              personId: obj.personId,
+              firstName: obj.firstName,
+              lastName: obj.lastName,
+              userId: userMap[obj.personId].userId
+            }
+            requests.push(request);
+          })
+          return requests;
+        })
+        .then(function(req) {
+          return res.status(200).json({
+            status: 'Retrieved all requests',
+            requests: req
+          })
+        })
+        .catch(function(err) {
+          console.log(err);
+          return res.status(500).json({
+            status: 'Error retrieving requests'
+          })
+        })
+      })
+
+      
+
+    })
 }

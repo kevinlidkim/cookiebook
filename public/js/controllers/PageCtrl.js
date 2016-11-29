@@ -76,7 +76,11 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         PageService.loadPage(data)
           .then(function(pageData) {
             $scope.storage.groupPage = pageData;
-            console.log(pageData);
+            // console.log(pageData);
+            return PageService.loadGroupRequests(data)
+          })
+          .then(function(requestData) {
+            $scope.storage.groupRequest = requestData.data.requests;
           })
       })
   }
@@ -191,6 +195,22 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         })
 
     }
+  },
+
+  $scope.isGroupOwner = function() {
+    var owner = false;
+    var groups = $scope.storage.groupData.ownsGroup;
+    for (var i = 0; i < groups.length; i++) {
+      if (groups[i].groupId == $scope.storage.group.groupId) {
+        owner = true;
+      }
+    }
+    return owner;
+  }
+
+  $scope.approveJoinRequest = function(userId) {
+    console.log(userId);
+    // delete joinrequestgroup obj, create memberofgroup obj in backend
   }
 
 }]);
