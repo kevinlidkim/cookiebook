@@ -120,4 +120,8 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     }
   }
 
+  $scope.getGroupPage = function(groupId) {
+    console.log(groupId);
+  }
+
 }]);

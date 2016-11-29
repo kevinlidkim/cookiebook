@@ -1,64 +1,101 @@
 var db = require('../../config/db');
+var _ = require('lodash');
 
-exports.findAll = function(req, res) {
+exports.createGroup = function(req, res) {
 
-  db.Group.findAll()
-    .then(function (groups) {
-      res.status(200).json(groups);
+  var groupObj = {
+    groupName: req.body.groupName,
+    type: req.body.type
+  }
+
+  var groupsRelation = {
+    owner: req.body.you,
+    user: req.body.you
+  };
+
+  db.Group.create(groupObj)
+    .then(function(group) {
+      groupsRelation.group = group.groupId;
+      return db.OwnsGroup.create(groupsRelation);
     })
-    .catch(function (err) {
-      res.status(500).json(err);
-    });
+    .then(function() {
+      return db.MemberOfGroup.create(groupsRelation);
+    })
+    .then(function() {
+      var newPage = {
+        postCount: 0
+      }
+      return db.Page.create(newPage)
+    })
+    .then(function(page) {
+      var relation = {
+        page: page.pageId,
+        group: groupsRelation.group
+      }
+      return db.OwnsPage.create(relation);
+    })
+    .then(function(result) {
+      return res.status(200).json({
+        status: 'Successfully created group',
+        pageId: result.page,
+        groupId: groupsRelation.group
+      })
+    })
+    .catch(function(err) {
+      // console.log(err);
+      return res.status(500).json({
+        status: 'Error creating group'
+      })
+    })
+
 }
 
-exports.show = function(req, res) {
+exports.getGroupData = function(req, res) {
 
-  db.Group.findById(req.params.id)
-    .then(function (group) {
-      res.status(200).json(group);
+  var data = {};
+
+  db.OwnsGroup.findAll({ where: {owner: req.body.you} })
+    .then(function(ownsGroup) {
+
+      var promiseArrayOwnsGroup = [];
+      _.forEach(ownsGroup, function(getGroup) {
+        promiseArrayOwnsGroup.push(db.Group.find({ where: {groupId: getGroup.group} }));
+      })
+
+      Promise.all(promiseArrayOwnsGroup).then(values => {
+        data.ownsGroup = values;
+      })
+
+      .then(function() {
+        return db.MemberOfGroup.findAll({ where: {user: req.body.you} })
+      })
+      .then(function(memberOfGroup) {
+
+        var promiseArrayMemberGroup = [];
+        _.forEach(memberOfGroup, function(member) {
+          promiseArrayMemberGroup.push(db.Group.find({ where: {groupId: member.group} }));
+        })
+
+        Promise.all(promiseArrayMemberGroup).then(groups => {
+          data.allGroup = groups;
+        })
+        .then(function() {
+          data.memberOfGroup = _.differenceWith(data.allGroup, data.ownsGroup, _.isEqual);
+        })
+        .then(function() {
+          return res.status(200).json({
+            status: 'Successfully retrieved groups',
+            data: data
+          })
+        })
+        .catch(function(err) {
+          console.log(err);
+          return res.status(500).json({
+            status: 'Failed to retrieve groups'
+          })
+        })
+      })
+
     })
-    .catch(function (err) {
-      res.status(500).json(err);
-    });
-}
 
-exports.create = function(req, res) {
-
-  var group = db.Group.create(req.body)
-    .then(function (newGroup) {
-      res.status(200).json(newGroup);
-    })
-    .catch(function (err) {
-      res.status(500).json(err);
-    });
-}
-
-exports.update = function(req, res) {
-
-  db.Group.update(req.body, {
-    where: {
-      id: req.params.id
-    }
-  })
-    .then(function (updatedRecords) {
-      res.status(200).json(updatedRecords);
-    })
-    .catch(function (err) {
-      res.status(500).json(err);
-    });
-}
-
-exports.delete = function(req, res) {
-
-  db.Group.destroy({
-    where: {
-      id: req.params.id
-    }
-  })
-    .then(function (deletedRecords) {
-      res.status(200).json(deletedRecords);
-    })
-    .catch(function (err) {
-      res.status(500).json(err);
-    });
 }

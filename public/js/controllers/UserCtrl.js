@@ -102,10 +102,38 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     var obj = {
       you: $scope.storage.user.userId,
       friend: friendId
-    }
+    };
     UserService.acceptFriendRequest(obj)
       .then(function(data) {
         $scope.getFriendData();
+      })
+  }
+
+  $scope.createGroup = function() {
+    var obj = {
+      you: $scope.storage.user.userId,
+      groupName: $scope.newGroup.groupName,
+      type: $scope.newGroup.type
+    };
+    if ($scope.newGroup.groupName && $scope.newGroup.type && $scope.newGroup.groupName != "" && $scope.newGroup.type != "") {
+      UserService.createGroup(obj)
+        .then(function(data) {
+          $scope.newGroup.groupName = "";
+          $scope.newGroup.type = "";
+          // console.log(data);
+        })
+    }
+  }
+
+  $scope.getGroupData = function() {
+    $scope.getUserData();
+    var obj = {
+      you: $scope.storage.user.userId
+    }
+    UserService.getGroupData(obj)
+      .then(function(data) {
+        console.log(data);
+        $scope.storage.groupData = data.data.data;
       })
   }
 

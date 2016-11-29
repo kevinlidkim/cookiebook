@@ -10,6 +10,7 @@ module.exports = function(app, passport) {
   var pages = require('./controllers/pages');
   var posts = require('./controllers/posts');
   var comments = require('./controllers/comments');
+  var groups = require('./controllers/groups');
   
   app.get('/persons/find', persons.findAll); // lists all persons
   app.get('/yo', users.findAll); // lists all users
@@ -47,7 +48,10 @@ module.exports = function(app, passport) {
   app.post('/friend/request', users.sendFriendRequest);
   app.post('/friend/get', users.getFriendData);
   app.post('/friend/accept', users.acceptFriendRequest);
-  // app.post('/page/friend', pages.getFriendPageId);
+
+  app.post('/group/create', groups.createGroup);
+  app.post('/groups/get', groups.getGroupData);
+
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');

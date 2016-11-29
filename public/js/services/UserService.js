@@ -143,7 +143,27 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     acceptFriendRequest : function(obj) {
       return $http.post('/friend/accept', obj)
         .success(function(data) {
+          // console.log(data);
+          return data;
+        })
+        .error(function(data) {
           console.log(data);
+        })
+    },
+    createGroup : function(obj) {
+      return $http.post('/group/create', obj)
+        .success(function(data) {
+          // console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    getGroupData : function(obj) {
+      return $http.post('/groups/get', obj)
+        .success(function(data) {
+          // console.log(data);
           return data;
         })
         .error(function(data) {

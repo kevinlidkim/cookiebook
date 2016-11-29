@@ -38,8 +38,15 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
-    .when('/group/:groupId?', {
+    .when('/groups', {
       templateUrl: 'views/group.html',
+      controller: 'UserController',
+      access: {restricted: true}
+    })
+
+    .when('/create/group', {
+      templateUrl: 'views/createGroup.html',
+      controller: 'UserController',
       access: {restricted: true}
     })
 
@@ -49,7 +56,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
-    .when('/user/:friend?', {
+    .when('/user/:friend', {
       templateUrl: 'views/friendPage.html',
       controller: 'PageController',
       access: {restricted: true}
