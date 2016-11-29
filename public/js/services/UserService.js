@@ -151,6 +151,16 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         .error(function(data) {
           console.log(data);
         })
+    },
+    joinGroupRequest : function(obj) {
+      return $http.post('/group/joinRequest', obj)
+        .success(function(data) {
+          console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
     }
   }
 

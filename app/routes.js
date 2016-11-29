@@ -53,7 +53,7 @@ module.exports = function(app, passport) {
   app.post('/group/create', groups.createGroup);
   app.post('/groups/get', groups.getGroupData);
   app.post('/page/group', pages.getGroupPageId);
-
+  app.post('/group/joinRequest', groups.joinGroupRequest);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');

@@ -99,3 +99,46 @@ exports.getGroupData = function(req, res) {
     })
 
 }
+
+exports.joinGroupRequest = function(req, res) {
+
+  db.MemberOfGroup.find({ where: {user: req.body.you, group: req.body.group} })
+    .then(function(groupMember) {
+
+      if (groupMember == null) {
+        db.JoinGroupRequest.find({ where: {user: req.body.you, group: req.body.group} })
+          .then(function(joinRequest) {
+
+            if (joinRequest == null) {
+              var newRequest = {
+                user: req.body.you,
+                group: req.body.group
+              }
+              db.JoinGroupRequest.create(newRequest)
+                .then(function() {
+                  return res.status(200).json({
+                    status: 'Join group request send'
+                  })
+                })
+                .catch(function(err) {
+                  return res.status(500).json({
+                    status: 'Error sending join group request'
+                  })
+                })
+
+            } else {
+              return res.status(200).json({
+                status: 'Already sent join group request'
+              })
+            }
+          })
+
+
+      } else {
+        return res.status(200).json({
+          status: 'Already in the group'
+        })
+      }
+    })
+
+}

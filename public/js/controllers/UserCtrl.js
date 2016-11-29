@@ -142,8 +142,18 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     console.log(groupId);
   }
 
-  $scope.sendGroupRequest = function(groupId) {
-    console.log(groupId);
+  // this is a user sending a request to join a group
+  $scope.joinGroupRequest = function(groupId) {
+    obj = {
+      you: $scope.storage.user.userId,
+      group: groupId
+    }
+    UserService.joinGroupRequest(obj);
+  }
+
+  // this is a group page owner sending a request for a user to join
+  $scope.sendGroupRequest = function() {
+    
   }
 
   
