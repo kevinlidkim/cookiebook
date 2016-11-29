@@ -12,16 +12,18 @@
     <button type="submit" class="btn btn-default">Submit</button>
   </form> -->
 
-  <a ng-href="/create/group"><h3>Create a Group</h3></a>
+  <a ng-href="/create/group"><button class="btn btn-primary">Create a Group</button></a>
 
   <h3>Groups You Own</h3>
   <div ng-repeat="ownsGroup in storage.groupData.ownsGroup">
-    <p><a ng-href="/group/{{ownsGroup.groupId}}" ng-controller="PageController" ng-click="getGroupPage(ownsGroup)">{{ownsGroup.groupName}} ({{ownsGroup.type}})</a></p>
+    <p class="in-line_add"><a ng-href="/group/{{ownsGroup.groupId}}" ng-controller="PageController" ng-click="getGroupPage(ownsGroup)">{{ownsGroup.groupName}} ({{ownsGroup.type}})</a></p>
+    <button type="submit" class="btn btn-default" ng-click="editGroup(ownsGroup.groupId)">Edit Group</button>
   </div>
 
   <h3>Groups You're Part Of</h3>
   <div ng-repeat="memberOfGroup in storage.groupData.memberOfGroup">
-    <p><a ng-href="/group/{{memberOfGroup.groupId}}" ng-controller="PageController" ng-click="getGroupPage(memberOfGroup)">{{memberOfGroup.groupName}} ({{memberOfGroup.type}})</a></p>
+    <p class="in-line_add"><a ng-href="/group/{{memberOfGroup.groupId}}" ng-controller="PageController" ng-click="getGroupPage(memberOfGroup)">{{memberOfGroup.groupName}} ({{memberOfGroup.type}})</a></p>
+    <button type="submit" class="btn btn-default" ng-click="editGroup(memberOfGroup.groupId)">Edit Group</button>
   </div>
 
 </div>

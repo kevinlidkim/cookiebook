@@ -14,7 +14,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     }
 
     var userId = $scope.storage.user.userId;
-    UserService.getPersonalPageId(userId)
+    PageService.getPersonalPageId(userId)
       .then(function(pageId) {
         $scope.storage.personalPageId = pageId.data.data;
 
@@ -38,7 +38,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
       id: friend.userId
     }
 
-    UserService.getFriendPageId(obj)
+    PageService.getFriendPageId(obj)
       .then(function(pageId) {
         $scope.storage.friendPageId = pageId.data.data;
 
@@ -53,6 +53,30 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
             // console.log(pageData);
           })
       });
+  }
+
+  $scope.getGroupPage = function(group) {
+    $scope.storage.group = group;
+
+    var obj = {
+      id: group.groupId
+    }
+
+    PageService.getGroupPageId(obj)
+      .then(function(pageId) {
+        $scope.storage.groupPageId = pageId.data.data;
+
+        var data = {
+          page: $scope.storage.groupPageId,
+          group: group.groupId
+        }
+
+        PageService.loadPage(data)
+          .then(function(pageData) {
+            $scope.storage.groupPage = pageData;
+            console.log(pageData);
+          })
+      })
   }
 
   $scope.postStatus = function() {
@@ -118,10 +142,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         })
 
     }
-  }
-
-  $scope.getGroupPage = function(groupId) {
-    console.log(groupId);
   }
 
 }]);

@@ -40,6 +40,36 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
           // console.log(data);
           return null;
         });
+    },
+
+    getPersonalPageId : function() {
+      return $http.get('/page/me')
+        .success(function(data) {
+          return data.data;
+        })
+        .error(function() {
+          return null;
+        });
+    },
+
+    getFriendPageId : function(obj) {
+      return $http.post('/page/friend', obj)
+        .success(function(data) {
+          return data.data;
+        })
+        .error(function() {
+          return null;
+        });
+    },
+
+    getGroupPageId : function(obj) {
+      return $http.post('/page/group', obj)
+        .success(function(data) {
+          return data.data;
+        })
+        .error(function() {
+          return null;
+        });
     }
   }
 

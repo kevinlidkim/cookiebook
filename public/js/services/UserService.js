@@ -82,24 +82,6 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     getUserData : function() {
       return loggedInUser;
     },
-    getPersonalPageId : function() {
-      return $http.get('/page/me')
-        .success(function(data) {
-          return data.data;
-        })
-        .error(function() {
-          return null;
-        });
-    },
-    getFriendPageId : function(obj) {
-      return $http.post('/page/friend', obj)
-        .success(function(data) {
-          return data.data;
-        })
-        .error(function() {
-          return null;
-        });
-    },
     updateProfile : function(obj) {
       return $http.post('/update', obj)
         .success(function(data) {

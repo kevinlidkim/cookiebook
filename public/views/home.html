@@ -23,7 +23,8 @@
 
       <h3>Groups</h3>
       <div ng-repeat="groups in searchResults.groups">
-        <p>{{groups.groupName}}</p>
+        <p class="in-line_add">{{groups.groupName}}</p>
+        <button type="submit" class="btn btn-default" ng-click="sendGroupRequest(groups.groupId)">Join</button>
       </div>
     </div>
   </div>

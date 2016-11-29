@@ -149,6 +149,24 @@ exports.getFriendPageId = function(req, res) {
     });
 }
 
+exports.getGroupPageId = function(req, res) {
+
+  db.OwnsPage.find({ where: {group: req.body.id} })
+    .then(function(relation) {
+      var pageId = relation.page;
+      return res.status(200).json({
+        status: 'Group Page Id',
+        data: pageId
+      });
+    })
+    .catch(function(err) {
+      // console.log(err);
+      return res.status(500).json({
+        status: 'Error retrieving friend page'
+      });
+    });
+}
+
 // exports.findAll = function(req, res) {
 
 //   db.Page.findAll()

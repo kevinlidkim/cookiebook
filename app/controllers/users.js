@@ -212,7 +212,10 @@ exports.queryAll = function(req, res) {
   var arrayOfPersons;
   var users = [];
   
-    db.Group.findAll({ where: ["groupName like ?", '%' + req.body.query + '%'] })
+    db.Group.findAll({ where: Sequelize.or(
+      ["groupName like ?", '%' + req.body.query + '%'],
+      ["groupName like ?", '%' + req.body.query + '%']
+      ) })
     .then(function(groups) {
       data.groups = groups;
 

@@ -51,6 +51,7 @@ module.exports = function(app, passport) {
 
   app.post('/group/create', groups.createGroup);
   app.post('/groups/get', groups.getGroupData);
+  app.post('/page/group', pages.getGroupPageId);
 
 
   app.get('*', function(req, res) {

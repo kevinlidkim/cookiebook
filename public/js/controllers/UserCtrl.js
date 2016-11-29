@@ -137,5 +137,13 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
       })
   }
 
+  $scope.editGroup = function(groupId) {
+    console.log(groupId);
+  }
+
+  $scope.sendGroupRequest = function(groupId) {
+    console.log(groupId);
+  }
+
   
 }]);
