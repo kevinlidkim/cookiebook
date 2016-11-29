@@ -209,8 +209,14 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   }
 
   $scope.approveJoinRequest = function(userId) {
-    console.log(userId);
-    // delete joinrequestgroup obj, create memberofgroup obj in backend
+    var obj = {
+      user: userId,
+      group: $scope.storage.group.groupId
+    };
+    UserService.approveJoinRequest(obj)
+      .then(function(data) {
+        $scope.getGroupPage($scope.storage.group);
+      })
   }
 
 }]);

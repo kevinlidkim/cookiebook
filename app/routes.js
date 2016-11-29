@@ -54,6 +54,7 @@ module.exports = function(app, passport) {
   app.post('/groups/get', groups.getGroupData);
   app.post('/page/group', pages.getGroupPageId);
   app.post('/group/joinRequest', groups.joinGroupRequest);
+  app.post('/group/approveRequest', groups.approveGroupRequest);
   app.post('/page/groupRequests', groups.loadGroupRequest);
 
   app.get('*', function(req, res) {

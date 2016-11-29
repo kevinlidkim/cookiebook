@@ -155,6 +155,30 @@ exports.joinGroupRequest = function(req, res) {
 
 }
 
+exports.approveGroupRequest = function(req, res) {
+
+  console.log(req.body);
+
+  db.JoinGroupRequest.find({ where: {user: req.body.user, group: req.body.group} })
+    .then(function(joinRequest) {
+      return joinRequest.destroy();
+    })
+    .then(function() {
+      return db.MemberOfGroup.create(req.body);
+    })
+    .then (function() {
+      return res.status(200).json({
+        status: 'Approved user to group'
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to approve user join group request'
+      })
+    })
+}
+
 exports.loadGroupRequest = function(req, res) {
 
   var data = {};
