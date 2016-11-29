@@ -50,6 +50,12 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
+    .when('/group/:group', {
+      templateUrl: 'views/groupPage.html',
+      controller: 'PageController',
+      access: {restricted: true}
+    })
+
     .when('/friend/', {
       templateUrl: 'views/friend.html',
       controller: 'UserController',
