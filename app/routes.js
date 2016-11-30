@@ -10,7 +10,11 @@ module.exports = function(app, passport) {
   var pages = require('./controllers/pages');
   var posts = require('./controllers/posts');
   var comments = require('./controllers/comments');
+<<<<<<< HEAD
   var groups = require('./controllers/groups');
+=======
+  var likes = require('./controllers/likes');
+>>>>>>> 504a8f2f6cda64c09d11645d0f169f65ff11ed0c
   
   app.get('/persons/find', persons.findAll); // lists all persons
   app.get('/yo', users.findAll); // lists all users
@@ -19,10 +23,18 @@ module.exports = function(app, passport) {
   app.get('/yoposts', posts.findAll);
   app.get('/yoyoposts', posts.findAll2);
   app.get('/yocom', comments.findAll);
+<<<<<<< HEAD
   app.get('/yofr', persons.findAll2);
   app.get('/yofw', persons.findAll3);
+<<<<<<< HEAD
   app.get('/yogroup', persons.findAll4);
   app.get('/yogroupreq', persons.findgroupreq);
+=======
+=======
+  app.get('/yolikesPost', likes.findAll);
+>>>>>>> cd9eddf5f87f3d539ce4a0c1efa4a12a93f9b782
+
+>>>>>>> 504a8f2f6cda64c09d11645d0f169f65ff11ed0c
 
   app.get('/logout', users.logout);
   app.post('/signup', passport.authenticate('local-signup', {
@@ -39,6 +51,8 @@ module.exports = function(app, passport) {
   app.post('/page', pages.loadPage);
   app.post('/post', posts.makePost);
   app.post('/comment', comments.makeComment);
+  app.post('/likesPost', likes.LikesPost);
+  app.post('/likesComment', likes.LikesComment);
   app.get('/page/me', pages.getPersonalPageId);
 
   app.post('/update', users.updateProfile);
