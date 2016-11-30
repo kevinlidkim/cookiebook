@@ -10,6 +10,7 @@ module.exports = function(app, passport) {
   var pages = require('./controllers/pages');
   var posts = require('./controllers/posts');
   var comments = require('./controllers/comments');
+  var likes = require('./controllers/likes');
   
   app.get('/persons/find', persons.findAll); // lists all persons
   app.get('/yo', users.findAll); // lists all users
@@ -18,8 +19,12 @@ module.exports = function(app, passport) {
   app.get('/yoposts', posts.findAll);
   app.get('/yoyoposts', posts.findAll2);
   app.get('/yocom', comments.findAll);
+<<<<<<< HEAD
   app.get('/yofr', persons.findAll2);
   app.get('/yofw', persons.findAll3);
+=======
+  app.get('/yolikesPost', likes.findAll);
+>>>>>>> cd9eddf5f87f3d539ce4a0c1efa4a12a93f9b782
 
 
   app.get('/logout', users.logout);
@@ -37,6 +42,8 @@ module.exports = function(app, passport) {
   app.post('/page', pages.loadPage);
   app.post('/post', posts.makePost);
   app.post('/comment', comments.makeComment);
+  app.post('/likesPost', likes.LikesPost);
+  app.post('/likesComment', likes.LikesComment);
   app.get('/page/me', pages.getPersonalPageId);
 
   app.post('/update', users.updateProfile);

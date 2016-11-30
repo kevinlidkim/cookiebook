@@ -1,6 +1,5 @@
 angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', function($scope, $localStorage, $sessionStorage, UserService, PageService) {
 
-
   $scope.storage = $localStorage;
   $scope.newStatus = "";
   $scope.newComment = [];
@@ -65,6 +64,8 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         likes: 0
       };
 
+      console.log($scope.storage);
+
       PageService.postStatus(data)
         .then(function() {
           PageService.loadPage(data)
@@ -98,6 +99,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     }
   }
 
+<<<<<<< HEAD
   $scope.postFriendComment = function(index, postId) {
     if ($scope.newFriendComment[index] !="" && $scope.newFriendComment[index]) {
       var data = {
@@ -118,6 +120,62 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         })
 
     }
+=======
+  $scope.likesPost = function(postId) {
+    if(postId != null) {
+      var data = {
+        post: postId,
+        user: $scope.storage.user.userId
+      }
+    
+      PageService.likesPost(data)
+        .then(function(){
+          $scope.getUserPage(); //updates storage so that checkLikePost will be accurate
+        })
+    }
+  }
+
+  $scope.likesComment = function(commentId) {
+    if(commentId != null) {
+      var data = {
+        comment: commentId,
+        user: $scope.storage.user.userId
+      }
+    
+      PageService.likesComment(data)
+        .then(function(){
+          $scope.getUserPage(); //updates storage so that checkLikePost will be accurate
+        })
+    }
+  }
+
+  $scope.checkLikesPost = function(postId) {
+
+    var array = $scope.storage.page.data.pageData.arrayOfLikesPost;
+    var found = false;
+
+    for(var i = 0; i < array.length; i++){
+        if(array[i].post == postId){
+          found = true;
+          break;
+        }
+    }
+    return found;
+  }
+
+    $scope.checkLikesComment = function(commentId) {
+
+    var array = $scope.storage.page.data.pageData.arrayOfLikesComment;
+    var found = false;
+
+    for(var i = 0; i < array.length; i++){
+        if(array[i].comment == commentId){
+          found = true;
+          break;
+        }
+    }
+    return found;
+>>>>>>> cd9eddf5f87f3d539ce4a0c1efa4a12a93f9b782
   }
 
 }]);

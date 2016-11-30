@@ -40,8 +40,33 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
           // console.log(data);
           return null;
         });
+    },
+
+    likesPost : function(sendData) {
+      return $http.post('/likesPost', sendData)
+        .success(function(data){
+          console.log(data);
+        })
+        .error(function(data){
+          console.log(data);
+          return null;
+        });
+    },
+
+    likesComment : function(sendData) {
+      return $http.post('/likesComment', sendData)
+        .success(function(data){
+          console.log(data);
+        })
+        .error(function(data){
+          console.log(data);
+          return null;
+        });
     }
+
   }
+
+
 
 }]);
 

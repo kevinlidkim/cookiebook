@@ -26,6 +26,7 @@ exports.makePost = function(req, res) {
 
   db.Post.create(req.body)
     .then(function(post) {
+
       var date = new Date();
       var relation = {
         post: post.postId,
@@ -33,6 +34,7 @@ exports.makePost = function(req, res) {
         user: req.body.user,
         dateTimePosted: new Date()
       };
+
       return db.PostedOn.create(relation);
     })
     .then(function(newRelation) {
