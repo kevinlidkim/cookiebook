@@ -73,10 +73,18 @@ exports.loadPage = function(req, res) {
         pageData.arrayOfPosts = values;
 
         // Get all the comment relations
+        // Get all the likesPost relations
         var promiseArrayComments = [];
+        var promistArrayLikesPost = [];
         _.forEach(values, function(post) {
           promiseArrayComments.push(db.CommentedOn.findAll({ where: {post: post.postId} }));
+          promistArrayLikesPost.push(db.LikesPost.findAll({where: {post: post.postId}}))
         })
+
+        // Resolve the promise --> now we have the likesPost relations
+        Promise.all(promistArrayLikesPost).then(likesPostRelations => {
+          var LikesPostRelations = [].concat.apply([], likesPostRelations);
+          pageData.arrayOfLikesPost = LikesPostRelations;
 
         // Resolve the promise --> now we have the comment relations
         Promise.all(promiseArrayComments).then(commentRelations => {
@@ -85,15 +93,23 @@ exports.loadPage = function(req, res) {
 
           // Get all the comments
           var superPromiseArray = [];
+          var promistArrayLikesComment = [];
           _.forEach(flattenArray, function(comment) {
-            superPromiseArray.push(db.Comment.findAll({ where: {commentId: comment.comment} }))
+            superPromiseArray.push(db.Comment.findAll({ where: {commentId: comment.comment} }));
+            promistArrayLikesComment.push(db.LikesComment.findAll({where: {comment : comment.comment}}))
           })
 
-          // Resolve the promise --> now we have all the comments
-          Promise.all(superPromiseArray).then(arrayOfComments => {
-            var flattenComments = [].concat.apply([], arrayOfComments);
-            pageData.arrayOfComments = flattenComments;
-          })
+          // Resolve the promise --> now we have the likesComment relations
+          Promise.all(promistArrayLikesComment).then(likesCommentRelations => {
+            var LikesCommentRelations = [].concat.apply([], likesCommentRelations);
+            pageData.arrayOfLikesComment = LikesCommentRelations;
+
+            // Resolve the promise --> now we have all the comments
+            Promise.all(superPromiseArray).then(arrayOfComments => {
+              var flattenComments = [].concat.apply([], arrayOfComments);
+              pageData.arrayOfComments = flattenComments;
+            })
+
           .then(function() {
 
             // Convert arrays to maps
@@ -134,12 +150,15 @@ exports.loadPage = function(req, res) {
             });
           })
 
-        })
+          }) //promise likesComment Relation
 
-      })
+        })  //promise comment relation
+        })  //promist likesPost
 
-
+      }) //promise post
     })
+
+
 
 }
 
