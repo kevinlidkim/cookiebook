@@ -42,27 +42,16 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
         });
     },
 
-<<<<<<< HEAD
     getPersonalPageId : function() {
       return $http.get('/page/me')
         .success(function(data) {
           return data.data;
         })
         .error(function() {
-=======
-    likesPost : function(sendData) {
-      return $http.post('/likesPost', sendData)
-        .success(function(data){
-          console.log(data);
-        })
-        .error(function(data){
-          console.log(data);
->>>>>>> 504a8f2f6cda64c09d11645d0f169f65ff11ed0c
-          return null;
+          return null
         });
     },
 
-<<<<<<< HEAD
     getFriendPageId : function(obj) {
       return $http.post('/page/friend', obj)
         .success(function(data) {
@@ -88,16 +77,29 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
         .success(function(data) {
           return data.data;
         })
-        .error(function() {
-=======
+        .error(function(data) {
+          console.log(data);
+        });
+    },
+
+    likesPost : function(sendData) {
+      return $http.post('/likesPost', sendData)
+        .success(function(data){
+          // console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+          return null;
+        });
+    },
+
     likesComment : function(sendData) {
       return $http.post('/likesComment', sendData)
         .success(function(data){
-          console.log(data);
+          // console.log(data);
         })
         .error(function(data){
           console.log(data);
->>>>>>> 504a8f2f6cda64c09d11645d0f169f65ff11ed0c
           return null;
         });
     }

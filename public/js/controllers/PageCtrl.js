@@ -129,7 +129,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     }
   }
 
-<<<<<<< HEAD
   $scope.postFriendComment = function(index, postId) {
     if ($scope.newFriendComment[index] !="" && $scope.newFriendComment[index]) {
       var data = {
@@ -150,7 +149,8 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         })
 
     }
-=======
+  }
+
   $scope.likesPost = function(postId) {
     if(postId != null) {
       var data = {
@@ -193,7 +193,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     return found;
   }
 
-    $scope.checkLikesComment = function(commentId) {
+  $scope.checkLikesComment = function(commentId) {
 
     var array = $scope.storage.page.data.pageData.arrayOfLikesComment;
     var found = false;
@@ -205,7 +205,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         }
     }
     return found;
->>>>>>> cd9eddf5f87f3d539ce4a0c1efa4a12a93f9b782
   }
 
   $scope.postGroupStatus = function() {

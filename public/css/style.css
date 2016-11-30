@@ -114,7 +114,6 @@ body {
 }
 
 .like_button {
-<<<<<<< HEAD
   width: 32px;
   height: 32px;
   min-width: 32px;
@@ -122,7 +121,5 @@ body {
 
 .in-line_add {
   display: inline-block;
-=======
-  color: grey;
->>>>>>> cd9eddf5f87f3d539ce4a0c1efa4a12a93f9b782
+  color: gray;
 }
