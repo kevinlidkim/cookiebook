@@ -157,7 +157,7 @@ exports.joinGroupRequest = function(req, res) {
 
 exports.approveGroupRequest = function(req, res) {
 
-  console.log(req.body);
+  // console.log(req.body);
 
   db.JoinGroupRequest.find({ where: {user: req.body.user, group: req.body.group} })
     .then(function(joinRequest) {
