@@ -95,5 +95,3 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
         });
   });
 });
-
-// need to create a method that sees if user has access to group/friend
