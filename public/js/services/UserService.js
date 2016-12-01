@@ -178,6 +178,26 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         .error(function(data) {
           console.log(data);
         })
+    },
+    sendMessage : function(obj) {
+      return $http.post('/sendMessage', obj)
+        .success(function(data) {
+          // console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    loadMessages : function(obj) {
+      return $http.post('/loadMessages', obj)
+        .success(function(data) {
+          console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
     }
   }
 

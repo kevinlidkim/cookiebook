@@ -70,11 +70,13 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 
     .when('/createMessage/:user', {
       templateUrl: 'views/createMessage.html',
+      controller: 'UserController',
       access: {restricted: true}
     })
 
     .when('/message', {
       templateUrl: 'views/message.html',
+      controller: 'UserController',
       access: {restricted: true}
     })
 

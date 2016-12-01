@@ -12,6 +12,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
       $scope.storage.user = user;
       $scope.storage.name = user.firstName + " " + user.lastName;
     }
+    return user;
   }
 
   $scope.logout = function(user) {
@@ -20,7 +21,6 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
 
   $scope.isLoggedIn = function() {
     if ($scope.storage.user) {
-      console.log($scope.storage.user);
       return true;
     } else {
       return false;
@@ -163,16 +163,25 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   }
 
   $scope.createMessage = function(user) {
-    console.log(user);
-    // load the data into createMessage using scope and storage
+    $scope.storage.userToMessage = user;
   }
 
-  $scope.sendMessage = function(userId) {
-    if (userId == $scope.storage.user.userId) {
-      // console.log('you cant message yourself');
-    } else {
-      
+  $scope.sendMessage = function(newMessage) {
+    var obj = {
+      sender: $scope.storage.user.userId,
+      receiver: $scope.storage.userToMessage.userId,
+      content: newMessage.content,
+      subject: newMessage.subject
     }
+
+    //send this object to backend and create relation/message obj
+    UserService.sendMessage(obj);
+  }
+
+  $scope.loadMessages = function() {
+    $scope.getUserData();
+    var obj = $scope.storage.user;
+    UserService.loadMessages(obj);
   }
 
   

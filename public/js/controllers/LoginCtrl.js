@@ -59,6 +59,7 @@ angular.module('LoginCtrl', []).controller('LoginController', ['$scope', '$local
                   PageService.loadPage(data)
                     .then(function(pageData) {
                       $scope.storage.page = pageData;
+                      // load messages afterwards
                     })
                 })
 
