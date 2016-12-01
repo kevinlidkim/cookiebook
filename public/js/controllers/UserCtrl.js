@@ -139,7 +139,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     }
     UserService.getGroupData(obj)
       .then(function(data) {
-        console.log(data.data.data);
+        // console.log(data.data.data);
         $scope.storage.groupData = data.data.data;
       })
   }

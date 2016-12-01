@@ -537,23 +537,35 @@ exports.loadMessages = function(req, res) {
 
             // Merge the two new arrays into one object
             var userMsg = [];
-            var map = _.keyBy(data.msgRelation, 'userId');
+            var map = _.keyBy(data.msgRelation, 'messageId');
 
             // ERROR HERE - ITS NOT GETTING THE CORRECT STUFF? -- BECAUSE THERE CAN BE MULTIPLE MESSAGES BY ONE USER
-            // USE ARRAYS
+            // USE ARRAYS? OR KEY BY MESSAGE ID IN THE ABOVE MAP??? SIMILAR TO POST/COMMENT I IMPLEMENTED
             _.forEach(data.userPerson, function(obj) {
               var result = {
                 userId: obj.userId,
                 personId: obj.personId,
                 firstName: obj.firstName,
                 lastName: obj.lastName,
-                messageId: map[obj.userId].messageId,
-                subject: map[obj.userId].subject,
-                content: map[obj.userId].content
+                messages: []
               }
+              // var result = {
+              //   userId: obj.userId,
+              //   personId: obj.personId,
+              //   firstName: obj.firstName,
+              //   lastName: obj.lastName,
+              //   messageId: map[obj.userId].messageId,
+              //   subject: map[obj.userId].subject,
+              //   content: map[obj.userId].content
+              // }
               userMsg.push(result);
             })
-            data.superObj = userMsg;
+            data.superObj = _.keyBy(userMsg, 'userId');
+
+            _.forEach(map, function(mapObj) {
+              var id = mapObj.userId;
+              data.superObj[id].messages.push(mapObj);
+            })
 
           })
           .then(function() {
