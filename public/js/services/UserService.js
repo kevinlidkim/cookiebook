@@ -60,7 +60,14 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         return deferred.promise;
     },
     isLoggedIn : function() {
-      if (loggedInUser) {
+      if (user) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isAuth : function() {
+      if (user) {
         return true;
       } else {
         return false;

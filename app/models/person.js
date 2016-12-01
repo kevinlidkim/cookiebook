@@ -39,6 +39,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       field: 'zipCode'
     },
+    gender: {
+      type: DataTypes.CHAR(1),
+      allowNull: true,
+      field: 'gender'
+    },
     telephone: {
       type: DataTypes.BIGINT,
       allowNull: true,

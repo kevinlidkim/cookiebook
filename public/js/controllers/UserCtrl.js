@@ -19,7 +19,13 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   }
 
   $scope.isLoggedIn = function() {
-    return UserService.isLoggedIn();
+    if ($scope.storage.user) {
+      console.log($scope.storage.user);
+      return true;
+    } else {
+      return false;
+    }
+    // return UserService.isLoggedIn();
   }
 
   $scope.updateProfile = function() {
@@ -154,6 +160,19 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   // this is a group page owner sending a request for a user to join
   $scope.sendGroupRequest = function() {
 
+  }
+
+  $scope.createMessage = function(user) {
+    console.log(user);
+    // load the data into createMessage using scope and storage
+  }
+
+  $scope.sendMessage = function(userId) {
+    if (userId == $scope.storage.user.userId) {
+      // console.log('you cant message yourself');
+    } else {
+      
+    }
   }
 
   

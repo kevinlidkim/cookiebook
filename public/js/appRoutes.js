@@ -68,6 +68,11 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
+    .when('/createMessage/:user', {
+      templateUrl: 'views/createMessage.html',
+      access: {restricted: true}
+    })
+
     .when('/message', {
       templateUrl: 'views/message.html',
       access: {restricted: true}
@@ -88,7 +93,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
     function (event, next, current) {
       UserService.getUserStatus()
         .then(function() {
-          if (next.access.restricted && UserService.isLoggedIn() === false) {
+          if (next.access.restricted && UserService.isAuth() === false) {
             $location.path('/login');
             $route.reload();
           }
