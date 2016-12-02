@@ -8,7 +8,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.newGroupComment = [];
 
   $scope.getUserPage = function() {
-    var user = UserService.getUserData()
+    var user = UserService.getUserData();
     if (user != null) {
       $scope.storage.user = user;
       $scope.storage.name = user.firstName + " " + user.lastName;

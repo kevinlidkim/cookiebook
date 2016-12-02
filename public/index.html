@@ -44,7 +44,7 @@
 			<li ng-show="isLoggedIn()"><a ng-controller="PageController" ng-href="/page" ng-click="getUserPage()">Your Page</a></li>
 			<li ng-show="isLoggedIn()"><a ng-href="/groups" ng-click="getGroupData()">Groups</a></li>
 			<li ng-show="isLoggedIn()"><a ng-href="/friend" ng-click="getFriendData()">Friends</a></li>
-			<li ng-show="isLoggedIn()"><a ng-href="/message" ng-click="getUserData()">Messages</a></li>
+			<li ng-show="isLoggedIn()"><a ng-href="/message" ng-click="loadMessages()">Messages</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li ng-show="isLoggedIn()">

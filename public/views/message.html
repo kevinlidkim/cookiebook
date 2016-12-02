@@ -4,4 +4,23 @@
   <br>
   <p>List of Messages</p>
 
+  <div ng-repeat="users in storage.listOfMessages">
+    <p>{{users.firstName}} {{users.lastName}} has sent you:</p>
+    <div ng-repeat="messages in users.messages">
+
+      <div class="post_card_wide mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title">
+          <h2 class="mdl-card__title-text">Subject: {{messages.subject}}</h2>
+        </div>
+
+        <div class="mdl-card__supporting-text">
+          <p class="in-line_add">Content: {{messages.content}}</p>
+          <a ng-href="/createMessage/{{users.userId}}" ng-click="createMessage(users)"><button type="submit" class="btn btn-default">Reply</button></a>
+          <button type="submit" class="btn btn-default" ng-click="deleteMessage(messages)">Delete</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>

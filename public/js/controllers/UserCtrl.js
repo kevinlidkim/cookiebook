@@ -12,6 +12,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
       $scope.storage.user = user;
       $scope.storage.name = user.firstName + " " + user.lastName;
     }
+    return user;
   }
 
   $scope.logout = function(user) {
@@ -19,7 +20,12 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   }
 
   $scope.isLoggedIn = function() {
-    return UserService.isLoggedIn();
+    if ($scope.storage.user) {
+      return true;
+    } else {
+      return false;
+    }
+    // return UserService.isLoggedIn();
   }
 
   $scope.updateProfile = function() {
@@ -133,7 +139,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     }
     UserService.getGroupData(obj)
       .then(function(data) {
-        console.log(data.data.data);
+        // console.log(data.data.data);
         $scope.storage.groupData = data.data.data;
       })
   }
@@ -154,6 +160,49 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   // this is a group page owner sending a request for a user to join
   $scope.sendGroupRequest = function() {
 
+
+  }
+
+  $scope.createMessage = function(user) {
+    $scope.storage.userToMessage = user;
+  }
+
+  $scope.sendMessage = function(newMessage) {
+    if (newMessage) {
+      if (newMessage.content && newMessage.subject) {
+        if (newMessage.content != "" && newMessage.subject != "") {
+          var obj = {
+            sender: $scope.storage.user.userId,
+            receiver: $scope.storage.userToMessage.userId,
+            content: newMessage.content,
+            subject: newMessage.subject
+          }
+          UserService.sendMessage(obj)
+            .then(function() {
+              $scope.newMessage.subject = "";
+              $scope.newMessage.content = "";
+            })
+        }
+      }
+    }
+  }
+
+  $scope.loadMessages = function() {
+    $scope.getUserData();
+    var obj = $scope.storage.user;
+    UserService.loadMessages(obj)
+      .then(function(data) {
+        $scope.storage.listOfMessages = data.data.data;
+        // console.log(data.data.data);
+      })
+  }
+
+  $scope.deleteMessage = function(message) {
+    var obj = message;
+    UserService.deleteMessage(obj)
+      .then(function(data) {
+        console.log(data);
+      })
   }
 
   

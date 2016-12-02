@@ -432,3 +432,151 @@ exports.acceptFriendRequest = function(req, res) {
     })
 
 }
+
+exports.sendMessage = function(req, res) {
+
+  var messageObj = {
+    subject: req.body.subject,
+    content : req.body.content
+  }
+
+  db.Message.create(messageObj)
+    .then(function(message) {
+      var date = new Date();
+      var relation = {
+        dateTimeSent: date,
+        receiver: req.body.receiver,
+        sender: req.body.sender,
+        message: message.messageId
+      }
+      return db.SentMessage.create(relation);
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Successfully sent message'
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to send message'
+      })
+    })
+
+}
+
+exports.loadMessages = function(req, res) {
+
+  var data = {};
+
+  // Get all message relations with this user as the receiver
+  db.SentMessage.findAll({ where: {receiver: req.body.userId} })
+    .then(function(sentMessages) {
+      data.sentMessages = sentMessages;
+
+      // Get all messages with the corresponding message relation
+      var messagePromiseArray = [];
+      _.forEach(sentMessages, function(sentMessage) {
+        messagePromiseArray.push(db.Message.find({ where: {messageId: sentMessage.message} }));
+      })
+
+      Promise.all(messagePromiseArray).then(messages => {
+        data.messages = messages;
+      })
+      .then(function() {
+
+        // Get all users that sent message to the receiver
+        var findUserPromiseArray = []
+        _.forEach(data.sentMessages, function(findUser) {
+          findUserPromiseArray.push(db.User.find({ where: {userId: findUser.sender} }));
+        })
+
+        Promise.all(findUserPromiseArray).then(users => {
+          data.users = users;
+
+          // Get all the persons that correspond to the user
+          var findPersonPromiseArray = []
+          for (var i = 0; i < users.length; i++) {
+            findPersonPromiseArray.push(db.Person.find({ where: {personId: users[i].personId } }))
+          }
+
+          Promise.all(findPersonPromiseArray).then(persons => {
+            data.persons = persons;
+
+            // Merge Person and User object data
+            var userPerson = [];
+            var people = _.keyBy(data.persons, 'personId');
+            // var receivedMessages = _.keyBy(data.messages, 'messageId');
+
+            _.forEach(data.users, function(user) {
+              var result = {
+                email: user.email,
+                userId: user.userId,
+                personId: user.personId,
+                firstName: people[user.personId].firstName,
+                lastName: people[user.personId].lastName
+              }
+              userPerson.push(result);
+            })
+            data.userPerson = userPerson;
+
+            // Merge Message and Message relation object data
+            var messageRelation = [];
+            var messageMap = _.keyBy(data.messages, 'messageId');
+
+            _.forEach(data.sentMessages, function(msg) {
+              var result = {
+                userId: msg.sender,
+                messageId: msg.message,
+                subject: messageMap[msg.message].subject,
+                content: messageMap[msg.message].content
+              }
+              messageRelation.push(result);
+            })
+            data.msgRelation = messageRelation;
+
+            // Merge the two new arrays into one object
+            var userMsg = [];
+            var map = _.keyBy(data.msgRelation, 'messageId');
+
+            _.forEach(data.userPerson, function(obj) {
+              var result = {
+                userId: obj.userId,
+                personId: obj.personId,
+                firstName: obj.firstName,
+                lastName: obj.lastName,
+                messages: []
+              }
+              userMsg.push(result);
+            })
+            data.superObj = _.keyBy(userMsg, 'userId');
+
+            _.forEach(map, function(mapObj) {
+              var id = mapObj.userId;
+              data.superObj[id].messages.push(mapObj);
+            })
+
+          })
+          .then(function() {
+            return res.status(200).json({
+              status: 'Successfully retrieved all messages',
+              data: data.superObj
+            })
+          })
+          .catch(function(err) {
+            console.log(err);
+            return res.status(500).json({
+              status: 'Failed to retreive messages'
+            })
+          })
+
+        })
+      })
+
+    })
+}
+
+exports.deleteMessage = function (req, res) {
+  console.log(req);
+
+}

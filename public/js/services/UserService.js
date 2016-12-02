@@ -60,7 +60,14 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         return deferred.promise;
     },
     isLoggedIn : function() {
-      if (loggedInUser) {
+      if (user) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isAuth : function() {
+      if (user) {
         return true;
       } else {
         return false;
@@ -166,6 +173,35 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
       return $http.post('/group/approveRequest', obj)
         .success(function(data) {
           // console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    sendMessage : function(obj) {
+      return $http.post('/sendMessage', obj)
+        .success(function(data) {
+          // console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    loadMessages : function(obj) {
+      return $http.post('/loadMessages', obj)
+        .success(function(data) {
+          // console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    deleteMessage : function(obj) {
+      return $http.post('/deleteMessage', obj)
+        .success(function(data) {
           return data;
         })
         .error(function(data) {
