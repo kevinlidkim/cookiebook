@@ -88,7 +88,7 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
           // console.log(data);
         })
         .error(function(data) {
-          console.log(data);
+          //console.log(data);
           return null;
         });
     },
@@ -99,7 +99,7 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
           // console.log(data);
         })
         .error(function(data){
-          console.log(data);
+          //console.log(data);
           return null;
         });
     }

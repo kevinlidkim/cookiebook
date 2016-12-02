@@ -11,7 +11,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
       $http.post('/signup', userData)
         .success(function(data, status) {
           if (status === 200 && data.status) {
-            deferred.resolve();
+            deferred.resolve(th);
           } else {
             deferred.reject();
           }
@@ -60,7 +60,17 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         return deferred.promise;
     },
     isLoggedIn : function() {
-      if (loggedInUser) {
+      if (user) {
+<<<<<<< HEAD
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isAuth : function() {
+      if (user) {
+=======
+>>>>>>> 4f35bebee5e810e0d9fcc9cf268509f58e2c5167
         return true;
       } else {
         return false;
@@ -175,6 +185,44 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
       return $http.post('/group/approveRequest', obj)
         .success(function(data) {
           // console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    sendMessage : function(obj) {
+      return $http.post('/sendMessage', obj)
+        .success(function(data) {
+          // console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    loadMessages : function(obj) {
+      return $http.post('/loadMessages', obj)
+        .success(function(data) {
+          // console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    deleteMessage : function(obj) {
+      return $http.post('/deleteMessage', obj)
+        .success(function(data) {
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    isEmployee : function(obj) {
+      return $http.post('/isEmployee', obj)
+        .success(function(data) {
           return data;
         })
         .error(function(data) {

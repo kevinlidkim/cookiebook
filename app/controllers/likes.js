@@ -16,8 +16,6 @@ exports.findAll = function(req, res) {
 
 exports.LikesPost = function(req, res) {
 
-  //need to increate like count by 1 
-
   db.LikesPost.find({
       where: {
         post: req.body.post,
@@ -41,7 +39,7 @@ exports.LikesPost = function(req, res) {
             db.Post.update({likes: newLike}, {where: {postId: req.body.post}})
             .then(function(data) {
 
-              console.log("Successfully updated like Count in Post: " + req.body.post);
+              //console.log("Successfully increased like Count in PostId: " + req.body.post);
 
             })
         })
@@ -60,7 +58,7 @@ exports.LikesPost = function(req, res) {
               db.Post.update({likes: newLike}, {where: {postId: req.body.post}})
               .then(function(data) {
 
-                console.log("Successfully updated like Count in Post: " + req.body.post);
+                //console.log("Successfully decreased like Count in PostId: " + req.body.post);
 
               })
           })
@@ -115,7 +113,7 @@ exports.LikesComment = function(req, res) {
 
             db.Comment.update({likes: newLike}, {where: {commentId: req.body.comment}})
             .then(function(data) {
-              console.log("Successfully updated like Count in comment: " + req.body.comment);
+              //console.log("Successfully increased like Count in comment: " + req.body.comment);
 
             })
         })
@@ -133,7 +131,7 @@ exports.LikesComment = function(req, res) {
 
             db.Comment.update({likes: newLike}, {where: {commentId: req.body.comment}})
             .then(function(data) {
-              console.log("Successfully updated like Count in comment: " + req.body.comment);
+              //console.log("Successfully decreased like Count in comment: " + req.body.comment);
 
             })
         })

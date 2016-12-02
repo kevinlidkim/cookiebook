@@ -10,7 +10,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.searched = false;
 
   $scope.getUserPage = function() {
-    var user = UserService.getUserData()
+    var user = UserService.getUserData();
     if (user != null) {
       $scope.storage.user = user;
       $scope.storage.name = user.firstName + " " + user.lastName;
@@ -163,8 +163,9 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
       PageService.likesPost(data)
         .then(function(){
           $scope.getUserPage(); //updates storage so that checkLikePost will be accurate
-        })
+          })
     }
+
   }
 
   $scope.likesComment = function(commentId) {

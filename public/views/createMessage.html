@@ -1,0 +1,22 @@
+<div class="jumbotron cookie_body">
+
+  <h2>Send a message to {{storage.userToMessage.firstName}} {{storage.userToMessage.lastName}}</h2>
+  <br>
+
+  <div class="form-container">
+    <form class="form">
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" class="form-control" ng-model="newMessage.subject"/>
+      </div>
+      <div class="mdl-textfield mdl-js-textfield">
+        <label for="content">Content</label>
+        <textarea class="mdl-textfield__input" type="text" ng-model="newMessage.content" rows="5"></textarea>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" ng-click="sendMessage(newMessage)">Send</button></a>
+      </div>
+    </form>
+  </div>
+
+</div>
