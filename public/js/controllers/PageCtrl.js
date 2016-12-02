@@ -161,8 +161,9 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
       PageService.likesPost(data)
         .then(function(){
           $scope.getUserPage(); //updates storage so that checkLikePost will be accurate
-        })
+          })
     }
+
   }
 
   $scope.likesComment = function(commentId) {

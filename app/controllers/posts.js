@@ -38,6 +38,27 @@ exports.makePost = function(req, res) {
       return db.PostedOn.create(relation);
     })
     .then(function(newRelation) {
+
+      //INCREASE COMMENT COUNT.
+      db.Page.find({
+        where: {
+          pageId: newRelation.page,
+        }
+      }).then(function(page){
+        var newPostCount = page.postCount + 1;
+
+        db.Page.update({postCount: newPostCount}, {
+          where: {
+            pageId: newRelation.page,
+          }
+        }).then(function(data) {
+
+          console.log("Successfully increased post Count in pageId: " + newRelation.page);
+
+        })
+      })
+    //INCREASE COMMENT COUNT.
+
       return res.status(200).json({
         status: 'Successfully created post',
         data: newRelation

@@ -11,7 +11,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
       $http.post('/signup', userData)
         .success(function(data, status) {
           if (status === 200 && data.status) {
-            deferred.resolve();
+            deferred.resolve(th);
           } else {
             deferred.reject();
           }
@@ -61,6 +61,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     },
     isLoggedIn : function() {
       if (user) {
+<<<<<<< HEAD
         return true;
       } else {
         return false;
@@ -68,6 +69,8 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     },
     isAuth : function() {
       if (user) {
+=======
+>>>>>>> 4f35bebee5e810e0d9fcc9cf268509f58e2c5167
         return true;
       } else {
         return false;
