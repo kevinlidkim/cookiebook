@@ -207,6 +207,15 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         .error(function(data) {
           console.log(data);
         })
+    },
+    isEmployee : function(obj) {
+      return $http.post('/isEmployee', obj)
+        .success(function(data) {
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
     }
   }
 

@@ -576,8 +576,8 @@ exports.loadMessages = function(req, res) {
     })
 }
 
-exports.deleteMessage = function (req, res) {
-  
+exports.deleteMessage = function(req, res) {
+
   db.SentMessage.find({ where: {message: req.body.messageId, sender: req.body.userId} })
     .then(function(sentMessage) {
       return sentMessage.destroy();
@@ -597,4 +597,36 @@ exports.deleteMessage = function (req, res) {
       })
     })
 
+}
+
+exports.isEmployee = function(req, res) {
+
+  var data = false;
+
+  db.Employee.find({ where: {userId: req.body.userId} })
+    .then(function(employee) {
+      if (employee == null) {
+        data = false;
+      } else {
+        data = true
+      }
+    })
+    .then(function() {
+      if (data) {
+        return res.status(200).json({
+          status: 'You are an employee',
+          data: data
+        })
+      } else {
+        return res.status(200).json({
+          status: 'You are not an employee',
+          data: data
+        })
+      }
+    })
+    .catch(function(err) {
+      return res.status(500).json({
+        status: 'Unable to find out if employee'
+      })
+    })
 }

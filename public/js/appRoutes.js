@@ -80,6 +80,11 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
+    .when('/advertisements', {
+      templateUrl: 'views/advertisement.html',
+      access: {restricted: true}
+    })
+
 		.otherwise({
       redirectTo: '/'
     });
