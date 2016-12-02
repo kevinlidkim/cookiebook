@@ -161,36 +161,6 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   $scope.sendGroupRequest = function() {
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   }
 
   $scope.createMessage = function(user) {
@@ -228,7 +198,11 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   }
 
   $scope.deleteMessage = function(message) {
-    console.log(message);
+    var obj = message;
+    UserService.deleteMessage(obj)
+      .then(function(data) {
+        console.log(data);
+      })
   }
 
   

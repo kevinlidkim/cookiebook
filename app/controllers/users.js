@@ -575,3 +575,8 @@ exports.loadMessages = function(req, res) {
 
     })
 }
+
+exports.deleteMessage = function (req, res) {
+  console.log(req);
+
+}
