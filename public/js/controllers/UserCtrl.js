@@ -201,7 +201,8 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     var obj = message;
     UserService.deleteMessage(obj)
       .then(function(data) {
-        console.log(data);
+        // console.log(data);
+        $scope.loadMessages();
       })
   }
 

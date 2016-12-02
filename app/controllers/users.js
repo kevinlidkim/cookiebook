@@ -577,6 +577,24 @@ exports.loadMessages = function(req, res) {
 }
 
 exports.deleteMessage = function (req, res) {
-  console.log(req);
+  
+  db.SentMessage.find({ where: {message: req.body.messageId, sender: req.body.userId} })
+    .then(function(sentMessage) {
+      return sentMessage.destroy();
+    })
+    .then(function() {
+      return db.Message.find({ where: {messageId: req.body.messageId} })
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Successfully deleted message'
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to delete message'
+      })
+    })
 
 }
