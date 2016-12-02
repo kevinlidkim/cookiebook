@@ -27,7 +27,7 @@
 
   <h3>Group Requests Received</h3>
   <div ng-repeat="groupRequests in storage.groupData.sendGroupRequest">
-    <p class="in-line_add"><a ng-href="/group/{{groupRequests.groupId}}" ng-controller="PageController" ng-click="getGroupPage(groupRequests)">{{groupRequests.groupName}}</a></p>
+    <p class="in-line_add">{{groupRequests.groupName}} ({{groupRequests.type}})</a></p>
   </div>
 
 </div>
