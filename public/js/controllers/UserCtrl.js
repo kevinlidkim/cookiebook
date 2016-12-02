@@ -159,12 +159,6 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     UserService.joinGroupRequest(obj);
   }
 
-  
-
-<<<<<<< HEAD
-
-  }
-
   $scope.createMessage = function(user) {
     $scope.storage.userToMessage = user;
   }
@@ -229,7 +223,5 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     }
     
   }
-=======
->>>>>>> 423ef22d2a2cd569e90b79ecedccf2b435689dbc
 
 }]);
