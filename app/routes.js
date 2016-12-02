@@ -12,7 +12,7 @@ module.exports = function(app, passport) {
   var comments = require('./controllers/comments');
   var groups = require('./controllers/groups');
   var likes = require('./controllers/likes');
-  
+
   app.get('/persons/find', persons.findAll); // lists all persons
   app.get('/yo', users.findAll); // lists all users
   app.get('/yopages', pages.findAll);
@@ -58,6 +58,7 @@ module.exports = function(app, passport) {
   app.post('/groups/get', groups.getGroupData);
   app.post('/page/group', pages.getGroupPageId);
   app.post('/group/joinRequest', groups.joinGroupRequest);
+  app.post('/group/sendRequest', groups.sendGroupRequest);
   app.post('/group/approveRequest', groups.approveGroupRequest);
   app.post('/page/groupRequests', groups.loadGroupRequest);
 

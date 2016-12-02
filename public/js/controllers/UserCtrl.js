@@ -128,7 +128,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
         .then(function(data) {
           $scope.newGroup.groupName = "";
           $scope.newGroup.type = "";
-          
+
           $scope.getGroupData();
         })
     }
@@ -159,9 +159,9 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     UserService.joinGroupRequest(obj);
   }
 
-  // this is a group page owner sending a request for a user to join
-  $scope.sendGroupRequest = function() {
+  
 
+<<<<<<< HEAD
 
   }
 
@@ -229,6 +229,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     }
     
   }
+=======
+>>>>>>> 423ef22d2a2cd569e90b79ecedccf2b435689dbc
 
-  
 }]);
