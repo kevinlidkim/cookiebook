@@ -11,7 +11,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
       $http.post('/signup', userData)
         .success(function(data, status) {
           if (status === 200 && data.status) {
-            deferred.resolve();
+            deferred.resolve(th);
           } else {
             deferred.reject();
           }
@@ -60,7 +60,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         return deferred.promise;
     },
     isLoggedIn : function() {
-      if (loggedInUser) {
+      if (user) {
         return true;
       } else {
         return false;

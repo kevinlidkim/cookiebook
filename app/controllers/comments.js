@@ -3,41 +3,66 @@ var db = require('../../config/db');
 exports.findAll = function(req, res) {
 
   db.Comment.findAll()
-    .then(function (users) {
-      res.status(200).json(users);
-    })
-    .catch(function (err) {
-      res.status(500).json(err);
-    });
+  .then(function (users) {
+    res.status(200).json(users);
+  })
+  .catch(function (err) {
+    res.status(500).json(err);
+  });
 }
 
 exports.makeComment = function(req, res) {
 
-  // need to increase comment count of post by 1
-
   db.Comment.create(req.body)
-    .then(function(comment) {
-      var relation = {
-        post: req.body.post,
-        user: req.body.user,
-        comment: comment.commentId,
-        dateTimePosted: new Date()
-      };
-      return db.CommentedOn.create(relation);
+  .then(function(comment) {
+    var relation = {
+      post: req.body.post,
+      user: req.body.user,
+      comment: comment.commentId,
+      dateTimePosted: new Date()
+    };
+    return db.CommentedOn.create(relation);
+  })
+  .then(function(newRelation) {
+
+    //INCREASE COMMENT COUNT.
+    db.Post.find({
+      where: {
+        postId: req.body.post,
+      }
+    }).then(function(post){
+      var newCommentCount = post.commentCount + 1;
+
+      db.Post.update({commentCount: newCommentCount}, {
+        where: {
+          postId: req.body.post,
+        }
+      }).then(function(data) {
+
+        console.log("Successfully increased comment Count in PostId: " + req.body.post);
+
+      })
     })
-    .then(function(newRelation) {
-      return res.status(200).json({
-        status: 'Successfully created comment',
-        data: newRelation
-      });
-    })
-    .catch(function(err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'Error commenting'
-      });
+    //INCREASE COMMENT COUNT.
+
+    return res.status(200).json({
+      status: 'Successfully created comment',
+      data: newRelation
     });
+  })
+  .catch(function(err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'Error commenting'
+    });
+  });
 }
+
+exports.commentedBy = function(req, res) {
+
+
+}
+
 
 
 
