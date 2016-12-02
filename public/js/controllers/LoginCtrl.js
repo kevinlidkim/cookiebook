@@ -64,6 +64,16 @@ angular.module('LoginCtrl', []).controller('LoginController', ['$scope', '$local
                       UserService.loadMessages(obj)
                         .then(function(data) {
                           $scope.storage.listOfMessages = data.data.data;
+                          if ($scope.storage.user) {
+                            var employee = {
+                              userId: $scope.storage.user.userId
+                            }
+                            UserService.isEmployee(employee)
+                              .then(function(status) {
+                                // return status.data.data;
+                                $scope.storage.isEmployee = status.data.data;
+                              })
+                          }
                         })
                     })
                 })

@@ -57,6 +57,8 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
           var user = UserService.getUserData();
           $scope.storage.user = user;
           $scope.storage.name = user.firstName + " " + user.lastName;
+          $scope.profilePerson = "";
+          $scope.profileUser = "";
         })
     }
 
@@ -139,7 +141,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     }
     UserService.getGroupData(obj)
       .then(function(data) {
-        // console.log(data.data.data);
+        console.log(data.data.data);
         $scope.storage.groupData = data.data.data;
       })
   }
@@ -201,8 +203,31 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     var obj = message;
     UserService.deleteMessage(obj)
       .then(function(data) {
-        console.log(data);
+        // console.log(data);
+        $scope.loadMessages();
       })
+  }
+
+  $scope.checkEmployee = function() {
+    if ($scope.storage.user) {
+      var obj = {
+        userId: $scope.storage.user.userId
+      }
+      UserService.isEmployee(obj)
+        .then(function(status) {
+          // return status.data.data;
+          $scope.storage.isEmployee = status.data.data;
+        })
+    }
+  }
+
+  $scope.isEmployee = function() {
+    if ($scope.storage.isEmployee) {
+      return true
+    } else {
+      return false
+    }
+    
   }
 
   
