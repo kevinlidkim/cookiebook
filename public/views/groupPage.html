@@ -3,6 +3,9 @@
   <h2>Page</h2>
   <br>
   <p>{{storage.group.groupName}}'s Page</p>
+  <div ng-show="isGroupOwner()">
+    <button class="btn btn-primary">Edit Group</button>
+  </div>
 
   <div class="mdl-textfield mdl-js-textfield">
     <label for="newStatus">What's on your mind?</label>
@@ -49,6 +52,19 @@
       <p class="in-line_add">{{joinRequests.firstName}} {{joinRequests.lastName}}</p>
       <button type="submit" class="btn btn-default" ng-click="approveJoinRequest(joinRequests.userId)">Approve</button>
     </div>
+    <h3>Search for Users to Add</h3>
+    <form class="navbar-form" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search" ng-model="groupSearch">
+      </div>
+      <button type="submit" class="btn btn-default" ng-click="searchAllFromGroup()">Submit</button>
+    </form>
+    <div ng-show="searched">
+      <h3>Search Results</h3>
+      <div ng-repeat="users in searchResults.users">
+        <p class="in-line_add">{{users.firstName}} {{users.lastName}}</p>
+        <button type="submit" class="btn btn-default" ng-click="sendGroupRequest(users.userId)">Send Group Request</button>
+      </div>
   </div>
 
 </div>
