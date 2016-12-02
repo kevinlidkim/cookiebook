@@ -162,7 +162,10 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 992acfc9237185897cc2f1920206af8252d98b90
 
   }
 
@@ -230,6 +233,11 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     }
     
   }
+<<<<<<< HEAD
 >>>>>>> 7d7a99e0140b480248e82a3de97694319e664836
+=======
+=======
+>>>>>>> 423ef22d2a2cd569e90b79ecedccf2b435689dbc
+>>>>>>> 992acfc9237185897cc2f1920206af8252d98b90
 
 }]);
