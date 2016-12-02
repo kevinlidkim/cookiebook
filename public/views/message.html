@@ -14,7 +14,9 @@
         </div>
 
         <div class="mdl-card__supporting-text">
-          <p>Content: {{messages.content}}</p>
+          <p class="in-line_add">Content: {{messages.content}}</p>
+          <a ng-href="/createMessage/{{users.userId}}" ng-click="createMessage(users)"><button type="submit" class="btn btn-default">Reply</button></a>
+          <button type="submit" class="btn btn-default" ng-click="deleteMessage(messages)">Delete</button>
         </div>
 
       </div>

@@ -160,6 +160,37 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   // this is a group page owner sending a request for a user to join
   $scope.sendGroupRequest = function() {
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 
   $scope.createMessage = function(user) {
@@ -192,8 +223,12 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     UserService.loadMessages(obj)
       .then(function(data) {
         $scope.storage.listOfMessages = data.data.data;
-        console.log(data.data.data);
+        // console.log(data.data.data);
       })
+  }
+
+  $scope.deleteMessage = function(message) {
+    console.log(message);
   }
 
   
