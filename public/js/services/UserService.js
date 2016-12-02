@@ -192,7 +192,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     loadMessages : function(obj) {
       return $http.post('/loadMessages', obj)
         .success(function(data) {
-          console.log(data);
+          // console.log(data);
           return data;
         })
         .error(function(data) {

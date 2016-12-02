@@ -4,4 +4,21 @@
   <br>
   <p>List of Messages</p>
 
+  <div ng-repeat="users in storage.listOfMessages">
+    <p>{{users.firstName}} {{users.lastName}} has sent you:</p>
+    <div ng-repeat="messages in users.messages">
+
+      <div class="post_card_wide mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title">
+          <h2 class="mdl-card__title-text">Subject: {{messages.subject}}</h2>
+        </div>
+
+        <div class="mdl-card__supporting-text">
+          <p>Content: {{messages.content}}</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>

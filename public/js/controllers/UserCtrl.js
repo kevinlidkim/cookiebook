@@ -167,21 +167,33 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
   }
 
   $scope.sendMessage = function(newMessage) {
-    var obj = {
-      sender: $scope.storage.user.userId,
-      receiver: $scope.storage.userToMessage.userId,
-      content: newMessage.content,
-      subject: newMessage.subject
+    if (newMessage) {
+      if (newMessage.content && newMessage.subject) {
+        if (newMessage.content != "" && newMessage.subject != "") {
+          var obj = {
+            sender: $scope.storage.user.userId,
+            receiver: $scope.storage.userToMessage.userId,
+            content: newMessage.content,
+            subject: newMessage.subject
+          }
+          UserService.sendMessage(obj)
+            .then(function() {
+              $scope.newMessage.subject = "";
+              $scope.newMessage.content = "";
+            })
+        }
+      }
     }
-
-    //send this object to backend and create relation/message obj
-    UserService.sendMessage(obj);
   }
 
   $scope.loadMessages = function() {
     $scope.getUserData();
     var obj = $scope.storage.user;
-    UserService.loadMessages(obj);
+    UserService.loadMessages(obj)
+      .then(function(data) {
+        $scope.storage.listOfMessages = data.data.data;
+        console.log(data.data.data);
+      })
   }
 
   

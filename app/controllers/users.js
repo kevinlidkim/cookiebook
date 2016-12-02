@@ -560,7 +560,7 @@ exports.loadMessages = function(req, res) {
           .then(function() {
             return res.status(200).json({
               status: 'Successfully retrieved all messages',
-              data: data
+              data: data.superObj
             })
           })
           .catch(function(err) {
