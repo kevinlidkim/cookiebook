@@ -209,8 +209,9 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
       }
       UserService.isEmployee(obj)
         .then(function(status) {
-          // return status.data.data;
+          // console.log(status.data);
           $scope.storage.isEmployee = status.data.data;
+          $scope.storage.employee = status.data.employee;
         })
     }
   }

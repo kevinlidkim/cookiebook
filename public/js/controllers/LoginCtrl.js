@@ -72,6 +72,7 @@ angular.module('LoginCtrl', []).controller('LoginController', ['$scope', '$local
                               .then(function(status) {
                                 // return status.data.data;
                                 $scope.storage.isEmployee = status.data.data;
+                                $scope.storage.employee = status.data.employee;
                               })
                           }
                         })

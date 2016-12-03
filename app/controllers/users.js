@@ -602,20 +602,23 @@ exports.deleteMessage = function(req, res) {
 exports.isEmployee = function(req, res) {
 
   var data = false;
+  var emp = {};
 
   db.Employee.find({ where: {userId: req.body.userId} })
     .then(function(employee) {
       if (employee == null) {
         data = false;
       } else {
-        data = true
+        data = true;
+        emp = employee;
       }
     })
     .then(function() {
       if (data) {
         return res.status(200).json({
           status: 'You are an employee',
-          data: data
+          data: data,
+          employee: emp
         })
       } else {
         return res.status(200).json({

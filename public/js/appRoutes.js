@@ -56,11 +56,11 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
-	.when('/editGroup/:group', {
-		templateUrl: 'views/groupEdit.html',
-		controller: 'UserController',
-		access: {restricted: true}
-	})
+  	.when('/editGroup/:group', {
+  		templateUrl: 'views/groupEdit.html',
+  		controller: 'UserController',
+  		access: {restricted: true}
+  	})
 
     .when('/friend/', {
       templateUrl: 'views/friend.html',
@@ -88,6 +88,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 
     .when('/advertisements', {
       templateUrl: 'views/advertisement.html',
+      controller: 'EmployeeController',
       access: {restricted: true}
     })
 

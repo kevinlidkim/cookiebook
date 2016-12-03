@@ -7,10 +7,30 @@
     <form class="form">
       <div class="form-group">
         <label for="adType">Type</label>
-        <input type="text" id="adType" class="form-control"/>
+        <input type="text" id="adType" class="form-control" ng-model="ad.adType" required/>
       </div>
       <div class="form-group">
-        <button type="submit" class="btn btn-primary">Create</button>
+        <label for="company">Company</label>
+        <input type="text" id="company" class="form-control" ng-model="ad.company" required/>
+      </div>
+      <div class="form-group">
+        <label for="itemName">Name</label>
+        <input type="text" id="itemName" class="form-control" ng-model="ad.itemName" required/>
+      </div>
+      <div class="form-group">
+        <label for="content">Content</label>
+        <input type="text" id="adType" class="form-control" ng-model="ad.content" required/>
+      </div>
+      <div class="form-group">
+        <label for="unitPrice">Price</label>
+        <input type="number" step="0.01" id="unitPrice" class="form-control" ng-model="ad.unitPrice" required/>
+      </div>
+      <div class="form-group">
+        <label for="availableUnit">Stock</label>
+        <input type="number" id="unitPrice" class="form-control" ng-model="ad.availableUnits" required/>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" ng-click="createAd()">Create</button>
       </div>
     </form>
   </div>
