@@ -221,7 +221,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     } else {
       return false
     }
-    
+
   }
 
 }]);

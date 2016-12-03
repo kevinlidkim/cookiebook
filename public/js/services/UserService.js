@@ -2,6 +2,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
 
   var user = null;
   var loggedInUser = null;
+  var editedGroup = null;
 
   return {
 
@@ -88,6 +89,9 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     },
     getUserData : function() {
       return loggedInUser;
+    },
+    getUpdatedGroupData : function() {
+      return editedGroup;
     },
     updateProfile : function(obj) {
       return $http.post('/update', obj)

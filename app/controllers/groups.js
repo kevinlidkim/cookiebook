@@ -50,6 +50,35 @@ exports.createGroup = function(req, res) {
 
 }
 
+exports.updateGroup = function(req, res) {
+    var obj = {};
+
+    if (req.body.groupObj) {
+      db.Group.update(req.body.groupObj, {
+        where : {
+            groupId : req.body.groupId
+        }
+      })
+      .then(function() {
+        return db.Group.find({ where: {groupId: req.body.groupId} })
+      })
+      .then(function(group) {
+        obj.groupName = group.groupName;
+        obj.type = group.type;
+        obj.groupId = group.groupId;
+        return res.status(200).json({
+          data: obj,
+          status: 'Update group successful'
+        })
+      })
+      .catch(function(err) {
+        return res.status(500).json({
+          status: 'Error updating group'
+        })
+      })
+    }
+}
+
 exports.getGroupData = function(req, res) {
 
   var data = {};

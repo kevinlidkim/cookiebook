@@ -58,7 +58,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 
 	.when('/editGroup/:group', {
 		templateUrl: 'views/groupEdit.html',
-		controller: 'UserController',
+		controller: 'PageController',
 		access: {restricted: true}
 	})
 
