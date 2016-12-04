@@ -104,7 +104,6 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
         });
     },
 
-<<<<<<< HEAD
     deleteComment: function(sendData) {
       return $http.post('/deleteComment', sendData)
         .success(function(data){
@@ -113,7 +112,9 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
         .error(function(data){
            console.log(data);
         })
-=======
+
+    },
+
     commentedBy : function(sendData) {
       return $http.post('/commentedBy', sendData)
         .success(function(data){
@@ -123,7 +124,6 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
           //console.log(data);
           return null;
         });
->>>>>>> 6afcb269ad8ebabb736cd91c2b34af755043de70
     }
 
   }

@@ -41,11 +41,8 @@ module.exports = function(app, passport) {
   app.post('/page', pages.loadPage);
   app.post('/post', posts.makePost);
   app.post('/comment', comments.makeComment);
-<<<<<<< HEAD
   app.post('/deleteComment', comments.deleteComment);
-=======
   app.post('/commentedBy', comments.commentedBy);
->>>>>>> 6afcb269ad8ebabb736cd91c2b34af755043de70
   app.post('/likesPost', likes.LikesPost);
   app.post('/likesComment', likes.LikesComment);
   app.get('/page/me', pages.getPersonalPageId);

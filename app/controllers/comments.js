@@ -57,7 +57,6 @@ exports.makeComment = function(req, res) {
   });
 }
 
-<<<<<<< HEAD
 exports.deleteComment = function(req, res) {
     //DECREASE POST COMMENT COUNT.
     db.CommentedOn.find({
@@ -130,7 +129,6 @@ exports.deleteComment = function(req, res) {
       });
     });
 
-=======
 exports.commentedBy = function(req, res) {
   db.CommentedOn.find({
     where: {
@@ -164,7 +162,6 @@ exports.commentedBy = function(req, res) {
     })
   })
 }
->>>>>>> 6afcb269ad8ebabb736cd91c2b34af755043de70
 
   }
 
