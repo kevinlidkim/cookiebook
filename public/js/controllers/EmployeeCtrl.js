@@ -25,7 +25,7 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
     var employeeAd = ad;
     EmployeeService.deleteEmployeeAd(ad)
       .then(function(data) {
-        console.log(data);
+        // console.log(data);
         $scope.loadEmployeeAds();
       })
   }

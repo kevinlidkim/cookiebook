@@ -92,6 +92,18 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
+    .when('/customers', {
+      templateUrl: 'views/customer.html',
+      controller: 'EmployeeController',
+      access: {restricted: true}
+    })
+
+    .when('/editCustomer', {
+      templateUrl: 'views/editCustomer.html',
+      controller: 'EmployeeController',
+      access: {restricted: true}
+    })
+
 		.otherwise({
       redirectTo: '/'
     });
