@@ -69,6 +69,8 @@ module.exports = function(app, passport) {
 
   app.post('/isEmployee', users.isEmployee);
   app.post('/createAd', employees.createAd);
+  app.post('/loadEmployeeAds', employees.loadEmployeeAds);
+  app.post('/deleteEmployeeAd', employees.deleteEmployeeAd);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');

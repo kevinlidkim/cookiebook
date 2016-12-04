@@ -50,7 +50,7 @@
 			<li ng-show="isLoggedIn()"><a ng-href="/groups" ng-click="getGroupData()">Groups</a></li>
 			<li ng-show="isLoggedIn()"><a ng-href="/friend" ng-click="getFriendData()">Friends</a></li>
 			<li ng-show="isLoggedIn()"><a ng-href="/message" ng-click="loadMessages()">Messages</a></li>
-			<li ng-show="isEmployee()"><a ng-href="/advertisements">Advertisements</a></li>
+			<li ng-show="isEmployee()"><a ng-controller="EmployeeController" ng-href="/advertisements" ng-click="loadEmployeeAds()">Advertisements</a></li>
 			<li ng-show="isEmployee()"><a ng-href="/customer">Customers</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">

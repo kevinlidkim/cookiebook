@@ -4,12 +4,32 @@ angular.module('EmployeeServ', []).factory('EmployeeService', ['$q', '$timeout',
 
     createAd : function(obj) {
       return $http.post('/createAd', obj)
-        .success(function(data){
+        .success(function(data) {
           // console.log(data);
         })
-        .error(function(data){
+        .error(function(data) {
           console.log(data);
         });
+    },
+
+    loadEmployeeAds : function(obj) {
+      return $http.post('/loadEmployeeAds', obj)
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+
+    deleteEmployeeAd : function(obj) {
+      return $http.post('/deleteEmployeeAd', obj)
+        .success(function(data) {
+          console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
     }
 
   }
