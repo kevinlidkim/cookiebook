@@ -7,6 +7,8 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.newGroupStatus = "";
   $scope.newGroupComment = [];
   $scope.commented_By=[];
+  $scope.groupSearch = "";
+  $scope.searched = false;
 
   $scope.getUserPage = function() {
     var user = UserService.getUserData();
@@ -76,7 +78,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         PageService.loadPage(data)
           .then(function(pageData) {
             $scope.storage.groupPage = pageData;
-            // console.log(pageData);
+            console.log(pageData);
             return PageService.loadGroupRequests(data)
           })
           .then(function(requestData) {
@@ -158,7 +160,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         post: postId,
         user: $scope.storage.user.userId
       }
-    
+
       PageService.likesPost(data)
         .then(function(){
           $scope.getUserPage(); //updates storage so that checkLikePost will be accurate
@@ -173,7 +175,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         comment: commentId,
         user: $scope.storage.user.userId
       }
-    
+
       PageService.likesComment(data)
         .then(function(){
           $scope.getUserPage(); //updates storage so that checkLikePost will be accurate
@@ -283,6 +285,17 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     return owner;
   }
 
+  $scope.isGroupMember = function() {
+    var member = false;
+    var groups = $scope.stroage.groupData.memberOfGroup;
+    for (var i = 0; i < groups.length; i++) {
+        if (groups[i].groupId == $scope.storage.group.groupId) {
+            member = true;
+        }
+    }
+    return member;
+  }
+
   $scope.approveJoinRequest = function(userId) {
     var obj = {
       user: userId,
@@ -292,6 +305,38 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
       .then(function(data) {
         $scope.getGroupPage($scope.storage.group);
       })
+  }
+
+  $scope.searchAllFromGroup = function() {
+    //$scope.getUserData();
+
+    var query = {
+      query: $scope.groupSearch
+    }
+
+    if ($scope.groupSearch != "") {
+      UserService.searchAll(query)
+        .then(function(data) {
+         $scope.searchResults = data.data.data;
+         $scope.searched = true;
+         $scope.groupSearch = "";
+
+         // console.log(data.data.data);
+        })
+    }
+  }
+
+  // this is a group page owner sending a request for a user to join
+  $scope.sendGroupRequest = function(userId) {
+    if (userId == $scope.storage.user.userId) {
+        // console.log('you cant add yourself');
+      } else {
+        obj = {
+          user: userId,
+          group: $scope.storage.group.groupId
+        }
+        UserService.sendGroupRequest(obj);
+    }
   }
 
 }]);
