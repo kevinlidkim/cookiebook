@@ -103,6 +103,7 @@ body {
   min-width: 50px;
   min-height: 20px;
   margin-bottom: 10px;
+  background-color: rgba(77,77,77,0.08);
 }
 
 .mdl-textfield.mdl-js-textfield {
@@ -120,4 +121,16 @@ body {
 .in-line_add {
   display: inline-block;
   color: gray;
+}
+
+.commentedBy {
+  color: blue;
+  text-transform: uppercase;
+  font-weight: 300 !important;
+}
+
+.postedBy {
+  color: blue;
+  text-transform: uppercase;
+  font-weight: 400 !important;
 }

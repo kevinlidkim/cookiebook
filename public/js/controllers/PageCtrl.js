@@ -6,6 +6,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.newFriendComment = [];
   $scope.newGroupStatus = "";
   $scope.newGroupComment = [];
+  $scope.commented_By=[];
 
   $scope.getUserPage = function() {
     var user = UserService.getUserData();
@@ -206,6 +207,22 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         }
     }
     return found;
+  }
+
+  $scope.commentedBy = function(index, commentId) {
+
+    if(commentId != null) {
+      var data = {
+        comment: commentId,
+        user: $scope.storage.user.userId
+      }
+      
+    }
+
+    PageService.commentedBy(data)
+        .then(function(personData){
+          $scope.commented_By[index] = personData.data.data.firstName + " " + personData.data.data.lastName;
+        })
   }
 
   $scope.postGroupStatus = function() {
