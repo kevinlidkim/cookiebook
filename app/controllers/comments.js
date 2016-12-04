@@ -38,7 +38,7 @@ exports.makeComment = function(req, res) {
         }
       }).then(function(data) {
 
-        console.log("Successfully increased comment Count in PostId: " + req.body.post);
+        //console.log("Successfully increased comment Count in PostId: " + req.body.post);
 
       })
     })
@@ -57,6 +57,7 @@ exports.makeComment = function(req, res) {
   });
 }
 
+<<<<<<< HEAD
 exports.deleteComment = function(req, res) {
     //DECREASE POST COMMENT COUNT.
     db.CommentedOn.find({
@@ -129,6 +130,41 @@ exports.deleteComment = function(req, res) {
       });
     });
 
+=======
+exports.commentedBy = function(req, res) {
+  db.CommentedOn.find({
+    where: {
+      comment : req.body.comment
+    }
+  }).then(function(commentedOn){
+    db.User.find({
+      where: {
+        userId : commentedOn.user
+      }
+    }).then(function(user){
+      db.Person.find({
+        where: {
+          personId: user.personId
+        }
+      })
+      .then(function(person){
+
+        return res.status(200).json({
+          status: 'Successfully found Person commentedBy',
+          data: person
+        });
+
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Error finding Person commentedBy'
+        });
+      });
+    })
+  })
+}
+>>>>>>> 6afcb269ad8ebabb736cd91c2b34af755043de70
 
   }
 

@@ -9,14 +9,14 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true,
       field: 'employeeId'
     },
-    personId: {
+    userId: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       references: {
-        model: 'Person',
-        key: 'personId'
+        model: 'User',
+        key: 'userId'
       },
-      field: 'personId'
+      field: 'userId'
     },
     ssn: {
       type: DataTypes.INTEGER(11),

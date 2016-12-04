@@ -91,19 +91,40 @@ exports.getGroupData = function(req, res) {
             var flattenRequests = [].concat.apply([], results);
             data.JoinRequests = flattenRequests;
             // need to get user and then person so you can display => person name wants to join group name
+
           })
           .then(function() {
-            return res.status(200).json({
-              status: 'Successfully retrieve groups',
-              data: data
-            })
+              // get all the sendgrouprequest with your user
+              return db.SendGroupRequest.findAll({ where: {user: req.body.you} })
           })
-          .catch(function(err) {
-            console.log(err)
-            return res.status(500).json({
-              status: 'Failed to retrieve groups'
-            })
-          })
+          .then(function(sendGroupRequest) {
+              // load all received group requests into a list
+              var sendGroupRequestArray = [];
+              //console.log(sendGroupRequest);
+
+              _.forEach(sendGroupRequest, function(sendGroupRequest) {
+                  sendGroupRequestArray.push(db.Group.find({ where: {groupId: sendGroupRequest.group} }));
+              })
+              Promise.all(sendGroupRequestArray).then(values => {
+                  data.sendGroupRequest = values;
+                  //console.log(values)
+              })
+              .then(function() {
+                return res.status(200).json({
+                  status: 'Successfully retrieve groups',
+                  data: data
+                })
+              })
+              .catch(function(err) {
+                console.log(err)
+                return res.status(500).json({
+                  status: 'Failed to retrieve groups'
+                })
+              })
+
+            }
+
+          )
         })
       })
 
@@ -153,6 +174,44 @@ exports.joinGroupRequest = function(req, res) {
       }
     })
 
+}
+
+exports.sendGroupRequest = function(req, res) {
+
+    db.MemberOfGroup.find({ where: {user: req.body.user, group: req.body.group} })
+      .then(function(groupMember) {
+
+        if(groupMember == null) {
+          db.SendGroupRequest.find({ where: {user: req.body.user, group: req.body.group} })
+            .then(function(sendRequest) {
+              if(sendRequest == null) {
+                var newRequest = {
+                  user: req.body.user,
+                  group: req.body.group
+                }
+                db.SendGroupRequest.create(newRequest)
+                  .then(function() {
+                    return res.status(200).json({
+                      status: 'Join group request send'
+                    })
+                  })
+                  .catch(function(err) {
+                    return res.status(500).json({
+                      status: 'Error sending join group request'
+                    })
+                  })
+              } else {
+                return res.status(200).json({
+                  status: 'Already sent send group request'
+                })
+              }
+            })
+        } else {
+            return res.status(200).json({
+              status: 'Already in the group'
+            })
+        }
+      })
 }
 
 exports.approveGroupRequest = function(req, res) {
@@ -238,7 +297,7 @@ exports.loadGroupRequest = function(req, res) {
         })
       })
 
-      
+
 
     })
 }

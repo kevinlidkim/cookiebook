@@ -103,6 +103,7 @@ body {
   min-width: 50px;
   min-height: 20px;
   margin-bottom: 10px;
+  background-color: rgba(77,77,77,0.08);
 }
 
 .mdl-textfield.mdl-js-textfield {
@@ -122,6 +123,19 @@ body {
   color: gray;
 }
 
+<<<<<<< HEAD
 .btn-danger {
   width: 25%;
+=======
+.commentedBy {
+  color: blue;
+  text-transform: uppercase;
+  font-weight: 300 !important;
+}
+
+.postedBy {
+  color: blue;
+  text-transform: uppercase;
+  font-weight: 400 !important;
+>>>>>>> 6afcb269ad8ebabb736cd91c2b34af755043de70
 }

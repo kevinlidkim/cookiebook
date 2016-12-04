@@ -2,35 +2,35 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 
 	$routeProvider
 
-		// home page
-		.when('/', {
-			templateUrl: 'views/home.html',
-			controller: 'UserController',
-			access: {restricted: true}
-		})
+	// home page
+	.when('/', {
+		templateUrl: 'views/home.html',
+		controller: 'UserController',
+		access: {restricted: true}
+	})
 
-		.when('/signup', {
-			templateUrl: 'views/signup.html',
-			controller: 'SignUpController',
-			access: {restricted: false}
-		})
+	.when('/signup', {
+		templateUrl: 'views/signup.html',
+		controller: 'SignUpController',
+		access: {restricted: false}
+	})
 
-		.when('/login', {
-			templateUrl: 'views/login.html',
-			controller: 'LoginController',
-			access: {restricted: false}
-		})
+	.when('/login', {
+		templateUrl: 'views/login.html',
+		controller: 'LoginController',
+		access: {restricted: false}
+	})
 
-		.when('/logout', {
-			controller: 'LogoutController',
-			access: {restricted: true}
-		})
+	.when('/logout', {
+		controller: 'LogoutController',
+		access: {restricted: true}
+	})
 
-		.when('/profile', {
-			templateUrl: 'views/profile.html',
-			controller: 'UserController',
-			access: {restricted: true}
-		})
+	.when('/profile', {
+		templateUrl: 'views/profile.html',
+		controller: 'UserController',
+		access: {restricted: true}
+	})
 
     .when('/page', {
       templateUrl: 'views/page.html',
@@ -56,6 +56,12 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
+	.when('/editGroup/:group', {
+		templateUrl: 'views/groupEdit.html',
+		controller: 'UserController',
+		access: {restricted: true}
+	})
+
     .when('/friend/', {
       templateUrl: 'views/friend.html',
       controller: 'UserController',
@@ -68,8 +74,20 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
+    .when('/createMessage/:user', {
+      templateUrl: 'views/createMessage.html',
+      controller: 'UserController',
+      access: {restricted: true}
+    })
+
     .when('/message', {
       templateUrl: 'views/message.html',
+      controller: 'UserController',
+      access: {restricted: true}
+    })
+
+    .when('/advertisements', {
+      templateUrl: 'views/advertisement.html',
       access: {restricted: true}
     })
 
@@ -88,7 +106,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
     function (event, next, current) {
       UserService.getUserStatus()
         .then(function() {
-          if (next.access.restricted && UserService.isLoggedIn() === false) {
+          if (next.access.restricted && UserService.isAuth() === false) {
             $location.path('/login');
             $route.reload();
           }

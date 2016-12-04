@@ -4,39 +4,49 @@
   <br>
   <p>{{storage.friend.firstName}} {{storage.friend.lastName}}'s Page</p>
 
-    <!-- PageController used to load posts and comments -->
-    <!-- <div ng-controller="PageController"> -->
+  <!-- PageController used to load posts and comments -->
+  <!-- <div ng-controller="PageController"> -->
 
-      <!-- Load up posts -->
-      <div class="post_card_wide mdl-card mdl-shadow--2dp" ng-repeat="posts in storage.friendPage.data.finalData">
-        <div class="mdl-card__title">
-          <h2 class="mdl-card__title-text">{{posts.content}}</h2>
-        </div>
-        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored like_button">
-          <i class="material-icons">thumb_up</i>
-        </button>
+  <!-- Load up posts -->
+  <div class="post_card_wide mdl-card mdl-shadow--2dp" ng-repeat="posts in storage.friendPage.data.finalData; ">
+    <div class="mdl-card__title">
+      <h2 class="mdl-card__title-text postedBy"> {{storage.friend.firstName}} {{storage.friend.lastName}}: </h2>
+    </div>
+    <div class="mdl-card__title">
+      <h2 class="mdl-card__title-text"> {{posts.content}} </h2>
+      <h2 class="mdl-card__title-text"> (commentCount: {{posts.commentCount}}) </h2>
+    </div>
+    <button class="mdl-button mdl-js-button mdl-js-ripple-effect like_button" ng-click="likesPost(posts.postId); 
+    postLiked=!postLiked">
+    <i class="material-icons" ng-class="{'active_liketbn': postLiked}" ng-init="postLiked=checkLikesPost(posts.postId)">thumb_up</i>
+    <span>{{posts.likes}}</span>
+  </button>
 
-        <div class="mdl-card__supporting-text">
-          <div class="comment_card_wide mdl-card mdl-shadow--2dp" ng-repeat="comment in posts.comments">
-            <p>{{comment.content}}<p>
-            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored like_button">
-              <i class="material-icons">thumb_up</i>
-            </button>
-          </div>
-        </div>
+  <div class="mdl-card__supporting-text">
+    <div class="comment_card_wide mdl-card mdl-shadow--2dp" ng-repeat="comment in posts.comments" >
+      <p for="commented_By" class="commentedBy" ng-model="commented_By[$index]" ng-init="commentedBy($index, comment.commentId)">{{commented_By[$index]}}: </p>
+      <p>{{comment.content}}</p> 
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect like_button" ng-click="likesComment(comment.commentId); 
+      commentLiked=!commentLiked">
+      <i class="material-icons" ng-class="{'active_liketbn': commentLiked}" ng-init="commentLiked=checkLikesComment(comment.commentId)"
+      >thumb_up</i>
+      <span>{{comment.likes}}</span>
+    </button>
+  </div>
+</div>
 
-        <div class="mdl-textfield mdl-js-textfield">
-          <label for="newFriendComment">Post a comment (post index {{$index}})</label>
-          <textarea class="mdl-textfield__input" type="text" ng-model="newFriendComment[$index]"></textarea>
-        </div>
+<div class="mdl-textfield mdl-js-textfield">
+  <label for="newFriendComment">Post a comment (post index {{$index}})</label>
+  <textarea class="mdl-textfield__input" type="text" ng-model="newFriendComment[$index]" ng-init="newComment[$index]='Type Comment Here...'"></textarea>
+</div>
 
-        <div class="mdl-card__actions mdl-card--border">
-          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="postFriendComment($index, posts.postId)">
-          Comment
-          </a>
-        </div>
-      </div>
+<div class="mdl-card__actions mdl-card--border">
+  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="postFriendComment($index, posts.postId)">
+    Comment
+  </a>
+</div>
+</div>
 
-   <!-- </div> -->
+<!-- </div> -->
 
 </div>
