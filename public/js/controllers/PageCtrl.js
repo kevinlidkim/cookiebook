@@ -129,23 +129,43 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     }
   }
 
-  $scope.deleteComment = function(commentId, userId) {
+  $scope.deleteComment = function(commentId) {
     if(commentId != null) {
       var data = {
-        comment: commentId,
-        user: userId
+        comment: commentId
       }
 
       PageService.deleteComment(data)
         .then(function() {
           $scope.getUserPage();
-
-          // PageService.loadPage(data)
-          // .then(function(pageData){       //FIND OUT WHAT THIS IS 
-          //     $scope.storage.page = pageData;   //refresh page to show deleted comment.
-          // })
         })
     }
+  }
+
+  $scope.deletePost = function(postId) {
+
+    var postArray = $scope.storage.page.data.finalData
+    console.log(postArray);
+
+    for(post in postArray){
+      console.log(postArray[post]);
+
+      if(postArray[post].postId == postId) {
+        console.log("Found postId... beginning to delete Post")
+
+        var commentArray = postArray[post].comments;
+        //DELETE ALL COMMENTS ON THE POST.
+        for(var j = 0; j < commentArray.length; j++) {
+          console.log("deleteing comment id: " + commentArray[j].commentId)
+          $scope.deleteComment(commentArray[j].commentId);
+        }
+
+        //BEGIN DELETING POST.
+
+      }
+
+    }
+
   }
 
   $scope.postFriendComment = function(index, postId) {

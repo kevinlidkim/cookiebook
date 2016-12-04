@@ -62,7 +62,6 @@ exports.deleteComment = function(req, res) {
     db.CommentedOn.find({
       where: {
         comment: req.body.comment,
-        user: req.body.user
       }
     })
     .then(function(commentedOn) {
@@ -87,7 +86,6 @@ exports.deleteComment = function(req, res) {
           db.LikesComment.find({
             where: {
               comment: commentedOn.comment,
-              user: commentedOn.user
             }
           })
           .then(function(LikesComment) {
@@ -100,8 +98,12 @@ exports.deleteComment = function(req, res) {
               commentedOn.destroy();
               console.log("Deleted commentedOn relation.");
 
-              LikesComment.destroy();                         ///CHECK THESE FOR NULL BEFORE DELETEING 
-              console.log("delted LikesComment relation");
+              if(LikesComment != null){
+                
+                  LikesComment.destroy();                         ///CHECK THESE FOR NULL BEFORE DELETEING 
+                  console.log("delted LikesComment relation");
+
+              }
 
               comment.destroy();
               console.log("DELETED COMMENT");

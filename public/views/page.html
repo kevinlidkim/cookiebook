@@ -19,6 +19,7 @@
 
       <!-- Load up posts -->
       <div class="post_card_wide mdl-card mdl-shadow--2dp" ng-repeat="posts in storage.page.data.finalData; ">
+        <button type="button" class="btn btn-danger" ng-click="deletePost(posts.postId)">DELETE</button> 
         <div class="mdl-card__title">
           <h2 class="mdl-card__title-text">{{storage.name}}: {{posts.content}} </h2>
           <h2 class="mdl-card__title-text"> (commentCount: {{posts.commentCount}}) </h2>
@@ -31,7 +32,7 @@
 
         <div class="mdl-card__supporting-text">
           <div class="comment_card_wide mdl-card mdl-shadow--2dp" ng-repeat="comment in posts.comments">
-          <button type="button" class="btn btn-danger" ng-click="deleteComment(comment.commentId, storage.user.userId)">DELETE</button> 
+          <button type="button" class="btn btn-danger" ng-click="deleteComment(comment.commentId)">DELETE</button> 
             <p>{{comment.content}}<p>
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect like_button" ng-click="likesComment(comment.commentId); 
             commentLiked=!commentLiked">
