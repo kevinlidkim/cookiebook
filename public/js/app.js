@@ -1,1 +1,1 @@
-angular.module('myApp', ['ngRoute', 'ngStorage', 'appRoutes', 'PageCtrl', 'UserCtrl', 'SignUpCtrl', 'LoginCtrl', 'LogoutCtrl', 'EmployeeCtrl', 'UserServ', 'PageServ', 'EmployeeServ']);
+angular.module('myApp', ['ngRoute', 'ngStorage', 'appRoutes', 'PageCtrl', 'UserCtrl', 'SignUpCtrl', 'LoginCtrl', 'LogoutCtrl', 'EmployeeCtrl', 'ManagerCtrl', 'UserServ', 'PageServ', 'EmployeeServ', 'ManagerServ']);
