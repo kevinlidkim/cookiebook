@@ -11,7 +11,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
       $http.post('/signup', userData)
         .success(function(data, status) {
           if (status === 200 && data.status) {
-            deferred.resolve(th);
+            deferred.resolve();
           } else {
             deferred.reject();
           }

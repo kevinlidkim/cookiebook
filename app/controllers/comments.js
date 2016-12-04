@@ -12,7 +12,6 @@ exports.findAll = function(req, res) {
 }
 
 exports.makeComment = function(req, res) {
-
   db.Comment.create(req.body)
   .then(function(comment) {
     var relation = {
@@ -58,11 +57,78 @@ exports.makeComment = function(req, res) {
   });
 }
 
-exports.commentedBy = function(req, res) {
+exports.deleteComment = function(req, res) {
+    //DECREASE POST COMMENT COUNT.
+    db.CommentedOn.find({
+      where: {
+        comment: req.body.comment,
+        user: req.body.user
+      }
+    })
+    .then(function(commentedOn) {
+
+      console.log("commentId: " + commentedOn.comment);
+
+      db.Comment.find({
+        where: {
+          commentId: commentedOn.comment
+        }
+      })
+      .then(function(comment) {
+
+        db.Post.find({
+          where: {
+            postId: commentedOn.post,
+          }
+        })
+        .then(function(post){
+          var newCommentCount = post.commentCount - 1;
+
+          db.LikesComment.find({
+            where: {
+              comment: commentedOn.comment,
+              user: commentedOn.user
+            }
+          })
+          .then(function(LikesComment) {
+            db.Post.update({commentCount: newCommentCount}, {
+              where: {
+                postId: commentedOn.post
+              }
+            }).then(function(data) {
+
+              commentedOn.destroy();
+              console.log("Deleted commentedOn relation.");
+
+              LikesComment.destroy();                         ///CHECK THESE FOR NULL BEFORE DELETEING 
+              console.log("delted LikesComment relation");
+
+              comment.destroy();
+              console.log("DELETED COMMENT");
+
+              console.log("Successfully decreased comment Count in PostId: " + req.body.post);
+
+            })
 
 
-}
+          })
+        })
+      })
 
+      return res.status(200).json({
+        status: 'Successfully deleted comment',
+      });
+
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Error deleting comment'
+      });
+    });
+
+
+  }
 
 
 

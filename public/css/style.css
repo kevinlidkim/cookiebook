@@ -121,3 +121,7 @@ body {
   display: inline-block;
   color: gray;
 }
+
+.btn-danger {
+  width: 25%;
+}

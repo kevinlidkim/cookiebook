@@ -20,7 +20,7 @@
       <!-- Load up posts -->
       <div class="post_card_wide mdl-card mdl-shadow--2dp" ng-repeat="posts in storage.page.data.finalData; ">
         <div class="mdl-card__title">
-          <h2 class="mdl-card__title-text"> {{storage.name}}: {{posts.content}} </h2>
+          <h2 class="mdl-card__title-text">{{storage.name}}: {{posts.content}} </h2>
           <h2 class="mdl-card__title-text"> (commentCount: {{posts.commentCount}}) </h2>
         </div>
         <button class="mdl-button mdl-js-button mdl-js-ripple-effect like_button" ng-click="likesPost(posts.postId); 
@@ -31,10 +31,12 @@
 
         <div class="mdl-card__supporting-text">
           <div class="comment_card_wide mdl-card mdl-shadow--2dp" ng-repeat="comment in posts.comments">
+          <button type="button" class="btn btn-danger" ng-click="deleteComment(comment.commentId, storage.user.userId)">DELETE</button> 
             <p>{{comment.content}}<p>
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect like_button" ng-click="likesComment(comment.commentId); 
             commentLiked=!commentLiked">
-              <i class="material-icons" ng-class="{'active_liketbn': commentLiked}" ng-init="commentLiked=checkLikesComment(comment.commentId)"
+              <i class="material-icons" ng-class="{'active_liketbn': commentLiked}" 
+                ng-init="commentLiked=checkLikesComment(comment.commentId)"
               >thumb_up</i>
               <span>{{comment.likes}}</span>
             </button>
@@ -43,7 +45,8 @@
 
         <div class="mdl-textfield mdl-js-textfield">
           <label for="newComment">Post a comment (post index {{$index}})</label>
-          <textarea class="mdl-textfield__input" type="text" ng-model="newComment[$index]" ng-init="newComment[$index]='Type Comment Here...'"></textarea>
+          <textarea class="mdl-textfield__input" type="text" ng-model="newComment[$index]" ng-init="newComment[$index]='Type Comment Here...'">
+          </textarea>
         </div>
 
         <div class="mdl-card__actions mdl-card--border">

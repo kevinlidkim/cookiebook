@@ -129,6 +129,25 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     }
   }
 
+  $scope.deleteComment = function(commentId, userId) {
+    if(commentId != null) {
+      var data = {
+        comment: commentId,
+        user: userId
+      }
+
+      PageService.deleteComment(data)
+        .then(function() {
+          $scope.getUserPage();
+
+          // PageService.loadPage(data)
+          // .then(function(pageData){       //FIND OUT WHAT THIS IS 
+          //     $scope.storage.page = pageData;   //refresh page to show deleted comment.
+          // })
+        })
+    }
+  }
+
   $scope.postFriendComment = function(index, postId) {
     if ($scope.newFriendComment[index] !="" && $scope.newFriendComment[index]) {
       var data = {

@@ -41,6 +41,7 @@ module.exports = function(app, passport) {
   app.post('/page', pages.loadPage);
   app.post('/post', posts.makePost);
   app.post('/comment', comments.makeComment);
+  app.post('/deleteComment', comments.deleteComment);
   app.post('/likesPost', likes.LikesPost);
   app.post('/likesComment', likes.LikesComment);
   app.get('/page/me', pages.getPersonalPageId);
