@@ -123,7 +123,7 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
         .error(function(data){
           //console.log(data);
           return null;
-        });
+        })
     }
 
   }
