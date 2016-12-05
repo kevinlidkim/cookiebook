@@ -636,3 +636,71 @@ exports.isEmployee = function(req, res) {
       })
     })
 }
+
+exports.addBankAccount = function(req, res) {
+
+  db.PurchaseAccount.create(req.body)
+    .then(function() {
+      return db.OwnsPurchaseAccount.create(req.body);
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Successfully added bank account'
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to add bank account'
+      })
+    })
+}
+
+exports.loadBankAccounts = function(req, res) {
+
+  var data = {};
+
+  db.OwnsPurchaseAccount.findAll({ where: {owner: req.body.owner} })
+    .then(function(relations) {
+      var accounts = [];
+
+      _.forEach(relations, function(account) {
+        accounts.push(db.PurchaseAccount.find({ where: {accountNumber: account.accountNumber} }));
+      })
+
+      Promise.all(accounts).then(values => {
+        data.accounts = values;
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Successfully retrieved bank accounts',
+          data: data
+        })
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Failed to retrieve bank accounts'
+        })
+      })
+    })
+}
+
+exports.deleteBankAccount = function(req, res) {
+
+  db.OwnsPurchaseAccount.destroy({ where: {accountNumber: req.body.accountNumber} })
+    .then(function() {
+      return db.PurchaseAccount.destroy({ where: {accountNumber: req.body.accountNumber} });
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Successfully deleted bank account'
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to delete bank account'
+      })
+    })
+}

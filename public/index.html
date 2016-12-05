@@ -45,7 +45,7 @@
 			<a class="navbar-brand navbrand_custom" href="/">CookieBook</a>
 		</div>
 		<ul class="nav navbar-nav">
-			<li ng-show="isLoggedIn()"><a href="/profile" ng-click="getUserData()">Profile</a></li>
+			<li ng-show="isLoggedIn()"><a href="/profile" ng-click="loadBankAccounts()">Profile</a></li>
 			<li ng-show="isLoggedIn()"><a ng-controller="PageController" ng-href="/page" ng-click="getUserPage()">Your Page</a></li>
 			<li ng-show="isLoggedIn()"><a ng-href="/groups" ng-click="getGroupData()">Groups</a></li>
 			<li ng-show="isLoggedIn()"><a ng-href="/friend" ng-click="getFriendData()">Friends</a></li>

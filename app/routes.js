@@ -50,6 +50,9 @@ module.exports = function(app, passport) {
   app.get('/page/me', pages.getPersonalPageId);
 
   app.post('/update', users.updateProfile);
+  app.post('/addBankAccount', users.addBankAccount);
+  app.post('/loadBankAccounts', users.loadBankAccounts);
+  app.post('/deleteBankAccount', users.deleteBankAccount);
 
   app.post('/query/all', users.queryAll);
 

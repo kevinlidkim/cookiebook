@@ -240,6 +240,33 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         .error(function(data) {
           console.log(data);
         })
+    },
+    addBankAccount : function(obj) {
+      return $http.post('/addBankAccount', obj)
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    loadBankAccounts : function(obj) {
+      return $http.post('/loadBankAccounts', obj)
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    deleteBankAccount: function(obj) {
+      return $http.post('/deleteBankAccount', obj)
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
     }
   }
 

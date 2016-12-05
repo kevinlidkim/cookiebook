@@ -61,4 +61,24 @@
     </form>
   </div>
 
+  <h3>Bank Accounts</h3>
+
+  <div ng-repeat="bank in storage.user.bankAccounts">
+    <p class="in-line_add">{{bank.accountNumber}}</p>
+    <button type="submit" class="btn btn-default" ng-click="deleteBankAccount(bank)">Delete</button>
+  </div>
+
+  <br>
+  <div class="form-container">
+    <form class="form">
+      <div class= "form-group">
+        <label for="bankAccount">Bank Account</label>
+        <input type="number" id="bankAccount" class="form-control" ng-model="newBankAccount" required/>
+      </div>
+      <div class ="form-group">
+        <button type="submit" class="btn btn-primary" ng-click="addBankAccount()">Add</button>
+      </div>
+    </form>
+  </div>
+
 </div>

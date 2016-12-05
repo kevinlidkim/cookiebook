@@ -252,4 +252,36 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     console.log(userAd);
   }
 
+  $scope.addBankAccount = function() {
+    var bank = {
+      accountNumber: $scope.newBankAccount,
+      owner: $scope.storage.user.userId
+    }
+    if (bank) {
+      UserService.addBankAccount(bank)
+        .then(function(data) {
+          // console.log(data);
+          $scope.loadBankAccounts();
+          $scope.newBankAccount = "";
+        })
+    }
+  }
+
+  $scope.loadBankAccounts = function() {
+    var obj = {
+      owner: $scope.storage.user.userId
+    }
+    UserService.loadBankAccounts(obj)
+      .then(function(data) {
+        $scope.storage.user.bankAccounts = data.data.data.accounts;
+      })
+  }
+
+  $scope.deleteBankAccount = function(acc) {
+    UserService.deleteBankAccount(acc)
+      .then(function(data) {
+        $scope.loadBankAccounts();
+      })
+  }
+
 }]);
