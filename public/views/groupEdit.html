@@ -2,8 +2,8 @@
 
   <h2>{{storage.group.groupName}}</h2>
   <h3>( {{storage.group.type}} )</h3>
+  <a ng-href="/groups" ng-controller="UserController" ng-click="deleteGroup(storage.group.groupId)"><button class="btn btn-primary">Delete Group</button></a>
   <br>
-  <button class="btn btn-primary">Delete Group</button>
   <br>
   <p>Edit Group information here</p>
 
@@ -19,7 +19,7 @@
         <input type="text" id="type" class="form-control" ng-model="profileGroup.type"/>
       </div>
       <div class="form-group">
-        <button type="submit" class="btn btn-primary" ng-click="updateProfile()">Update</button>
+        <button type="submit" class="btn btn-primary" ng-click="updateGroup(storage.group.groupId)">Update</button>
       </div>
     </form>
   </div>

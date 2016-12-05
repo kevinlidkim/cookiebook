@@ -57,6 +57,8 @@ module.exports = function(app, passport) {
   app.post('/friend/accept', users.acceptFriendRequest);
 
   app.post('/group/create', groups.createGroup);
+  app.post('/group/update', groups.updateGroup);
+  app.post('/group/delete', groups.deleteGroup);
   app.post('/groups/get', groups.getGroupData);
   app.post('/page/group', pages.getGroupPageId);
   app.post('/group/joinRequest', groups.joinGroupRequest);

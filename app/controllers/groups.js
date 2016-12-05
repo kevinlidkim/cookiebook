@@ -50,6 +50,155 @@ exports.createGroup = function(req, res) {
 
 }
 
+exports.updateGroup = function(req, res) {
+    var obj = {};
+
+    if (req.body.groupObj) {
+      db.Group.update(req.body.groupObj, {
+        where : {
+          groupId : req.body.groupId
+        }
+      })
+      .then(function() {
+        return db.Group.find({ where: {groupId: req.body.groupId} })
+      })
+      .then(function(group) {
+        obj.groupName = group.groupName;
+        obj.type = group.type;
+        obj.groupId = group.groupId;
+        return res.status(200).json({
+          data: obj,
+          status: 'Update group successful'
+        })
+      })
+      .catch(function(err) {
+        return res.status(500).json({
+          status: 'Error updating group'
+        })
+      })
+    }
+}
+
+exports.deleteGroup = function(req, res) {
+    db.Group.find({ where: {groupId: req.body.groupId} })
+      .then(function(groupToDelete) {
+        if (groupToDelete) {
+          // Get info related to group tod delete
+          db.OwnsGroup.find({ where: {group: req.body.groupId} })
+            .then(function(ownsGroupToDelete) {
+              db.OwnsGroup.destroy({ where: {group: req.body.groupId} })
+            })
+          db.MemberOfGroup.findAll({ where: {group: req.body.groupId} })
+            .then(function(membersOfGroupToRemove) {
+              if(membersOfGroupToRemove) {
+                db.MemberOfGroup.destroy({ where: {group: req.body.groupId} })
+              }
+            })
+          db.JoinGroupRequest.findAll({ where: {group: req.body.groupId} })
+            .then(function(joinGroupRequestsToDelete) {
+              if(joinGroupRequestsToDelete) {
+                db.JoinGroupRequest.destroy({ where: {group: req.body.groupId} })
+              }
+            })
+          db.SendGroupRequest.findAll({ where: {group: req.body.groupId} })
+            .then(function(sendGroupRequestsToDelete) {
+              if(sendGroupRequestsToDelete) {
+                db.SendGroupRequest.destroy({ where: {group: req.body.groupId} })
+              }
+            })
+          // Begin to delete the post, comment, likesPost and likesComment data
+          /* db.OwnsPage.find({ where: {group: req.body.groupId} })
+            .then(function(ownsPageToDelete) {
+              console.log(ownsPageToDelete);
+              db.Page.find({ where: {pageId: ownsPageToDelete.page}})
+                .then(function(pageToDelete) {
+                  console.log(pageToDelete);
+                  db.PostedOn.findAll({ where: {page: pageToDelete.pageId} })
+                    .then(function(postedOnToDelete) {
+                      console.log(postedOnToDelete);
+                      if(postedOnToDelete) {
+                        // For each post, delete its comments, likesComments and likesPost
+                        _.forEach(postedOnToDelete, function(postedOn) {
+                          db.Post.find({ where: {postId: postedOn.post} })
+                            .then(function(postToDelete) {
+                              console.log(postToDelete);
+                              db.LikesPost.findAll({ where: {post: postToDelete.postId} })
+                                .then(function(likesPostToDelete) {
+                                  console.log(likesPostToDelete);
+                                  if(likesPostToDelete) {
+                                    db.LikesPost.destroy({ where: {post: postToDelete.postId} })
+                                  }
+                                })
+                              db.CommentedOn.findAll({ where: {post: postToDelete.postId} })
+                                .then(function(commentedOnToDelete) {
+                                  console.log(commentedOnToDelete);
+                                  if(commentedOnToDelete) {
+                                    var commentPromiseArray = [];
+                                    // For each comment, delete its likes and itself
+                                    _.forEach(commentedOnToDelete, function(commentedOn) {
+                                      commentPromiseArray.push(db.Comment.find({ where: {commentId: commentedOn.comment} }));
+                                    })
+                                    Promise.all(commentPromiseArray).then(values => {
+                                      console.log(values);
+                                      _.forEach(values, function(commentToDelete) {
+                                        db.LikesComment.findAll({ where: {comment: commentToDelete.commentId} })
+                                          .then(function(likesCommentToDelete) {
+                                            console.log(likesCommentToDelete);
+                                            if(likesCommentToDelete) {
+                                              db.LikesComment.destroy({ where: {comment: commentToDelete.commentId} })
+                                            }
+                                          })
+                                        Promise.all(commentToDelete).then(values => {
+                                          console.log(values);
+                                          db.Comment.destroy({ where: {commentId: values.commentId} })
+                                        })
+                                      })
+                                    })
+                                  }
+                                })
+                                .then(function() {
+                                  db.CommentedOn.destroy({ where: {post: postToDelete.postId} })
+                                })
+                            })
+                            .then(function() {
+                              db.Post.destroy({ where: {postId: postedOn.post} })
+                            })
+                        })
+                      }
+                    })
+                    .then(function() {
+                      db.PostedOn.destroy({ where: {page: pageToDelete.pageId} })
+                    })
+                    .then(function() {
+                      db.Page.destroy({ where: {pageId: ownsPageToDelete.page}})
+                    })
+                })
+                .then(function() {
+                  db.OwnsPage.destroy({ where: {group: req.body.groupId} })
+                })
+            })*/
+          Promise.all(groupToDelete).then(values => {
+              db.Group.destroy({ where: {groupId: req.body.groupId} })
+          })
+          .then(function() {
+            return res.status(200).json({
+              status: 'Delete group successful'
+            })
+          })
+        }
+        else {
+          return res.status(500).json({
+            status: 'Group to delete did not exist'
+          })
+        }
+      })
+      .catch(function(err) {
+        return res.status(500).json({
+          status: 'Error deleting group'
+        })
+      })
+}
+
 exports.getGroupData = function(req, res) {
 
   var data = {};

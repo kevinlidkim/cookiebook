@@ -82,6 +82,18 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
         });
     },
 
+    updateGroup : function(obj) {
+      return $http.post('/group/update', obj)
+        .success(function(data) {
+          console.log(data);
+          return data.data;
+        })
+        .error(function(data) {
+          console.log(44144);
+          console.log(data);
+        })
+    },
+
     likesPost : function(sendData) {
       return $http.post('/likesPost', sendData)
         .success(function(data){
@@ -130,4 +142,3 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
 
 
 }]);
-

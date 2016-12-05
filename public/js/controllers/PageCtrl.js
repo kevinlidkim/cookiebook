@@ -219,7 +219,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         comment: commentId,
         user: $scope.storage.user.userId
       }
-      
+
     }
 
     PageService.commentedBy(data)
@@ -290,9 +290,9 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     var member = false;
     var groups = $scope.stroage.groupData.memberOfGroup;
     for (var i = 0; i < groups.length; i++) {
-        if (groups[i].groupId == $scope.storage.group.groupId) {
-            member = true;
-        }
+      if (groups[i].groupId == $scope.storage.group.groupId) {
+        member = true;
+      }
     }
     return member;
   }
@@ -352,4 +352,27 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
       })
   }
 
+  $scope.updateGroup = function(groupId) {
+    var groupObj = $scope.profileGroup;
+
+    if (groupObj) {
+      if ($scope.profileGroup.groupName != "" && $scope.profileGroup.type != "") {
+        $scope.error = false;
+        var obj = {
+          groupObj: groupObj,
+          groupId: groupId
+        }
+        PageService.updateGroup(obj)
+          .then(function(data) {
+            $scope.getGroupPage(data.data.data);
+          })
+      } else {
+        $scope.errorMessage = "Group Data Fields cannot be empty.";
+        $scope.error = true;
+      }
+    } else {
+      $scope.error = false;
+      console.log(451)
+    }
+  }
 }]);

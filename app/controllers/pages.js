@@ -181,7 +181,7 @@ exports.getGroupPageId = function(req, res) {
     .catch(function(err) {
       console.log(err);
       return res.status(500).json({
-        status: 'Error retrieving friend page'
+        status: 'Error retrieving group page'
       });
     });
 }
