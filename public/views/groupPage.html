@@ -3,9 +3,9 @@
   <h2>Page</h2>
   <br>
   <p>{{storage.group.groupName}}'s Page</p>
- <!--  <div ng-show="isGroupOwner()">
-    <button class="btn btn-primary">Edit Group</button>
-  </div> -->
+  <div ng-show="isGroupOwner()">
+    <a ng-href="/editGroup/{{storage.group.groupId}}" ng-click="getGroupPage(storage.group)"><button class="btn btn-primary">Edit Group</button></a>
+  </div>
 
   <div class="mdl-textfield mdl-js-textfield">
     <label for="newStatus">What's on your mind?</label>

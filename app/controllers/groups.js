@@ -136,7 +136,7 @@ exports.deleteGroup = function(req, res) {
 
               Promise.all(promiseArrayAllComments).then(values4 => {
                 var commentsToDelete = [].concat.apply([], values4);
-                data.commmentsToDelete = commentsToDelete;
+                data.commentsToDelete = commentsToDelete;
               })
               .then(function() {
 
@@ -153,7 +153,7 @@ exports.deleteGroup = function(req, res) {
                 })
 
                 // Delete each comment
-                _.forEach(data.CommentsToDelete, function(deleteComment) {
+                _.forEach(data.commentsToDelete, function(deleteComment) {
                   return db.Comment.destroy({ where: {commentId: deleteComment.commentId} });
                 })
 
