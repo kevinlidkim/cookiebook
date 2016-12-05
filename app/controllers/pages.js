@@ -49,7 +49,7 @@ exports.loadPage = function(req, res) {
         var promistArrayLikesPost = [];
         _.forEach(values, function(post) {
           promiseArrayComments.push(db.CommentedOn.findAll({ where: {post: post.postId} }));
-          promistArrayLikesPost.push(db.LikesPost.findAll({where: {post: post.postId}}))
+          promistArrayLikesPost.push(db.LikesPost.findAll({where: {post: post.postId}}));
         })
 
         // Resolve the promise --> now we have the likesPost relations

@@ -218,6 +218,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     }
     UserService.deleteGroup(obj)
       .then(function(data) {
+        console.log(data);
         $scope.getGroupData();
       })
   }
