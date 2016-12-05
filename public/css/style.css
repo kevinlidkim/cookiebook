@@ -82,6 +82,7 @@ body {
   min-height: 50px;
   margin-bottom: 30px;
   margin-left: 325px;
+  background-color: aliceblue;
 }
 
 .post_card_wide > .mdl-card__title {
@@ -125,6 +126,20 @@ body {
 
 .btn-danger {
   width: 25%;
+  float: right !important;
+  border-radius: 4px !important;
+}
+
+.btn-warning {
+  width: 25%;
+  float: left !important;
+  border-radius: 4px !important;
+}
+
+.btn-success {
+  width: 25%;
+  float: left !important;
+  border-radius: 4px !important;
 }
 
 .commentedBy {

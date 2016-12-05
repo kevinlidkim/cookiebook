@@ -57,6 +57,25 @@ exports.makeComment = function(req, res) {
   });
 }
 
+exports.updateComment = function(req, res) {
+
+    db.Comment.update({content: req.body.content}, {
+      where: {
+        commentId: req.body.comment
+      }
+    })
+    .then(function(){
+       return res.status(200).json({
+        status: 'Successfully updated post',
+        });
+    })
+    .catch(function(err) {
+      return res.status(500).json({
+        status: 'Error posting'
+      });
+    })
+}
+
 exports.deleteComment = function(req, res) {
     //DECREASE POST COMMENT COUNT.
     db.CommentedOn.find({

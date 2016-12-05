@@ -31,6 +31,24 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
         });
     },
 
+    updateStatus : function(sendData) {
+      return $http.post('/updatePost', sendData)
+        .success(function(data) {
+        })
+        .error(function(data) {
+          return null;
+        });
+    },
+
+    updateComment : function(sendData) {
+      return $http.post('/updateComment', sendData)
+        .success(function(data) {
+        })
+        .error(function(data) {
+          return null;
+        });
+    },
+
     postComment : function(sendData) {
       return $http.post('/comment', sendData)
         .success(function(data) {

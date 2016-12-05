@@ -24,8 +24,25 @@
 
   <div class="mdl-card__supporting-text">
     <div class="comment_card_wide mdl-card mdl-shadow--2dp" ng-repeat="comment in posts.comments" >
+
+      <div ng-if=isMyComment($index)>
+
+        <button ng-show="!commentEditPressed" type="button" class="btn btn-warning" ng-click="commentEditPressed=!commentEditPressed" ng-init="commentEditPressed=false">Edit</button>
+        <button ng-show="commentEditPressed" type="button" class="btn btn-success" ng-click="updateComment(editComment, comment.commentId); commentEditPressed=!commentEditPressed">Submit</button>
+        <button type="button" class="btn btn-danger" ng-click="deleteComment(comment.commentId)" ng-if=isMyComment($index)>DELETE</button> 
+
+
+        <div ng-show="commentEditPressed" class="mdl-textfield mdl-js-textfield">
+          <textarea class="mdl-textfield__input" type="text" ng-model="editComment" ng-init="editComment=comment.content"></textarea>
+        </div>
+
+      </div>
+
+
+
+
+
       <p for="commented_By" class="commentedBy" ng-model="commented_By[$index]" ng-init="commentedBy($index, comment.commentId)">
-          <button type="button" class="btn btn-danger" ng-click="deleteComment(comment.commentId)" ng-if=isMyComment($index)>DELETE</button> 
       {{commented_By[$index]}}: </p>
       <p>{{comment.content}}</p> 
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect like_button" ng-click="likesComment(comment.commentId); 

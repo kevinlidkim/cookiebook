@@ -24,6 +24,9 @@ exports.findAll2 = function(req, res) {
 
 exports.makePost = function(req, res) {
 
+  console.log("making post:")
+  console.log(req.body);
+
   db.Post.create(req.body)
     .then(function(post) {
 
@@ -70,6 +73,25 @@ exports.makePost = function(req, res) {
       });
     });
 
+}
+
+exports.updatePost = function(req, res) {
+
+    db.Post.update({content: req.body.content}, {
+      where: {
+        postId: req.body.post
+      }
+    })
+    .then(function(){
+       return res.status(200).json({
+        status: 'Successfully updated post',
+        });
+    })
+    .catch(function(err) {
+      return res.status(500).json({
+        status: 'Error posting'
+      });
+    })
 }
 
 exports.deletePost = function(req, res) {
@@ -138,7 +160,7 @@ exports.deletePost = function(req, res) {
         status: 'Error deleting post'
       });
     });
-  }
+}
 
 // exports.findAll = function(req, res) {
 

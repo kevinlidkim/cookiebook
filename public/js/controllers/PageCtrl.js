@@ -113,6 +113,48 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     }
   }
 
+  $scope.updateStatus = function(editStatus, postId) {
+
+    if (editStatus != "") {
+      var data = {
+        content: editStatus,
+        post: postId,
+      };
+
+      PageService.updateStatus(data)
+        .then(function() {
+          PageService.loadPage(data)
+            .then(function(pageData) {
+              $scope.getUserPage();
+            })
+        });
+    }
+  }
+
+  $scope.updateComment = function(editComment, commentId){
+
+    console.log("updateing comment: ")
+    console.log(editComment)
+
+     if (editComment != "") {
+      var data = {
+        content: editComment,
+        comment: commentId,
+      };
+
+      PageService.updateComment(data)
+        .then(function() {
+          PageService.loadPage(data)
+            .then(function(pageData) {
+              $scope.getUserPage();
+              //TO SEE CHANGES ON FRIENDS PAGE
+              $scope.getFriendPage($scope.storage.friend);     
+            })
+        });
+    }
+
+  }
+
   $scope.postComment = function(index, postId) {
     if ($scope.newComment[index] !="" && $scope.newComment[index]) {
       var data = {
@@ -144,6 +186,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
       PageService.deleteComment(data)
         .then(function() {
           $scope.getUserPage();
+          //TO SEE CHANGES ON FRIENDS PAGE. 
           $scope.getFriendPage($scope.storage.friend);
         })
     }
