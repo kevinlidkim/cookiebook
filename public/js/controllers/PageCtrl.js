@@ -79,7 +79,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         PageService.loadPage(data)
           .then(function(pageData) {
             $scope.storage.groupPage = pageData;
-            console.log(pageData);
+            // console.log(pageData);
             return PageService.loadGroupRequests(data)
           })
           .then(function(requestData) {
@@ -250,9 +250,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   }
 
   $scope.postGroupComment = function(index, postId) {
-
-    console.log(index);
-    console.log(postId);
 
     if ($scope.newGroupComment[index] !="" && $scope.newGroupComment[index]) {
       var data = {

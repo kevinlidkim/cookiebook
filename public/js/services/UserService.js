@@ -224,6 +224,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     deleteGroup : function(obj) {
       return $http.post('/group/delete', obj)
         .success(function(data) {
+          // console.log(data);
           return data;
         })
         .error(function(data) {
