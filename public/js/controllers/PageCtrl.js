@@ -159,11 +159,20 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         var commentArray = postArray[post].comments;
         //DELETE ALL COMMENTS ON THE POST.
         for(var j = 0; j < commentArray.length; j++) {
-          console.log("deleteing comment id: " + commentArray[j].commentId)
+          
           $scope.deleteComment(commentArray[j].commentId);
         }
 
         //BEGIN DELETING POST.
+
+        var postData = {
+          post : postId
+        }
+
+        PageService.deletePost(postData)
+          .then(function() {
+            $scope.getUserPage();
+          })
 
       }
 

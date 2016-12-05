@@ -125,8 +125,11 @@ body {
 
 .btn-danger {
   width: 25%;
-  color: blue;
+}
+
+.commentedBy {
   text-transform: uppercase;
+  color: blue;
   font-weight: 300 !important;
 }
 

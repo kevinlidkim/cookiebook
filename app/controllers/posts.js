@@ -72,6 +72,74 @@ exports.makePost = function(req, res) {
 
 }
 
+exports.deletePost = function(req, res) {
+    //DECREASE PAGE POST COUNT.
+    db.PostedOn.find({
+      where: {
+        post: req.body.post,
+      }
+    })
+    .then(function(postedOn) {
+      db.Post.find({
+        where: {
+          postId: postedOn.post
+        }
+      })
+      .then(function(post) {
+        db.Page.find({
+          where: {
+            pageId: postedOn.page,
+          }
+        })
+        .then(function(page){
+
+          var newPostCount = page.postCount - 1;
+
+          db.LikesPost.find({
+            where: {
+              post: postedOn.post,
+            }
+          })
+          .then(function(likesPost) {
+            
+            db.Page.update({postCount: newPostCount}, {
+              where: {
+                pageId: postedOn.page
+              }
+            }).then(function(data) {
+
+              postedOn.destroy();
+              console.log("Deleted postedOn relation.");
+
+              if(likesPost != null){
+                
+                  likesPost.destroy();                         ///CHECK THESE FOR NULL BEFORE DELETEING 
+                  console.log("delted likesPost relation");
+
+              }
+
+              post.destroy();
+              console.log("DELETED post");
+              console.log("Successfully decreased post Count in pageId: " + page);
+
+            })
+          })
+        })
+      })
+
+      return res.status(200).json({
+        status: 'Successfully deleted post',
+      });
+
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Error deleting post'
+      });
+    });
+  }
+
 // exports.findAll = function(req, res) {
 
 //   db.Post.findAll()

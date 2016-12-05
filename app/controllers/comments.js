@@ -107,12 +107,9 @@ exports.deleteComment = function(req, res) {
 
               comment.destroy();
               console.log("DELETED COMMENT");
-
               console.log("Successfully decreased comment Count in PostId: " + req.body.post);
 
             })
-
-
           })
         })
       })
@@ -128,6 +125,7 @@ exports.deleteComment = function(req, res) {
         status: 'Error deleting comment'
       });
     });
+  }
 
 exports.commentedBy = function(req, res) {
   db.CommentedOn.find({
@@ -162,9 +160,6 @@ exports.commentedBy = function(req, res) {
     })
   })
 }
-
-  }
-
 
 
 // exports.findAll = function(req, res) {

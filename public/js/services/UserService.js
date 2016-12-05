@@ -67,13 +67,13 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
       }
     },
     isAuth : function() {
-     if (user) {
       if (user) {
         return true;
       } else {
         return false;
       }
     },
+    
     getUserStatus : function() {
       return $http.get('/status')
         .success(function(data) {

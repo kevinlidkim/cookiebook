@@ -40,6 +40,7 @@ module.exports = function(app, passport) {
 
   app.post('/page', pages.loadPage);
   app.post('/post', posts.makePost);
+  app.post('/deletePost', posts.deletePost);
   app.post('/comment', comments.makeComment);
   app.post('/deleteComment', comments.deleteComment);
   app.post('/commentedBy', comments.commentedBy);

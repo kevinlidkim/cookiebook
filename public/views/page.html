@@ -19,6 +19,7 @@
 
   <!-- Load up posts -->
   <div class="post_card_wide mdl-card mdl-shadow--2dp" ng-repeat="posts in storage.page.data.finalData; ">
+     <button type="button" class="btn btn-danger" ng-click="deletePost(posts.postId)">DELETE</button> 
     <div class="mdl-card__title">
       <h2 class="mdl-card__title-text postedBy"> {{storage.name}}: </h2>
     </div>
@@ -34,6 +35,7 @@
 
   <div class="mdl-card__supporting-text">
     <div class="comment_card_wide mdl-card mdl-shadow--2dp" ng-repeat="comment in posts.comments" >
+     <button type="button" class="btn btn-danger" ng-click="deleteComment(comment.commentId)">DELETE</button> 
       <p for="commented_By" class="commentedBy" ng-model="commented_By[$index]" ng-init="commentedBy($index, comment.commentId)">{{commented_By[$index]}}: </p>
       <p class = "commentContent">{{comment.content}}</p> 
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect like_button" ng-click="likesComment(comment.commentId); 
@@ -43,50 +45,6 @@
       <span>{{comment.likes}}</span>
     </button>
 
-    <!-- PageController used to load posts and comments -->
-    <!-- <div ng-controller="PageController"> -->
-
-      <!-- Load up posts -->
-      <div class="post_card_wide mdl-card mdl-shadow--2dp" ng-repeat="posts in storage.page.data.finalData; ">
-        <button type="button" class="btn btn-danger" ng-click="deletePost(posts.postId)">DELETE</button> 
-        <div class="mdl-card__title">
-          <h2 class="mdl-card__title-text">{{storage.name}}: {{posts.content}} </h2>
-          <h2 class="mdl-card__title-text"> (commentCount: {{posts.commentCount}}) </h2>
-        </div>
-        <button class="mdl-button mdl-js-button mdl-js-ripple-effect like_button" ng-click="likesPost(posts.postId); 
-        postLiked=!postLiked">
-          <i class="material-icons" ng-class="{'active_liketbn': postLiked}" ng-init="postLiked=checkLikesPost(posts.postId)">thumb_up</i>
-            <span>{{posts.likes}}</span>
-        </button>
-
-        <div class="mdl-card__supporting-text">
-          <div class="comment_card_wide mdl-card mdl-shadow--2dp" ng-repeat="comment in posts.comments">
-          <button type="button" class="btn btn-danger" ng-click="deleteComment(comment.commentId)">DELETE</button> 
-            <p>{{comment.content}}<p>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect like_button" ng-click="likesComment(comment.commentId); 
-            commentLiked=!commentLiked">
-              <i class="material-icons" ng-class="{'active_liketbn': commentLiked}" 
-                ng-init="commentLiked=checkLikesComment(comment.commentId)"
-              >thumb_up</i>
-              <span>{{comment.likes}}</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="mdl-textfield mdl-js-textfield">
-          <label for="newComment">Post a comment (post index {{$index}})</label>
-          <textarea class="mdl-textfield__input" type="text" ng-model="newComment[$index]" ng-init="newComment[$index]='Type Comment Here...'">
-          </textarea>
-        </div>
-
-        <div class="mdl-card__actions mdl-card--border">
-          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="postComment($index, posts.postId)">
-          Comment
-          </a>
-        </div>
-      </div>
-
-   <!-- </div> -->
   </div>
 </div>
 

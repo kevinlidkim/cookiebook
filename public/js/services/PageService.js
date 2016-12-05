@@ -107,12 +107,18 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
     deleteComment: function(sendData) {
       return $http.post('/deleteComment', sendData)
         .success(function(data){
-           console.log(data);
         })
         .error(function(data){
-           console.log(data);
         })
 
+    },
+
+    deletePost: function(sendData) {
+      return $http.post('/deletePost', sendData)
+        .success(function() {
+        })
+        .error(function(data) {
+        })
     },
 
     commentedBy : function(sendData) {
