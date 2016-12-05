@@ -272,9 +272,9 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     var member = false;
     var groups = $scope.stroage.groupData.memberOfGroup;
     for (var i = 0; i < groups.length; i++) {
-        if (groups[i].groupId == $scope.storage.group.groupId) {
-            member = true;
-        }
+      if (groups[i].groupId == $scope.storage.group.groupId) {
+        member = true;
+      }
     }
     return member;
   }

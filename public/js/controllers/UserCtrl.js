@@ -202,6 +202,16 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
       })
   }
 
+  $scope.deleteGroup = function(groupId) {
+    var obj = {
+      groupId : groupId
+    }
+    UserService.deleteGroup(obj)
+      .then(function(data) {
+        $scope.getGroupData();
+      })
+  }
+
   $scope.checkEmployee = function() {
     if ($scope.storage.user) {
       var obj = {

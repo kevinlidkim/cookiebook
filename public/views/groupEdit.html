@@ -2,7 +2,7 @@
 
   <h2>{{storage.group.groupName}}</h2>
   <h3>( {{storage.group.type}} )</h3>
-  <button class="btn btn-primary">Delete Group</button>
+  <a ng-href="/groups" ng-controller="UserController" ng-click="deleteGroup(storage.group.groupId)"><button class="btn btn-primary">Delete Group</button></a>
   <br>
   <br>
   <p>Edit Group information here</p>
