@@ -112,8 +112,8 @@ exports.deletePost = function(req, res) {
               console.log("Deleted postedOn relation.");
 
               if(likesPost != null){
-                
-                  likesPost.destroy();                         ///CHECK THESE FOR NULL BEFORE DELETEING 
+
+                  likesPost.destroy();                         //SOMETIMES HAPPENS AFTER POST.DESTORY CALL? 
                   console.log("delted likesPost relation");
 
               }

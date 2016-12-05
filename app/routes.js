@@ -12,6 +12,7 @@ module.exports = function(app, passport) {
   var comments = require('./controllers/comments');
   var groups = require('./controllers/groups');
   var likes = require('./controllers/likes');
+  var employees = require('./controllers/employees')
 
   app.get('/persons/find', persons.findAll); // lists all persons
   app.get('/yo', users.findAll); // lists all users
@@ -58,6 +59,8 @@ module.exports = function(app, passport) {
   app.post('/friend/accept', users.acceptFriendRequest);
 
   app.post('/group/create', groups.createGroup);
+  app.post('/group/update', groups.updateGroup);
+  app.post('/group/delete', groups.deleteGroup);
   app.post('/groups/get', groups.getGroupData);
   app.post('/page/group', pages.getGroupPageId);
   app.post('/group/joinRequest', groups.joinGroupRequest);
@@ -70,6 +73,11 @@ module.exports = function(app, passport) {
   app.post('/deleteMessage', users.deleteMessage);
 
   app.post('/isEmployee', users.isEmployee);
+  app.post('/createAd', employees.createAd);
+  app.post('/loadEmployeeAds', employees.loadEmployeeAds);
+  app.post('/deleteEmployeeAd', employees.deleteEmployeeAd);
+
+  app.post('/loadAds', pages.loadAds);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');

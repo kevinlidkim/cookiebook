@@ -181,7 +181,49 @@ exports.getGroupPageId = function(req, res) {
     .catch(function(err) {
       console.log(err);
       return res.status(500).json({
-        status: 'Error retrieving friend page'
+        status: 'Error retrieving group page'
       });
     });
+}
+
+exports.loadAds = function(req, res) {
+
+  var data = {};
+
+  if (req.body.user.adPreferences == null || req.body.user.adPreferences == "") {
+    db.Advertisement.findAll()
+      .then(function(ads) {
+        data.ads = ads;
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Loaded all ads',
+          data: data.ads
+        })
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Failed to load all ads'
+        })
+      })
+
+  } else {
+    db.Advertisement.findAll({ where: {adType: {$like: '%' + req.body.user.adPreferences + '%'} } })
+      .then(function(ads) {
+        data.ads = ads;
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Loaded preferred ads',
+          data: data.ads
+        })
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Failed to load preferred ads'
+        })
+      })
+  }
 }

@@ -2,6 +2,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
 
   var user = null;
   var loggedInUser = null;
+  var editedGroup = null;
 
   return {
 
@@ -89,6 +90,9 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     },
     getUserData : function() {
       return loggedInUser;
+    },
+    getUpdatedGroupData : function() {
+      return editedGroup;
     },
     updateProfile : function(obj) {
       return $http.post('/update', obj)
@@ -211,6 +215,15 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     },
     deleteMessage : function(obj) {
       return $http.post('/deleteMessage', obj)
+        .success(function(data) {
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    deleteGroup : function(obj) {
+      return $http.post('/group/delete', obj)
         .success(function(data) {
           return data;
         })

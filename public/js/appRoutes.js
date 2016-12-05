@@ -58,7 +58,7 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 
 	.when('/editGroup/:group', {
 		templateUrl: 'views/groupEdit.html',
-		controller: 'UserController',
+		controller: 'PageController',
 		access: {restricted: true}
 	})
 
@@ -88,6 +88,19 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 
     .when('/advertisements', {
       templateUrl: 'views/advertisement.html',
+      controller: 'EmployeeController',
+      access: {restricted: true}
+    })
+
+    .when('/customers', {
+      templateUrl: 'views/customer.html',
+      controller: 'EmployeeController',
+      access: {restricted: true}
+    })
+
+    .when('/editCustomer', {
+      templateUrl: 'views/editCustomer.html',
+      controller: 'EmployeeController',
       access: {restricted: true}
     })
 

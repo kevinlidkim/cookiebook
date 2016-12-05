@@ -27,11 +27,14 @@ angular.module('LoginCtrl', []).controller('LoginController', ['$scope', '$local
   };
 
   $scope.loadAll = function () {
+    // Loads the user data
     var user = UserService.getUserData();
     if (user != null) {
       $scope.storage.user = user;
       $scope.storage.name = user.firstName + " " + user.lastName;
     }
+
+    // Loads the user's friends
     var friendObj = {
       you: $scope.storage.user.userId
     }
@@ -42,41 +45,48 @@ angular.module('LoginCtrl', []).controller('LoginController', ['$scope', '$local
         var groupObj = {
           you: $scope.storage.user.userId
         }
+
+        // Loads the user's groups
         UserService.getGroupData(groupObj)
           .then(function(data) {
             $scope.storage.groupData = data.data.data;
 
+            // Set up to load your personal page
             var userId = $scope.storage.user.userId;
-              PageService.getPersonalPageId(userId)
-                .then(function(pageId) {
-                  $scope.storage.personalPageId = pageId.data.data;
+            PageService.getPersonalPageId(userId)
+              .then(function(pageId) {
+                $scope.storage.personalPageId = pageId.data.data;
 
-                  var data = {
-                    page: $scope.storage.personalPageId,
-                    user: $scope.storage.user.userId
-                  }
+                var data = {
+                  page: $scope.storage.personalPageId,
+                  user: $scope.storage.user.userId
+                }
 
-                  PageService.loadPage(data)
-                    .then(function(pageData) {
-                      $scope.storage.page = pageData;
-                      // load messages afterwards
-                      var obj = $scope.storage.user;
-                      UserService.loadMessages(obj)
-                        .then(function(data) {
-                          $scope.storage.listOfMessages = data.data.data;
-                          if ($scope.storage.user) {
-                            var employee = {
-                              userId: $scope.storage.user.userId
-                            }
-                            UserService.isEmployee(employee)
-                              .then(function(status) {
-                                // return status.data.data;
-                                $scope.storage.isEmployee = status.data.data;
-                              })
+                // Load your personal page
+                PageService.loadPage(data)
+                  .then(function(pageData) {
+                    $scope.storage.page = pageData;
+
+                    // Load your messages
+                    var obj = $scope.storage.user;
+                    UserService.loadMessages(obj)
+                      .then(function(data) {
+                        $scope.storage.listOfMessages = data.data.data;
+
+                        // Load employee status
+                        if ($scope.storage.user) {
+                          var employee = {
+                            userId: $scope.storage.user.userId
                           }
-                        })
-                    })
-                })
+                          UserService.isEmployee(employee)
+                            .then(function(status) {
+                              $scope.storage.isEmployee = status.data.data;
+                              $scope.storage.employee = status.data.employee;
+                            })
+                        }
+                      })
+                  })
+              })
 
 
           })
