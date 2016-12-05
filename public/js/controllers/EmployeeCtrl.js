@@ -7,6 +7,7 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
       .then(function(ad) {
         // console.log(ad);
         // append this ad to the bottom of the page and load the page again
+        $scope.loadEmployeeAds();
       })
   }
 
