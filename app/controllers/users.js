@@ -137,6 +137,7 @@ exports.updateProfile = function(req, res) {
               })
             })
             .catch(function(err) {
+              console.log(err);
               return res.status(500).json({
                 status: 'Error updating profile'
               })
@@ -161,6 +162,7 @@ exports.updateProfile = function(req, res) {
 
       })
       .catch(function(err) {
+        console.log(err);
         return res.status(200).json({
           status: 'Error updating person'
         })
@@ -197,6 +199,7 @@ exports.updateProfile = function(req, res) {
         })
       })
       .catch(function(err) {
+        console.log(err);
         return res.status(500).json({
           status: 'Error updating user'
         })

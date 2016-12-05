@@ -30,6 +30,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         PageService.loadPage(data)
           .then(function(pageData) {
             $scope.storage.page = pageData;
+            $scope.loadAds();
             // console.log(pageData);
           })
       });
@@ -337,6 +338,18 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         }
         UserService.sendGroupRequest(obj);
     }
+  }
+
+  $scope.loadAds = function() {
+
+    var data = {
+      user: $scope.storage.user
+    };
+    PageService.loadAds(data)
+      .then(function(ads) {
+        // console.log(ads);
+        $scope.storage.user.ads = ads.data.data;
+      })
   }
 
 }]);

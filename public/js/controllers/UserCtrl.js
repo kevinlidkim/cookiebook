@@ -57,8 +57,18 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
           var user = UserService.getUserData();
           $scope.storage.user = user;
           $scope.storage.name = user.firstName + " " + user.lastName;
-          $scope.profilePerson = "";
-          $scope.profileUser = "";
+          $scope.profilePerson.firstName = "";
+          $scope.profilePerson.lastName = "";
+          $scope.profilePerson.address = "";
+          $scope.profilePerson.city = "";
+          $scope.profilePerson.state = "";
+          $scope.profilePerson.zipcode = "";
+          $scope.profilePerson.telephone = "";
+          $scope.profileUser.email = "";
+          $scope.profileUser.password = "";
+          $scope.profileUser.confirmPassword = "";
+          $scope.profileUser.adPreferences = "";
+          $scope.profilePerson.creditCard = "";
         })
     }
 
@@ -141,7 +151,7 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     }
     UserService.getGroupData(obj)
       .then(function(data) {
-        console.log(data.data.data);
+        // console.log(data.data.data);
         $scope.storage.groupData = data.data.data;
       })
   }
@@ -226,6 +236,10 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
 
   $scope.isManager = function() {
     
+  }
+
+  $scope.purchaseItem = function(userAd) {
+    console.log(userAd);
   }
 
 }]);

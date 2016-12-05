@@ -113,6 +113,16 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
           //console.log(data);
           return null;
         });
+    },
+
+    loadAds : function(obj) {
+      return $http.post('/loadAds', obj)
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
     }
 
   }
