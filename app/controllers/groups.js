@@ -216,8 +216,6 @@ exports.sendGroupRequest = function(req, res) {
 
 exports.approveGroupRequest = function(req, res) {
 
-  // console.log(req.body);
-
   db.JoinGroupRequest.find({ where: {user: req.body.user, group: req.body.group} })
     .then(function(joinRequest) {
       return joinRequest.destroy();

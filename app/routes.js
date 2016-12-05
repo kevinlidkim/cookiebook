@@ -12,6 +12,7 @@ module.exports = function(app, passport) {
   var comments = require('./controllers/comments');
   var groups = require('./controllers/groups');
   var likes = require('./controllers/likes');
+  var employees = require('./controllers/employees')
 
   app.get('/persons/find', persons.findAll); // lists all persons
   app.get('/yo', users.findAll); // lists all users
@@ -68,6 +69,9 @@ module.exports = function(app, passport) {
   app.post('/deleteMessage', users.deleteMessage);
 
   app.post('/isEmployee', users.isEmployee);
+  app.post('/createAd', employees.createAd);
+  app.post('/loadEmployeeAds', employees.loadEmployeeAds);
+  app.post('/deleteEmployeeAd', employees.deleteEmployeeAd);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');

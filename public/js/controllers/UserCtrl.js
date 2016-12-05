@@ -202,18 +202,19 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
       })
   }
 
-  $scope.checkEmployee = function() {
-    if ($scope.storage.user) {
-      var obj = {
-        userId: $scope.storage.user.userId
-      }
-      UserService.isEmployee(obj)
-        .then(function(status) {
-          // return status.data.data;
-          $scope.storage.isEmployee = status.data.data;
-        })
-    }
-  }
+  // $scope.checkEmployee = function() {
+  //   if ($scope.storage.user) {
+  //     var obj = {
+  //       userId: $scope.storage.user.userId
+  //     }
+  //     UserService.isEmployee(obj)
+  //       .then(function(status) {
+  //         // console.log(status.data);
+  //         $scope.storage.isEmployee = status.data.data;
+  //         $scope.storage.employee = status.data.employee;
+  //       })
+  //   }
+  // }
 
   $scope.isEmployee = function() {
     if ($scope.storage.isEmployee) {
@@ -221,6 +222,9 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
     } else {
       return false
     }
+  }
+
+  $scope.isManager = function() {
     
   }
 

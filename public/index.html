@@ -24,9 +24,14 @@
 	<script src="js/controllers/LoginCtrl.js"></script>
 	<script src="js/controllers/LogoutCtrl.js"></script>
 	<script src="js/controllers/SignUpCtrl.js"></script>
+	<script src="js/controllers/EmployeeCtrl.js"></script>
+	<script src="js/controllers/ManagerCtrl.js"></script>
+
 
 	<script src="js/services/UserService.js"></script>
 	<script src="js/services/PageService.js"></script>
+	<script src="js/services/EmployeeService.js"></script>
+	<script src="js/services/ManagerService.js"></script>
 
 	<script src="js/appRoutes.js"></script>
 	<script src="js/app.js"></script>
@@ -45,8 +50,8 @@
 			<li ng-show="isLoggedIn()"><a ng-href="/groups" ng-click="getGroupData()">Groups</a></li>
 			<li ng-show="isLoggedIn()"><a ng-href="/friend" ng-click="getFriendData()">Friends</a></li>
 			<li ng-show="isLoggedIn()"><a ng-href="/message" ng-click="loadMessages()">Messages</a></li>
-			<li ng-show="isEmployee()"><a ng-href="/advertisements">Advertisements</a></li>
-			<li ng-show="isEmployee()"><a ng-href="/customer">Customers</a></li>
+			<li ng-show="isEmployee()"><a ng-controller="EmployeeController" ng-href="/advertisements" ng-click="loadEmployeeAds()">Advertisements</a></li>
+			<li ng-show="isEmployee()"><a ng-controller="EmployeeController" ng-href="/customers">Customers</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li ng-show="isLoggedIn()">
