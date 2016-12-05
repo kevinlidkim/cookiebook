@@ -7,6 +7,8 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.newGroupStatus = "";
   $scope.newGroupComment = [];
   $scope.commented_By=[];
+  $scope.comment_By_PersonId=[];
+  $scope.isMyComment=[];
   $scope.groupSearch = "";
   $scope.searched = false;
 
@@ -141,6 +143,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
       PageService.deleteComment(data)
         .then(function() {
           $scope.getUserPage();
+          $scope.getFriendPage($scope.storage.friend);
         })
     }
   }
@@ -159,7 +162,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         var commentArray = postArray[post].comments;
         //DELETE ALL COMMENTS ON THE POST.
         for(var j = 0; j < commentArray.length; j++) {
-          
+
           $scope.deleteComment(commentArray[j].commentId);
         }
 
@@ -266,13 +269,21 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         comment: commentId,
         user: $scope.storage.user.userId
       }
-      
     }
 
     PageService.commentedBy(data)
         .then(function(personData){
           $scope.commented_By[index] = personData.data.data.firstName + " " + personData.data.data.lastName;
+          $scope.comment_By_PersonId[index] = personData.data.data.personId;
         })
+  }
+
+  $scope.isMyComment = function(index) {
+
+      if($scope.comment_By_PersonId[index] == $scope.storage.user.userId) {
+          return true;
+      }
+    return false;
   }
 
   $scope.postGroupStatus = function() {

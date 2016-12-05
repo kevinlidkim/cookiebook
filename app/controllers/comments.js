@@ -144,7 +144,6 @@ exports.commentedBy = function(req, res) {
         }
       })
       .then(function(person){
-
         return res.status(200).json({
           status: 'Successfully found Person commentedBy',
           data: person
