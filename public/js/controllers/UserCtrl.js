@@ -1,4 +1,4 @@
-angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', function($scope, $localStorage, $sessionStorage, UserService, PageService) {
+angular.module('UserCtrl', []).controller('UserController', ['$location', '$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', function($location, $scope, $localStorage, $sessionStorage, UserService, PageService) {
 
   $scope.storage = $localStorage;
   $scope.errorMessage = "";
@@ -223,18 +223,18 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
       })
   }
 
-  $scope.checkEmployee = function() {
-    if ($scope.storage.user) {
-      var obj = {
-        userId: $scope.storage.user.userId
-      }
-      UserService.isEmployee(obj)
-        .then(function(status) {
-          // return status.data.data;
-          $scope.storage.isEmployee = status.data.data;
-        })
-    }
-  }
+  // $scope.checkEmployee = function() {
+  //   if ($scope.storage.user) {
+  //     var obj = {
+  //       userId: $scope.storage.user.userId
+  //     }
+  //     UserService.isEmployee(obj)
+  //       .then(function(status) {
+  //         // return status.data.data;
+  //         $scope.storage.isEmployee = status.data.data;
+  //       })
+  //   }
+  // }
 
   $scope.isEmployee = function() {
     if ($scope.storage.isEmployee) {
@@ -248,8 +248,41 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
 
   }
 
-  $scope.purchaseItem = function(userAd) {
-    console.log(userAd);
+  $scope.loadPurchasePage = function(userAd) {
+    $scope.storage.itemToPurchase = userAd;
+  }
+
+  $scope.purchaseItem = function() {
+    var obj = {
+      amount: $scope.quantity,
+      ad: $scope.storage.itemToPurchase,
+      account: $scope.chosenBankAccount
+    }
+    UserService.purchaseItem(obj)
+      .then(function(data) {
+        var update = {
+          user: $scope.storage.user
+        }
+        PageService.loadAds(update)
+        .then(function(ads) {
+          $scope.storage.user.ads = ads.data.data;
+          $location.path('/purchaseSuccess');
+        })
+      })
+  }
+
+  $scope.isOutOfStock = function(stock) {
+    if (stock < 1) {
+      return true;
+    } else if ($scope.quantity == undefined) {
+      return true;
+    } else if (stock < $scope.quantity) {
+      return true;
+    } else if ($scope.chosenBankAccount == undefined) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   $scope.addBankAccount = function() {

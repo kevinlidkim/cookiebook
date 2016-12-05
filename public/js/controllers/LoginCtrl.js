@@ -51,6 +51,15 @@ angular.module('LoginCtrl', []).controller('LoginController', ['$scope', '$local
           .then(function(data) {
             $scope.storage.groupData = data.data.data;
 
+            // Loads bank accounts
+            var bankObj = {
+              owner: $scope.storage.user.userId
+            }
+            UserService.loadBankAccounts(bankObj)
+              .then(function(data) {
+                $scope.storage.user.bankAccounts = data.data.data.accounts;
+              })
+
             // Set up to load your personal page
             var userId = $scope.storage.user.userId;
             PageService.getPersonalPageId(userId)
@@ -66,6 +75,8 @@ angular.module('LoginCtrl', []).controller('LoginController', ['$scope', '$local
                 PageService.loadPage(data)
                   .then(function(pageData) {
                     $scope.storage.page = pageData;
+
+
 
                     // Load your messages
                     var obj = $scope.storage.user;

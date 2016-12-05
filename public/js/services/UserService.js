@@ -259,8 +259,17 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
           console.log(data);
         })
     },
-    deleteBankAccount: function(obj) {
+    deleteBankAccount : function(obj) {
       return $http.post('/deleteBankAccount', obj)
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    purchaseItem : function(obj) {
+      return $http.post('/purchaseItem', obj)
         .success(function(data) {
           // console.log(data);
         })

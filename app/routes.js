@@ -53,6 +53,7 @@ module.exports = function(app, passport) {
   app.post('/addBankAccount', users.addBankAccount);
   app.post('/loadBankAccounts', users.loadBankAccounts);
   app.post('/deleteBankAccount', users.deleteBankAccount);
+  app.post('/purchaseItem', users.purchaseItem);
 
   app.post('/query/all', users.queryAll);
 

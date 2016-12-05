@@ -104,6 +104,17 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
+    .when('/purchaseItem', {
+      templateUrl: '/views/purchaseItem.html',
+      controller: 'UserController',
+      access: {restricted: true}
+    })
+
+    .when('/purchaseSuccess', {
+      templateUrl: '/views/purchaseSuccess.html',
+      access: {restricted: true}
+    })
+
 		.otherwise({
       redirectTo: '/'
     });

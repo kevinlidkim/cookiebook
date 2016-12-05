@@ -704,3 +704,33 @@ exports.deleteBankAccount = function(req, res) {
       })
     })
 }
+
+exports.purchaseItem = function(req, res) {
+
+  var date = new Date();
+  var transaction = {
+    dateTimeSold: date,
+    advertisementId: req.body.ad.advertisementId,
+    numberOfUnits: req.body.amount,
+    accountNumber: req.body.account.accountNumber
+  }
+
+  db.Sales.create(transaction)
+    .then(function() {
+      return db.Advertisement.find({ where: {advertisementId: req.body.ad.advertisementId} })
+    })
+    .then(function(advertisement) {
+      return advertisement.decrement(['availableUnits'], {by: req.body.amount} );
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Successfully purchased item'
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to purchase item'
+      })
+    })
+}
