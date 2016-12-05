@@ -115,6 +115,12 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
+    .when('/admin', {
+      templateUrl: 'views/admin.html',
+      controller: 'ManagerController',
+      access: {restricted: true}
+    })
+
     .when('/sales', {
       templateUrl: 'views/sales.html',
       controller: 'ManagerController',

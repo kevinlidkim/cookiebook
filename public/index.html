@@ -50,16 +50,11 @@
 			<li ng-show="isLoggedIn()"><a ng-href="/groups" ng-click="getGroupData()">Groups</a></li>
 			<li ng-show="isLoggedIn()"><a ng-href="/friend" ng-click="getFriendData()">Friends</a></li>
 			<li ng-show="isLoggedIn()"><a ng-href="/message" ng-click="loadMessages()">Messages</a></li>
-			<li ng-show="isEmployee()"><a ng-controller="EmployeeController" ng-href="/advertisements" ng-click="loadEmployeeAds()">Advertisements</a></li>
+			<li ng-show="isLoggedIn()"><a ng-controller="EmployeeController" ng-href="/advertisements" ng-click="loadEmployeeAds()">Advertisements</a></li>
 			<li ng-show="isEmployee()"><a ng-controller="EmployeeController" ng-href="/customers">Customers</a></li>
-			<li ng-show="isManager()"><a ng-controller="ManagerController" ng-href="/sales">Sales</a></li>
-			<li ng-show="isManager()"><a ng-controller="ManagerController" ng-href="/employees">Employees</li>
-			<!-- <li ng-show="isLoggedIn()"><a id="nav-logout" ng-controller="LogoutController" ng-click="logout()" href="">Logout</a></li> -->
+			<li ng-show="isLoggedIn()"><a ng-controller="ManagerController" ng-href="/admin">Admin</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-			<li ng-show="isLoggedIn()">
-				<a href="/profile" ng-click="loadBankAccounts()" class="nav-usericon"><span class="glyphicon glyphicon-user"></span></a> 
-			</li>
 			<li ng-show="isLoggedIn()">
 				<a id="nav-logout" ng-controller="LogoutController" ng-click="logout()" href="">Logout</a>
 			</li>
