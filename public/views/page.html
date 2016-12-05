@@ -90,11 +90,19 @@
 </div>
 </div>
 
+<<<<<<< HEAD
 <h3>Ads</h3>
 <div ng-repeat="userAds in storage.user.ads">
   <p class="in-line_add">{{userAds.itemName}} ({{userAds.adType}}) by {{userAds.company}}</p>
   <button type="submit" class="btn btn-default" ng-controller="UserController" ng-click="purchaseItem(userAds)">Buy</button>
 </div>
+=======
+  <h3>Ads</h3>
+  <div ng-repeat="userAds in storage.user.ads">
+    <p class="in-line_add">{{userAds.itemName}} ({{userAds.adType}}) by {{userAds.company}}</p>
+    <a ng-href="/purchaseItem"><button type="submit" class="btn btn-default" ng-controller="UserController" ng-click="loadPurchasePage(userAds)">Buy</button></a>
+  </div>
+>>>>>>> d743b84e3467fa7b429b7e49d336a7fa0761a2cc
 
 <!-- </div> -->
 

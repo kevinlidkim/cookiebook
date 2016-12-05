@@ -1,0 +1,25 @@
+<div class="jumbotron cookie_body">
+
+  <h2>Purchase item</h2>
+
+  <div>
+    <p>Name: {{storage.itemToPurchase.itemName}}</p>
+    <p>Type: {{storage.itemToPurchase.adType}}</p>
+    <p>Company: {{storage.itemToPurchase.company}}</p>
+    <p>Content: {{storage.itemToPurchase.content}}</p>
+    <p>Stock: {{storage.itemToPurchase.availableUnits}}</p>
+  </div>
+  <div class= "form-group">
+    <label for="purchaseQuantity">Quantity to purchase</label>
+    <input type="number" id="purchaseQuantity" class="form-control" ng-model="quantity" required/>
+  </div>
+
+  <br>
+  <h3>Choose bank account for purchase</h3>
+  <select ng-model="chosenBankAccount" ng-options="bank.accountNumber for bank in storage.user.bankAccounts">
+    <option value="">Select Account</option>
+  </select>
+
+  <button type="submit" class="btn btn-primary" ng-click="purchaseItem()" ng-disabled="isOutOfStock(storage.itemToPurchase.availableUnits)">Purchase</button>
+
+</div>

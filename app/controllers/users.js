@@ -631,8 +631,143 @@ exports.isEmployee = function(req, res) {
       }
     })
     .catch(function(err) {
+      console.log(err);
       return res.status(500).json({
         status: 'Unable to find out if employee'
+      })
+    })
+}
+
+exports.isManager = function(req, res) {
+
+  var data = false;
+  var manag = {};
+
+  db.Manager.find({ where: {userId: req.body.userId} })
+    .then(function(manager) {
+      if (manager == null) {
+        data = false;
+      } else {
+        data = true;
+        manag = manager
+      }
+    })
+    .then(function() {
+      if (data) {
+        return res.status(200).json({
+          status: 'You are a manager',
+          data: data,
+          manager: manag
+        })
+      } else {
+        return res.status(200).json({
+          status: 'You are not a manager',
+          data: data
+        })
+      }
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Unable to find out if manager'
+      })
+    })
+}
+
+exports.addBankAccount = function(req, res) {
+
+  db.PurchaseAccount.create(req.body)
+    .then(function() {
+      return db.OwnsPurchaseAccount.create(req.body);
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Successfully added bank account'
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to add bank account'
+      })
+    })
+}
+
+exports.loadBankAccounts = function(req, res) {
+
+  var data = {};
+
+  db.OwnsPurchaseAccount.findAll({ where: {owner: req.body.owner} })
+    .then(function(relations) {
+      var accounts = [];
+
+      _.forEach(relations, function(account) {
+        accounts.push(db.PurchaseAccount.find({ where: {accountNumber: account.accountNumber} }));
+      })
+
+      Promise.all(accounts).then(values => {
+        data.accounts = values;
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Successfully retrieved bank accounts',
+          data: data
+        })
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Failed to retrieve bank accounts'
+        })
+      })
+    })
+}
+
+exports.deleteBankAccount = function(req, res) {
+
+  db.OwnsPurchaseAccount.destroy({ where: {accountNumber: req.body.accountNumber} })
+    .then(function() {
+      return db.PurchaseAccount.destroy({ where: {accountNumber: req.body.accountNumber} });
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Successfully deleted bank account'
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to delete bank account'
+      })
+    })
+}
+
+exports.purchaseItem = function(req, res) {
+
+  var date = new Date();
+  var transaction = {
+    dateTimeSold: date,
+    advertisementId: req.body.ad.advertisementId,
+    numberOfUnits: req.body.amount,
+    accountNumber: req.body.account.accountNumber
+  }
+
+  db.Sales.create(transaction)
+    .then(function() {
+      return db.Advertisement.find({ where: {advertisementId: req.body.ad.advertisementId} })
+    })
+    .then(function(advertisement) {
+      return advertisement.decrement(['availableUnits'], {by: req.body.amount} );
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Successfully purchased item'
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to purchase item'
       })
     })
 }

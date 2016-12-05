@@ -67,6 +67,8 @@ angular.module('LoginCtrl', []).controller('LoginController', ['$scope', '$local
                   .then(function(pageData) {
                     $scope.storage.page = pageData;
 
+
+
                     // Load your messages
                     var obj = $scope.storage.user;
                     UserService.loadMessages(obj)
@@ -82,6 +84,25 @@ angular.module('LoginCtrl', []).controller('LoginController', ['$scope', '$local
                             .then(function(status) {
                               $scope.storage.isEmployee = status.data.data;
                               $scope.storage.employee = status.data.employee;
+
+                              // Loads bank accounts
+                              var bankObj = {
+                                owner: $scope.storage.user.userId
+                              }
+                              UserService.loadBankAccounts(bankObj)
+                                .then(function(data) {
+                                  $scope.storage.user.bankAccounts = data.data.data.accounts;
+
+                                  // Load manager status
+                                  var manager = {
+                                    userId: $scope.storage.user.userId
+                                  }
+                                  UserService.isManager(manager)
+                                    .then(function(admin) {
+                                      $scope.storage.isManager = admin.data.data;
+                                      $scope.storage.manager = admin.data.manager;
+                                    })
+                                })
                             })
                         }
                       })

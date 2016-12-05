@@ -52,6 +52,10 @@ module.exports = function(app, passport) {
   app.get('/page/me', pages.getPersonalPageId);
 
   app.post('/update', users.updateProfile);
+  app.post('/addBankAccount', users.addBankAccount);
+  app.post('/loadBankAccounts', users.loadBankAccounts);
+  app.post('/deleteBankAccount', users.deleteBankAccount);
+  app.post('/purchaseItem', users.purchaseItem);
 
   app.post('/query/all', users.queryAll);
 
@@ -80,6 +84,8 @@ module.exports = function(app, passport) {
   app.post('/deleteEmployeeAd', employees.deleteEmployeeAd);
 
   app.post('/loadAds', pages.loadAds);
+
+  app.post('/isManager', users.isManager);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');
