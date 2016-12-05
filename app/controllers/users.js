@@ -655,7 +655,9 @@ exports.isManager = function(req, res) {
     .then(function() {
       if (data) {
         return res.status(200).json({
-          status: 'You are a manager'
+          status: 'You are a manager',
+          data: data,
+          manager: manag
         })
       } else {
         return res.status(200).json({

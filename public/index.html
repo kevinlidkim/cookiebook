@@ -42,7 +42,7 @@
 	<!-- HEADER -->
 	<nav class="navbar navbar-inverse navbar-fixed-top navbar_custom">
 		<div class="navbar-header">
-			<a class="navbar-brand navbrand_custom" href="/">CookieBook</a>
+			<a class="navbar-brand navbrand_custom" href="/">Cookiebook</a>
 		</div>
 		<ul class="nav navbar-nav">
 			<li ng-show="isLoggedIn()"><a href="/profile" ng-click="loadBankAccounts()">Profile</a></li>
@@ -54,15 +54,16 @@
 			<li ng-show="isEmployee()"><a ng-controller="EmployeeController" ng-href="/customers">Customers</a></li>
 			<li ng-show="isManager()"><a ng-controller="ManagerController" ng-href="/sales">Sales</a></li>
 			<li ng-show="isManager()"><a ng-controller="ManagerController" ng-href="/employees">Employees</li>
+			<!-- <li ng-show="isLoggedIn()"><a id="nav-logout" ng-controller="LogoutController" ng-click="logout()" href="">Logout</a></li> -->
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li ng-show="isLoggedIn()">
-				<a href="/profile" ng-click="getUserData()"" class="nav-usericon" "><span class="glyphicon glyphicon-user"></span></a> 
+				<a href="/profile" ng-click="loadBankAccounts()" class="nav-usericon"><span class="glyphicon glyphicon-user"></span></a> 
 			</li>
 			<li ng-show="isLoggedIn()">
 				<a id="nav-logout" ng-controller="LogoutController" ng-click="logout()" href="">Logout</a>
 			</li>
-      </ul>
+    </ul>
 	</nav>
 
 	<!-- ANGULAR DYNAMIC CONTENT -->

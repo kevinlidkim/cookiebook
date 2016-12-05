@@ -99,8 +99,8 @@ angular.module('LoginCtrl', []).controller('LoginController', ['$scope', '$local
                                   }
                                   UserService.isManager(manager)
                                     .then(function(admin) {
-                                      $scope.storage.isManager = status.data.data;
-                                      $scope.storage.manager = status.data.manager;
+                                      $scope.storage.isManager = admin.data.data;
+                                      $scope.storage.manager = admin.data.manager;
                                     })
                                 })
                             })
