@@ -4,7 +4,7 @@
   <br>
   <p>{{storage.group.groupName}}'s Page</p>
   <div ng-show="isGroupOwner()">
-    <button class="btn btn-primary">Edit Group</button>
+    <a ng-href="/editGroup/{{storage.group.groupId}}" ng-click="getGroupPage(storage.group)"><button class="btn btn-primary">Edit Group</button></a>
   </div>
 
   <div class="mdl-textfield mdl-js-textfield">
