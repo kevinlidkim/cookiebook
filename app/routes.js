@@ -83,6 +83,8 @@ module.exports = function(app, passport) {
 
   app.post('/loadAds', pages.loadAds);
 
+  app.post('/isManager', users.isManager);
+
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');
   });

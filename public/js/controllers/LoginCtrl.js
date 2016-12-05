@@ -51,15 +51,6 @@ angular.module('LoginCtrl', []).controller('LoginController', ['$scope', '$local
           .then(function(data) {
             $scope.storage.groupData = data.data.data;
 
-            // Loads bank accounts
-            var bankObj = {
-              owner: $scope.storage.user.userId
-            }
-            UserService.loadBankAccounts(bankObj)
-              .then(function(data) {
-                $scope.storage.user.bankAccounts = data.data.data.accounts;
-              })
-
             // Set up to load your personal page
             var userId = $scope.storage.user.userId;
             PageService.getPersonalPageId(userId)
@@ -93,6 +84,25 @@ angular.module('LoginCtrl', []).controller('LoginController', ['$scope', '$local
                             .then(function(status) {
                               $scope.storage.isEmployee = status.data.data;
                               $scope.storage.employee = status.data.employee;
+
+                              // Loads bank accounts
+                              var bankObj = {
+                                owner: $scope.storage.user.userId
+                              }
+                              UserService.loadBankAccounts(bankObj)
+                                .then(function(data) {
+                                  $scope.storage.user.bankAccounts = data.data.data.accounts;
+
+                                  // Load manager status
+                                  var manager = {
+                                    userId: $scope.storage.user.userId
+                                  }
+                                  UserService.isManager(manager)
+                                    .then(function(admin) {
+                                      $scope.storage.isManager = status.data.data;
+                                      $scope.storage.manager = status.data.manager;
+                                    })
+                                })
                             })
                         }
                       })

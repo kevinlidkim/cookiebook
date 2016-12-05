@@ -631,8 +631,43 @@ exports.isEmployee = function(req, res) {
       }
     })
     .catch(function(err) {
+      console.log(err);
       return res.status(500).json({
         status: 'Unable to find out if employee'
+      })
+    })
+}
+
+exports.isManager = function(req, res) {
+
+  var data = false;
+  var manag = {};
+
+  db.Manager.find({ where: {userId: req.body.userId} })
+    .then(function(manager) {
+      if (manager == null) {
+        data = false;
+      } else {
+        data = true;
+        manag = manager
+      }
+    })
+    .then(function() {
+      if (data) {
+        return res.status(200).json({
+          status: 'You are a manager'
+        })
+      } else {
+        return res.status(200).json({
+          status: 'You are not a manager',
+          data: data
+        })
+      }
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Unable to find out if manager'
       })
     })
 }

@@ -238,14 +238,18 @@ angular.module('UserCtrl', []).controller('UserController', ['$location', '$scop
 
   $scope.isEmployee = function() {
     if ($scope.storage.isEmployee) {
-      return true
+      return true;
     } else {
-      return false
+      return false;
     }
   }
 
   $scope.isManager = function() {
-
+    if ($scope.storage.isManager) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   $scope.loadPurchasePage = function(userAd) {

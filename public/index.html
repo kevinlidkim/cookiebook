@@ -52,6 +52,8 @@
 			<li ng-show="isLoggedIn()"><a ng-href="/message" ng-click="loadMessages()">Messages</a></li>
 			<li ng-show="isEmployee()"><a ng-controller="EmployeeController" ng-href="/advertisements" ng-click="loadEmployeeAds()">Advertisements</a></li>
 			<li ng-show="isEmployee()"><a ng-controller="EmployeeController" ng-href="/customers">Customers</a></li>
+			<li ng-show="isManager()"><a ng-controller="ManagerController" ng-href="/sales">Sales</a></li>
+			<li ng-show="isManager()"><a ng-controller="ManagerController" ng-href="/employees">Employees</li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li ng-show="isLoggedIn()">

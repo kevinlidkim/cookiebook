@@ -241,6 +241,15 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
           console.log(data);
         })
     },
+    isManager: function(obj) {
+      return $http.post('/isManager', obj)
+        .success(function(data) {
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
     addBankAccount : function(obj) {
       return $http.post('/addBankAccount', obj)
         .success(function(data) {
