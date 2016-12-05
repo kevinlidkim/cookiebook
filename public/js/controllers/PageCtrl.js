@@ -133,9 +133,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
 
   $scope.updateComment = function(editComment, commentId){
 
-    console.log("updateing comment: ")
-    console.log(editComment)
-
      if (editComment != "") {
       var data = {
         content: editComment,
