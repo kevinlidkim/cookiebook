@@ -1,5 +1,9 @@
 angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', 'EmployeeService', function($scope, $localStorage, $sessionStorage, UserService, PageService, EmployeeService) {
 
+  $scope.errorMessage = "";
+  $scope.error = false;
+  $scope.searchedCustomer = false;
+
   $scope.createAd = function() {
     var adObj = $scope.ad;
     adObj.employeeId = $scope.storage.employee.employeeId;
@@ -41,6 +45,31 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
         $scope.customerMailingList = data.data.data;
       })
   }
-  
-}]);
 
+  $scope.searchAllCustomer = function() {
+    var query = {
+      query: $scope.customerSearch
+    }
+
+    if ($scope.customerSearch != "") {
+      EmployeeService.searchAllCustomer(query)
+        .then(function(data) {
+         $scope.searchResults = data.data.data;
+         $scope.searchedCustomer = true;
+         $scope.customerSearch = "";
+         // console.log(data.data.data);
+        })
+    }
+  }
+
+  $scope.getCustomerData = function(userId) {
+      var obj = {
+        userId = userId
+      }
+      EmployeeService.getCustomerData(obj)
+        .then(function(data) {
+          $scope.storage.customerData = data.data.data;
+        })
+  }
+
+}]);

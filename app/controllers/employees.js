@@ -5,14 +5,14 @@ var _ = require('lodash');
 exports.createAd = function(req, res) {
 
   var data = {};
-  
+
   db.Advertisement.create(req.body)
     .then(function(ad) {
       var date = new Date();
       var relation = {
         dateTimePosted: date,
         advertisement: ad.advertisementId,
-        employee: req.body.employeeId 
+        employee: req.body.employeeId
       }
       data = ad;
       return db.AdPostedBy.create(relation)
@@ -121,7 +121,7 @@ exports.getCustomerMailingList = function(req, res) {
 
           Promise.all(promiseUser).then(users => {
             data.users = users;
-            
+
             // Get unique users
             var uniqueUsers = [];
             var userMap = _.keyBy(users, 'userId');
@@ -149,5 +149,78 @@ exports.getCustomerMailingList = function(req, res) {
         })
 
       })
+    })
+}
+
+exports.queryAllCustomers = function(req, res) {
+  var array = [];
+  var data = {};
+  var arrayOfPersons;
+  var users = [];
+
+  db.Person.findAll({ where: Sequelize.or(
+    ["firstName like ?", '%' + req.body.query + '%'],
+    ["lastName like ?", '%' + req.body.query + '%']
+    ) })
+    .then(function(persons) {
+      arrayOfPersons = persons;
+
+      _.forEach(persons, function(person) {
+        array.push(db.User.find({ where: {personId: person.personId} }))
+      })
+
+      Promise.all(array).then(arrayOfUsers => {
+        data.users = arrayOfUsers;
+
+        var people = _.keyBy(arrayOfPersons, 'personId');
+        _.forEach(arrayOfUsers, function(user) {
+          var result = {
+            email: user.email,
+            userId: user.userId,
+            personId: user.personId,
+            firstName: people[user.personId].firstName,
+            lastName: people[user.personId].lastName
+          }
+          users.push(result);
+        })
+
+        data.users = users;
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Employee query for customers successful',
+          data: data
+        })
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Error querying customers for search by employee'
+        })
+      })
+    })
+}
+
+exports.getCustomerData = function(req, res) {
+  var data = {};
+  db.User.find({ where: {userId: req.body.userId} })
+    .then(function(user) {
+      data.user = user;
+      db.Person.find({ where: {personId: user.personId} })
+        .then(function(person) {
+          data.person = person;
+        })
+        .then(function() {
+          return res.status(200).json({
+            status: 'Successfully retrieved customer information',
+            data: data
+          })
+        })
+        .catch(function(err) {
+          console.log(err);
+          return res.status(500).json({
+            status: 'Error retrieving customer information'
+          })
+        })
     })
 }

@@ -59,6 +59,7 @@ module.exports = function(app, passport) {
   app.post('/purchaseItem', users.purchaseItem);
 
   app.post('/query/all', users.queryAll);
+  app.post('/query/customers', employees.queryAllCustomers);
 
   app.post('/page/friend', pages.getFriendPageId);
   app.post('/friend/request', users.sendFriendRequest);
@@ -82,6 +83,8 @@ module.exports = function(app, passport) {
   app.post('/sendMessage', users.sendMessage);
   app.post('/loadMessages', users.loadMessages);
   app.post('/deleteMessage', users.deleteMessage);
+
+  app.post('/customer/get', employees.getCustomerData);
 
   app.post('/isEmployee', users.isEmployee);
   app.post('/createAd', employees.createAd);
