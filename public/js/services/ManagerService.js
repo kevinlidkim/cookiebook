@@ -37,6 +37,15 @@ angular.module('ManagerServ', []).factory('ManagerService', ['$q', '$timeout', '
         .error(function(data) {
           console.log(data);
         })
+    },
+    companySearch : function(obj) {
+      return $http.post('/companySearch', obj)
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
     }
 
   }

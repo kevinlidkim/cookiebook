@@ -3,12 +3,6 @@
     <h2>Sales Page</h2>
     <br>
 
-    <h3>List of all advertisements</h3>
-    <div ng-repeat="allAds in storage.manager.ads">
-      <p class="in-line_add">{{allAds.itemName}} ({{allAds.adType}}) by {{allAds.company}}</p>
-    </div>
-
-
     <h3>Choose month for report</h3>
     <select ng-model="chosenMonth">
       <option value="">Select Month</option>
@@ -31,7 +25,25 @@
     <div ng-repeat="allSales in monthlyReport">
       <p>{{allSales.accountNumber}} purchased {{allSales.numberOfUnits}} {{allSales.itemName}} from {{allSales.company}} for ${{allSales.unitPrice}} each at {{allSales.dateTimeSold}}</p>
     </div>
+    <br>
 
+    <h3>Company Report</h3>
+    <form class="navbar-form" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search" ng-model="searchCompanyName">
+      </div>
+      <button type="submit" class="btn btn-default" ng-click="companySearch()">Search</button>
+    </form>
+
+    <div ng-show="searchedCompany">
+      <h3>Search Results for Company</h3>
+      <div ng-repeat="foundAds in companyAds">
+        <p>{{foundAds.company}} sells {{foundAds.itemName}} ({{foundAds.adType}}) for ${{foundAds.unitPrice}} each (Stock: {{foundAds.availableUnits}})</p>
+      </div>
+    </div>
+
+
+    <br>
     <h3>Transaction Report by name</h3>
     <form class="navbar-form" role="search">
       <div class="form-group">
@@ -52,6 +64,11 @@
       </div>
     </div>
 
-  </div>
+    <br>
+    <h3>List of all advertisements</h3>
+    <div ng-repeat="allAds in storage.manager.ads">
+      <p class="in-line_add">{{allAds.itemName}} ({{allAds.adType}}) by {{allAds.company}}</p>
+    </div>
 
+  </div>
 </div>

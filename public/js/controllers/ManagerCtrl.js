@@ -1,6 +1,7 @@
 angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', 'EmployeeService', 'ManagerService', function($scope, $localStorage, $sessionStorage, UserService, PageService, EmployeeService, ManagerService) {
   
   $scope.searchedSales = false;
+  $scope.searchedCompany = false;
 
   $scope.loadSalesPage = function() {
     $scope.loadAllAds();
@@ -42,6 +43,20 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       ManagerService.salesSearchUser(obj)
         .then(function(results) {
           $scope.salesSearchUser = results.data.data;
+        })
+    }
+  }
+
+  $scope.companySearch = function() {
+
+    if ($scope.searchCompanyName && $scope.searchCompanyName != "") {
+      var obj = {
+        query: $scope.searchCompanyName
+      }
+      $scope.searchedCompany = true;
+      ManagerService.companySearch(obj)
+        .then(function(data) {
+          $scope.companyAds = data.data.data.ads;
         })
     }
   }

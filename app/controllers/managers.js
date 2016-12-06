@@ -254,3 +254,24 @@ exports.salesSearchItem = function(req, res) {
       })
     })
 }
+
+exports.companySearch = function(req, res) {
+
+  var data = {};
+  db.Advertisement.findAll({ where: {company: {$like: '%' + req.body.query + '%'} } })
+    .then(function(ads) {
+      data.ads = ads;
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Successfully retrieved ads by company name',
+        data: data
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to retrieve ads by company name'
+      })
+    })
+}
