@@ -3,6 +3,11 @@
     <h2>Sales Page</h2>
     <br>
 
+    <h3>Customer that spent the most money:</h3>
+    <h4>{{storage.richestUser.firstName}} {{storage.richestUser.lastName}} spent ${{storage.richestUser.spent}} total</h4>
+    <br>
+    <p>----------------------------------------------------------</p>
+
     <h3>Choose month for report</h3>
     <select ng-model="chosenMonth">
       <option value="">Select Month</option>
@@ -20,12 +25,15 @@
       <option value=12>December</option>
     </select>
     <button type="submit" class="btn btn-primary" ng-click="loadMonthlyReport()">Update</button>
+    <br>
 
     <h3>Monthly Report</h3>
     <div ng-repeat="allSales in monthlyReport">
       <p>{{allSales.accountNumber}} purchased {{allSales.numberOfUnits}} {{allSales.itemName}} from {{allSales.company}} for ${{allSales.unitPrice}} each at {{allSales.dateTimeSold}}</p>
     </div>
     <br>
+
+    <p>----------------------------------------------------------</p>
 
     <h3>Company Report</h3>
     <form class="navbar-form" role="search">
@@ -38,12 +46,14 @@
     <div ng-show="searchedCompany">
       <h3>Search Results for Company</h3>
       <div ng-repeat="foundAds in companyAds">
-        <p>{{foundAds.company}} sells {{foundAds.itemName}} ({{foundAds.adType}}) for ${{foundAds.unitPrice}} each (Stock: {{foundAds.availableUnits}})</p>
+        <p>{{foundAds.company}} sells {{foundAds.itemName}} ({{foundAds.adType}}) for ${{foundAds.unitPrice}} each (Stock left: {{foundAds.availableUnits}})</p>
       </div>
     </div>
-
-
     <br>
+
+    <p>----------------------------------------------------------</p>
+
+
     <h3>Transaction Report by name</h3>
     <form class="navbar-form" role="search">
       <div class="form-group">
@@ -63,8 +73,10 @@
         <p>{{users.firstName}} {{users.lastName}} used {{users.accountNumber}} to purchase {{users.numberOfUnits}} {{users.itemName}} from {{users.company}} for ${{users.unitPrice}} each at {{users.dateTimeSold}}</p>
       </div>
     </div>
-
     <br>
+
+    <p>----------------------------------------------------------</p>
+
     <h3>List of all advertisements</h3>
     <div ng-repeat="allAds in storage.manager.ads">
       <p class="in-line_add">{{allAds.itemName}} ({{allAds.adType}}) by {{allAds.company}}</p>
