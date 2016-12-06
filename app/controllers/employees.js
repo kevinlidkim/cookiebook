@@ -163,17 +163,17 @@ exports.queryAllCustomers = function(req, res) {
     ["lastName like ?", '%' + req.body.query + '%']
     ) })
     .then(function(persons) {
-      arrayOfPersons = persons;
+      arrayOfPersons = _.compact(persons);
 
       _.forEach(persons, function(person) {
         array.push(db.User.find({ where: {personId: person.personId} }))
       })
 
       Promise.all(array).then(arrayOfUsers => {
-        // data.users = arrayOfUsers;
+        var compactUser = _.compact(arrayOfUsers);
 
         var people = _.keyBy(arrayOfPersons, 'personId');
-        _.forEach(arrayOfUsers, function(user) {
+        _.forEach(compactUser, function(user) {
           var result = {
             email: user.email,
             userId: user.userId,
