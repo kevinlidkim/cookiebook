@@ -19,6 +19,24 @@ angular.module('ManagerServ', []).factory('ManagerService', ['$q', '$timeout', '
         .error(function(data) {
           console.log(data);
         })
+    },
+    salesSearchUser : function(obj) {
+      return $http.post('/salesSearchUser', obj)
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    salesSearchItem : function(obj) {
+      return $http.post('/salesSearchItem', obj)
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
     }
 
   }

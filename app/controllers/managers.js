@@ -73,3 +73,66 @@ exports.loadMonthlyReport = function(req, res) {
       })
     })
 }
+
+exports.salesSearchUser = function(req, res) {
+
+  var data = {};
+
+  console.log(req.body);
+
+  // find all persons, then find all users, then find their purchase accounts, then find all sales
+
+}
+
+exports.salesSearchItem = function(req, res) {
+
+  var data = {};
+
+  db.Sales.findAll()
+    .then(function(sales) {
+      data.sales = sales;
+
+      var promise = [];
+      _.forEach(sales, function(sale) {
+        promise.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId, itemName: {$like: '%' + req.body.query + '%'} } }));
+      })
+
+      Promise.all(promise).then(values => {
+        data.ads = _.compact(values);
+
+        if (data.ads.length > 0) {
+          var ads = _.keyBy(data.ads, 'advertisementId');
+          var dataValues = [];
+
+          for (var i = 0; i < data.sales.length; i++) {
+            var result = {
+              transactionId: data.sales[i].transactionId,
+              dateTimeSold: data.sales[i].dateTimeSold,
+              advertisementId: data.sales[i].advertisementId,
+              numberOfUnits: data.sales[i].numberOfUnits,
+              accountNumber: data.sales[i].accountNumber,
+              adType: ads[data.sales[i].advertisementId].adType,
+              company: ads[data.sales[i].advertisementId].company,
+              itemName: ads[data.sales[i].advertisementId].itemName,
+              unitPrice: ads[data.sales[i].advertisementId].unitPrice
+            }
+            dataValues.push(result);
+          }
+          data.transactions = dataValues;
+        }
+
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Loaded all sales data by item',
+          data: data.transactions
+        })
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Failed to load all sales data by item'
+        })
+      })
+    })
+}

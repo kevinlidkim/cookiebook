@@ -21,7 +21,25 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       }
       ManagerService.loadMonthlyReport(obj)
         .then(function(sales) {
-          $scope.storage.manager.sales = sales.data.data;
+          $scope.storage.manager.monthlyReport = sales.data.data;
+        })
+    }
+  }
+
+  $scope.salesSearch = function() {
+
+    if ($scope.searchField && $scope.searchField != "") {
+      var obj = {
+        query: $scope.searchField
+      }
+      ManagerService.salesSearchItem(obj)
+        .then(function(sales) {
+          $scope.storage.manager.salesSearchItem = sales.data.data;
+
+          ManagerService.salesSearchUser(obj)
+            .then(function(results) {
+              console.log(results);
+            })
         })
     }
   }
