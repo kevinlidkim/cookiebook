@@ -169,6 +169,40 @@ angular.module('UserCtrl', []).controller('UserController', ['$location', '$scop
     UserService.joinGroupRequest(obj);
   }
 
+  $scope.isGroupOwner = function() {
+    var owner = false;
+    var groups = $scope.storage.groupData.ownsGroup;
+    for (var i = 0; i < groups.length; i++) {
+      if (groups[i].groupId == $scope.storage.group.groupId) {
+        owner = true;
+      }
+    }
+    return owner;
+  }
+
+  $scope.leaveGroup = function() {
+    var obj = {
+      group: $scope.storage.group,
+      user: $scope.storage.user
+    }
+    UserService.leaveGroup(obj)
+      .then(function(data) {
+        $scope.getGroupData();
+        $location.path('/groups');
+      })
+  }
+
+    $scope.deleteGroup = function(groupId) {
+    var obj = {
+      groupId : groupId
+    }
+    UserService.deleteGroup(obj)
+      .then(function(data) {
+        console.log(data);
+        $scope.getGroupData();
+      })
+  }
+
   $scope.createMessage = function(user) {
     $scope.storage.userToMessage = user;
   }
@@ -209,17 +243,6 @@ angular.module('UserCtrl', []).controller('UserController', ['$location', '$scop
       .then(function(data) {
         // console.log(data);
         $scope.loadMessages();
-      })
-  }
-
-  $scope.deleteGroup = function(groupId) {
-    var obj = {
-      groupId : groupId
-    }
-    UserService.deleteGroup(obj)
-      .then(function(data) {
-        console.log(data);
-        $scope.getGroupData();
       })
   }
 

@@ -74,6 +74,7 @@ module.exports = function(app, passport) {
   app.post('/group/sendRequest', groups.sendGroupRequest);
   app.post('/group/approveRequest', groups.approveGroupRequest);
   app.post('/page/groupRequests', groups.loadGroupRequest);
+  app.post('/group/leave', groups.leaveGroup);
 
   app.post('/sendMessage', users.sendMessage);
   app.post('/loadMessages', users.loadMessages);

@@ -469,7 +469,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
       }
     } else {
       $scope.error = false;
-      console.log(451)
     }
   }
+
 }]);
