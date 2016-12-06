@@ -12,7 +12,8 @@ module.exports = function(app, passport) {
   var comments = require('./controllers/comments');
   var groups = require('./controllers/groups');
   var likes = require('./controllers/likes');
-  var employees = require('./controllers/employees')
+  var employees = require('./controllers/employees');
+  var managers = require('./controllers/managers');
 
   app.get('/persons/find', persons.findAll); // lists all persons
   app.get('/yo', users.findAll); // lists all users
@@ -74,6 +75,9 @@ module.exports = function(app, passport) {
   app.post('/group/approveRequest', groups.approveGroupRequest);
   app.post('/group/approveSendGroupRequest', groups.approveSendGroupRequest);
   app.post('/page/groupRequests', groups.loadGroupRequest);
+  app.post('/group/leave', groups.leaveGroup);
+  app.post('/group/loadMembers', groups.loadGroupMembers);
+  app.post('/group/remove', groups.removeGroupMember);
 
   app.post('/sendMessage', users.sendMessage);
   app.post('/loadMessages', users.loadMessages);
@@ -87,6 +91,10 @@ module.exports = function(app, passport) {
   app.post('/loadAds', pages.loadAds);
 
   app.post('/isManager', users.isManager);
+  app.get('/loadAllAds', managers.loadAllAds);
+  app.post('/loadMonthlyReport', managers.loadMonthlyReport);
+  app.post('/salesSearchUser', managers.salesSearchUser);
+  app.post('/salesSearchItem', managers.salesSearchItem);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');
