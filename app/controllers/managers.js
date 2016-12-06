@@ -78,9 +78,71 @@ exports.salesSearchUser = function(req, res) {
 
   var data = {};
 
-  console.log(req.body);
+  // Get all persons with name like query
+  db.Person.findAll({ where: Sequelize.or(
+    ["firstName like ?", '%' + req.body.query + '%'],
+    ["lastName like ?", '%' + req.body.query + '%']
+    ) })
+    .then(function(persons) {
+      data.persons = persons;
 
-  // find all persons, then find all users, then find their purchase accounts, then find all sales
+      // Get all users from the persons
+      var promiseArrayUser = [];
+      _.forEach(persons, function(person) {
+        promiseArrayUser.push(db.User.find({ where: {personId: person.personId} }));
+      })
+
+      Promise.all(promiseArrayUser).then(promiseUsers => {
+        data.users = promiseUsers;
+
+        // Get all purchase accounts owned by users
+        var promiseArrayAccountRelation = [];
+        _.forEach(promiseUsers, function(user) {
+          promiseArrayAccountRelation.push(db.OwnsPurchaseAccount.findAll({ where: {owner: user.userId} }));
+        })
+
+        Promise.all(promiseArrayAccountRelation).then(promiseAccounts => {
+          var flattenAccounts = [].concat.apply([], promiseAccounts);
+          data.accounts = flattenAccounts;
+
+          // Get all sales with the accounts
+          var promiseArraySales = [];
+          _.forEach(flattenAccounts, function(account) {
+            promiseArraySales.push(db.Sales.findAll({ where: {accountNumber: account.accountNumber} }));
+          })
+
+          Promise.all(promiseArraySales).then(promiseSales => {
+            var flattenSales = [].concat.apply([], promiseSales);
+            data.sales = flattenSales
+
+            // Get all ads from the sales
+            var promiseArrayAds = [];
+            _.forEach(flattenSales, function(sale) {
+              promiseArrayAds.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId} }));
+            })
+
+            Promise.all(promiseArrayAds).then(promiseAds => {
+              data.ads = promiseAds;
+            })
+            .then(function() {
+              return res.status(200).json({
+                status: 'Loaded all sales data by user',
+                data: data
+              })
+            })
+            .catch(function(err) {
+              console.log(err);
+              return res.status(500).json({
+                status: 'Failed to load all sales data by user'
+              })
+            })
+
+          })
+
+        })
+      })
+
+    })
 
 }
 
