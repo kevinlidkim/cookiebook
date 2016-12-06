@@ -526,6 +526,29 @@ exports.approveGroupRequest = function(req, res) {
     })
 }
 
+exports.approveSendGroupRequest = function(req, res) {
+
+    db.SendGroupRequest.find({ where: {user: req.body.user, group: req.body.group} })
+      .then(function(sendRequest) {
+        return sendRequest.destroy();
+      })
+      .then(function() {
+        return db.MemberOfGroup.create(req.body);
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Approved send request from GroupOwner to user'
+        })
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Failed to approve send request from GroupOwner to user'
+        })
+      })
+
+}
+
 exports.loadGroupRequest = function(req, res) {
 
   var data = {};

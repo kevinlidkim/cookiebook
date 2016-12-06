@@ -74,7 +74,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         return false;
       }
     },
-    
+
     getUserStatus : function() {
       return $http.get('/status')
         .success(function(data) {
@@ -187,6 +187,15 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
       return $http.post('/group/approveRequest', obj)
         .success(function(data) {
           // console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    approveSendGroupRequest : function(obj) {
+      return $http.post('/group/approveSendGroupRequest', obj)
+        .success(function(data) {
           return data;
         })
         .error(function(data) {
