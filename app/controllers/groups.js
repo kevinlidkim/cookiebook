@@ -487,3 +487,71 @@ exports.leaveGroup = function(req, res) {
       })
     })
 }
+
+exports.loadGroupMembers = function(req, res) {
+
+  var data = {};
+
+  db.MemberOfGroup.findAll({ where: {group: req.body.id} })
+    .then(function(members) {
+      data.members = members;
+      return db.OwnsGroup.find({ where: {group: req.body.id} });
+    })
+    .then(function(owner) {
+      data.owner = owner;
+      
+      var promise = [];
+      for (var i = 0; i < data.members.length; i++) {
+        if (data.members[i].user != data.owner.owner) {
+          promise.push(db.User.find({ where: {userId: data.members[i].user} }));
+        }
+      }
+
+      Promise.all(promise).then(values => {
+        data.membersOfGroup = values;
+
+        var personPromise = [];
+        for (var i = 0; i < values.length; i++) {
+          personPromise.push(db.Person.find({ where: {personId: values[i].personId} }))
+        }
+
+        Promise.all(personPromise).then(results => {
+          data.persons = results;
+        })
+        .then(function() {
+          return res.status(200).json({
+            status: 'Successfully loaded all members of group',
+            data: data.persons
+          })
+        })
+        .catch(function(err) {
+          console.log(err);
+          return res.status(500).json({
+            status: 'Failed to load all members of group'
+          })
+        })
+      })
+    })
+}
+
+exports.removeGroupMember = function(req, res) {
+
+  db.User.find({ where: {personId: req.body.personId} })
+    .then(function(user) {
+      return db.MemberOfGroup.find({ where: {user: user.userId} })
+    })
+    .then(function(relation) {
+      return relation.destroy();
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Successfully removed member'
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to remove member'
+      })
+    })
+}

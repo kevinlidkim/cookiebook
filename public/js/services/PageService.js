@@ -103,11 +103,20 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
     updateGroup : function(obj) {
       return $http.post('/group/update', obj)
         .success(function(data) {
-          console.log(data);
+          // console.log(data);
           return data.data;
         })
         .error(function(data) {
-          console.log(44144);
+          console.log(data);
+        })
+    },
+
+    loadGroupMembers: function(obj) {
+      return $http.post('/group/loadMembers', obj)
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
           console.log(data);
         })
     },

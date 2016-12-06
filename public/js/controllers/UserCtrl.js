@@ -156,9 +156,9 @@ angular.module('UserCtrl', []).controller('UserController', ['$location', '$scop
       })
   }
 
-  $scope.editGroup = function(groupId) {
-    console.log(groupId);
-  }
+  // $scope.editGroup = function(groupId) {
+  //   console.log(groupId);
+  // }
 
   // this is a user sending a request to join a group
   $scope.joinGroupRequest = function(groupId) {
@@ -192,13 +192,24 @@ angular.module('UserCtrl', []).controller('UserController', ['$location', '$scop
       })
   }
 
+  // $scope.removeGroupMember = function(member) {
+  //   UserService.removeGroupMember(member)
+  //     .then(function(data) {
+  //       console.log(data);
+  //       var obj = {
+  //         id: $scope.storage.group.groupId
+  //       };
+  //       return PageService.loadGroupMembers(obj);
+  //     })
+  // }
+
     $scope.deleteGroup = function(groupId) {
     var obj = {
       groupId : groupId
     }
     UserService.deleteGroup(obj)
       .then(function(data) {
-        console.log(data);
+        //console.log(data);
         $scope.getGroupData();
       })
   }
