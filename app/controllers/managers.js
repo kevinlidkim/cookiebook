@@ -22,10 +22,13 @@ exports.loadAllAds = function(req, res) {
     })
 }
 
-exports.loadAllSales = function(req, res) {
+exports.loadMonthlyReport = function(req, res) {
+
+  var startDate = new Date(2016, req.body.month - 1, 0);
+  var endDate = new Date(2016, req.body.month, 0);
   var data = {};
 
-  db.Sales.findAll()
+  db.Sales.findAll({ where: {dateTimeSold: {$lt: endDate, $gt: startDate} }})
     .then(function(sales) {
       data.sales = sales;
 

@@ -91,7 +91,7 @@ module.exports = function(app, passport) {
 
   app.post('/isManager', users.isManager);
   app.get('/loadAllAds', managers.loadAllAds);
-  app.get('/loadAllSales', managers.loadAllSales)
+  app.post('/loadMonthlyReport', managers.loadMonthlyReport)
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');

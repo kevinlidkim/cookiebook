@@ -2,7 +2,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
   
   $scope.loadSalesPage = function() {
     $scope.loadAllAds();
-    $scope.loadAllSales();
+    $scope.loadMonthlyReport();
   }
 
   $scope.loadAllAds = function() {
@@ -13,12 +13,17 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       })
   }
 
-  $scope.loadAllSales = function() {
+  $scope.loadMonthlyReport = function() {
 
-    ManagerService.loadAllSales()
-      .then(function(sales) {
-        $scope.storage.manager.sales = sales.data.data;
-      })
+    if ($scope.chosenMonth) {
+      var obj = {
+        month: $scope.chosenMonth
+      }
+      ManagerService.loadMonthlyReport(obj)
+        .then(function(sales) {
+          $scope.storage.manager.sales = sales.data.data;
+        })
+    }
   }
 
 }]);

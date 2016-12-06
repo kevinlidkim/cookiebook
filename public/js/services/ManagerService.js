@@ -11,8 +11,8 @@ angular.module('ManagerServ', []).factory('ManagerService', ['$q', '$timeout', '
           console.log(data);
         })
     },
-    loadAllSales : function() {
-      return $http.get('/loadAllSales')
+    loadMonthlyReport : function(obj) {
+      return $http.post('/loadMonthlyReport', obj)
         .success(function(data) {
           // console.log(data);
         })
