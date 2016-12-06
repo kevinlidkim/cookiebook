@@ -28,8 +28,8 @@
     <button type="submit" class="btn btn-primary" ng-click="loadMonthlyReport()">Update</button>
 
     <h3>Monthly Report</h3>
-    <div ng-repeat="allSales in storage.manager.monthlyReport">
-      <p class="in-line_add">{{allSales.accountNumber}} purchased {{allSales.numberOfUnits}} {{allSales.itemName}} from {{allSales.company}} for ${{allSales.unitPrice}} each at {{allSales.dateTimeSold}}</p>
+    <div ng-repeat="allSales in monthlyReport">
+      <p>{{allSales.accountNumber}} purchased {{allSales.numberOfUnits}} {{allSales.itemName}} from {{allSales.company}} for ${{allSales.unitPrice}} each at {{allSales.dateTimeSold}}</p>
     </div>
 
     <h3>Transaction Report by name</h3>
@@ -39,6 +39,18 @@
       </div>
       <button type="submit" class="btn btn-default" ng-click="salesSearch()">Search</button>
     </form>
+
+    <div ng-show="searchedSales">
+      <h3>Search Results for Items</h3>
+      <div ng-repeat="items in salesSearchItem">
+        <p>{{items.accountNumber}} purchased {{items.numberOfUnits}} {{items.itemName}} from {{items.company}} for ${{items.unitPrice}} each at {{items.dateTimeSold}}</p>
+      </div>
+      <br>
+      <h3>Search Results for Users</h3>
+      <div ng-repeat="users in salesSearchUser">
+        <p>{{users.firstName}} {{users.lastName}} used {{users.accountNumber}} to purchase {{users.numberOfUnits}} {{users.itemName}} from {{users.company}} for ${{users.unitPrice}} each at {{users.dateTimeSold}}</p>
+      </div>
+    </div>
 
   </div>
 

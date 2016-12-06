@@ -1,5 +1,7 @@
 angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', 'EmployeeService', 'ManagerService', function($scope, $localStorage, $sessionStorage, UserService, PageService, EmployeeService, ManagerService) {
   
+  $scope.searchedSales = false;
+
   $scope.loadSalesPage = function() {
     $scope.loadAllAds();
     $scope.loadMonthlyReport();
@@ -21,7 +23,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       }
       ManagerService.loadMonthlyReport(obj)
         .then(function(sales) {
-          $scope.storage.manager.monthlyReport = sales.data.data;
+          $scope.monthlyReport = sales.data.data;
         })
     }
   }
@@ -32,14 +34,14 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       var obj = {
         query: $scope.searchField
       }
+      $scope.searchedSales = true;
       ManagerService.salesSearchItem(obj)
         .then(function(sales) {
-          $scope.storage.manager.salesSearchItem = sales.data.data;
-
-          ManagerService.salesSearchUser(obj)
-            .then(function(results) {
-              console.log(results);
-            })
+          $scope.salesSearchItem = sales.data.data;
+        })
+      ManagerService.salesSearchUser(obj)
+        .then(function(results) {
+          $scope.salesSearchUser = results.data.data;
         })
     }
   }

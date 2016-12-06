@@ -123,11 +123,67 @@ exports.salesSearchUser = function(req, res) {
 
             Promise.all(promiseArrayAds).then(promiseAds => {
               data.ads = promiseAds;
+
+              // Merge users and persons into one entity
+              var personMap = _.keyBy(data.persons, 'personId');
+              var userPerson = [];
+              for (var a = 0; a < data.users.length; a++) {
+                var result = {
+                  personId: data.users[a].personId,
+                  userId: data.users[a].userId,
+                  firstName: personMap[data.users[a].personId].firstName,
+                  lastName: personMap[data.users[a].personId].lastName
+                }
+                userPerson.push(result);
+              }
+              data.userPerson = userPerson;
+
+              // Merge userperson and accounts
+              var userPersonMap = _.keyBy(userPerson, 'userId');
+              var accountOwner = [];
+
+              for (var b = 0; b < data.accounts.length; b++) {
+                var result = {
+                  accountNumber: data.accounts[b].accountNumber,
+                  personId: userPersonMap[data.accounts[b].owner].personId,
+                  userId: data.accounts[b].owner,
+                  firstName: userPersonMap[data.accounts[b].owner].firstName,
+                  lastName: userPersonMap[data.accounts[b].owner].lastName
+                }
+                accountOwner.push(result);
+              }
+              data.accountOwner = accountOwner;
+
+              // Merge account entity with sales and ads
+              var accountMap = _.keyBy(accountOwner, 'accountNumber');
+
+              var adMap = _.keyBy(promiseAds, 'advertisementId')
+              var allData = [];
+              for (var i = 0; i < data.sales.length; i++) {
+                var result = {
+                  transactionId: data.sales[i].transactionId,
+                  dateTimeSold: data.sales[i].dateTimeSold,
+                  advertisementId: data.sales[i].advertisementId,
+                  numberOfUnits: data.sales[i].numberOfUnits,
+                  accountNumber: data.sales[i].accountNumber,
+                  adType: adMap[data.sales[i].advertisementId].adType,
+                  company: adMap[data.sales[i].advertisementId].company,
+                  itemName: adMap[data.sales[i].advertisementId].itemName,
+                  unitPrice: adMap[data.sales[i].advertisementId].unitPrice,
+                  personId: accountMap[data.sales[i].accountNumber].personId,
+                  userId: accountMap[data.sales[i].accountNumber].userId,
+                  firstName: accountMap[data.sales[i].accountNumber].firstName,
+                  lastName: accountMap[data.sales[i].accountNumber].lastName
+                }
+                allData.push(result);
+              }
+              data.allData = allData;
+
             })
             .then(function() {
               return res.status(200).json({
                 status: 'Loaded all sales data by user',
-                data: data
+                data: data.allData
               })
             })
             .catch(function(err) {
