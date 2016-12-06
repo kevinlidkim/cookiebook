@@ -42,23 +42,23 @@ angular.module('EmployeeServ', []).factory('EmployeeService', ['$q', '$timeout',
         })
     },
 
-    searchAllCustomer : function(query) {
+    searchAllCustomer : function(obj) {
       return $http.post('/query/customers', obj)
         .success(function(data) {
-          return data;
+          // console.log(data);
         })
         .error(function(err) {
-          console.log(data);
+          console.log(err);
         })
     },
 
     getCustomerData : function(obj) {
       return $http.post('/customer/get', obj)
         .success(function(data) {
-          return data;
+          //console.log(data);
         })
         .error(function(err) {
-          console.log(data);
+          console.log(err);
         })
     }
 

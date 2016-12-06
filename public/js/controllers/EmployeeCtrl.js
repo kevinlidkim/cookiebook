@@ -47,11 +47,11 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
   }
 
   $scope.searchAllCustomer = function() {
-    var query = {
-      query: $scope.customerSearch
-    }
 
-    if ($scope.customerSearch != "") {
+    if ($scope.customerSearch && $scope.customerSearch != "") {
+      var query = {
+        query: $scope.customerSearch
+      };
       EmployeeService.searchAllCustomer(query)
         .then(function(data) {
          $scope.searchResults = data.data.data;
@@ -64,7 +64,7 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
 
   $scope.getCustomerData = function(userId) {
       var obj = {
-        userId = userId
+        userId: userId
       }
       EmployeeService.getCustomerData(obj)
         .then(function(data) {

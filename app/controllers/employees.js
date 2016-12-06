@@ -170,7 +170,7 @@ exports.queryAllCustomers = function(req, res) {
       })
 
       Promise.all(array).then(arrayOfUsers => {
-        data.users = arrayOfUsers;
+        // data.users = arrayOfUsers;
 
         var people = _.keyBy(arrayOfPersons, 'personId');
         _.forEach(arrayOfUsers, function(user) {
