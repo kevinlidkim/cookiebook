@@ -22,6 +22,14 @@
       </div>
 
     </div>
+
+    <br>
+    <button type="submit" class="btn btn-primary" ng-click="getCustomerMailingList()">Generate Customer Mailing List</button>
+    <h3>Customer Mailing List</h3>
+    <div ng-repeat="customerEmails in customerMailingList">
+      <p>{{customerEmails.email}}</p>
+    </div>
+
   </div>
 
 </div>

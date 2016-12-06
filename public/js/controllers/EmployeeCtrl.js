@@ -30,6 +30,17 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
         $scope.loadEmployeeAds();
       })
   }
+
+  $scope.getCustomerMailingList = function() {
+    var obj = {
+      employeeId: $scope.storage.employee.employeeId
+    };
+    EmployeeService.getCustomerMailingList(obj)
+      .then(function(data) {
+        // console.log(data.data.data);
+        $scope.customerMailingList = data.data.data;
+      })
+  }
   
 }]);
 

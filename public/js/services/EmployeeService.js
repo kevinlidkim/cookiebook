@@ -25,7 +25,17 @@ angular.module('EmployeeServ', []).factory('EmployeeService', ['$q', '$timeout',
     deleteEmployeeAd : function(obj) {
       return $http.post('/deleteEmployeeAd', obj)
         .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
           console.log(data);
+        })
+    },
+
+    getCustomerMailingList : function(obj) {
+      return $http.post('/getCustomerMailingList', obj)
+        .success(function(data) {
+          // console.log(data);
         })
         .error(function(data) {
           console.log(data);
