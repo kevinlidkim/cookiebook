@@ -3,6 +3,16 @@
     <h2>Sales Page</h2>
     <br>
 
+    <h3>List of all advertisements</h3>
+    <div ng-repeat="allAds in storage.manager.ads">
+      <p class="in-line_add">{{allAds.itemName}} ({{allAds.adType}}) by {{allAds.company}}</p>
+    </div>
+
+    <h3>List of all transactions</h3>
+    <div ng-repeat="allSales in storage.manager.sales">
+      <p class="in-line_add">{{allSales.accountNumber}} purchased {{allSales.numberOfUnits}} {{allSales.itemName}} from {{allSales.company}} for ${{allSales.unitPrice}} each at {{allSales.dateTimeSold}}</p>
+    </div>
+
   </div>
 
 </div>
