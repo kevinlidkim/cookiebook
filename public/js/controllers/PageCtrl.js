@@ -198,13 +198,13 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.deletePost = function(postId) {
 
     var postArray = $scope.storage.page.data.finalData
-    console.log(postArray);
+    // console.log(postArray);
 
     for(post in postArray){
-      console.log(postArray[post]);
+      // console.log(postArray[post]);
 
       if(postArray[post].postId == postId) {
-        console.log("Found postId... beginning to delete Post")
+        // console.log("Found postId... beginning to delete Post")
 
         var commentArray = postArray[post].comments;
         //DELETE ALL COMMENTS ON THE POST.

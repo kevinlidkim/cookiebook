@@ -108,10 +108,17 @@ exports.loadPage = function(req, res) {
               finalData[postId].comments.push(comments[relation.comment]);
             })
 
+            var finalArray = [];
+            _.forEach(finalData, function(obj) {
+              finalArray.push(obj);
+            })
+            var reverse = _.reverse(finalArray);
+
             return res.status(200).json({
               status: "Retrieved all comments successfully",
               pageData: pageData,
-              finalData: finalData
+              finalData: finalData,
+              reverse: reverse
             });
           })
           .catch(function(err) {
