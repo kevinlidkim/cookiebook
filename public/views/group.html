@@ -28,7 +28,7 @@
   <h3>Group Requests Received</h3>
   <div ng-repeat="groupRequests in storage.groupData.sendGroupRequest">
     <p class="in-line_add">{{groupRequests.groupName}} ({{groupRequests.type}})</p>
-    <button type="submit" class="btn btn-default">Accept Request</button>
+    <a ng-href="/groups" ng-click="approveSendGroupRequest(groupRequests.groupId)"><button type="submit" class="btn btn-default">Accept Request</button></a>
   </div>
 
 </div>

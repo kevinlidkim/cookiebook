@@ -127,6 +127,18 @@ angular.module('UserCtrl', []).controller('UserController', ['$scope', '$localSt
       })
   }
 
+  $scope.approveSendGroupRequest = function(groupId) {
+    console.log(groupId);
+    var obj = {
+      user: $scope.storage.user.userId,
+      group : groupId
+    };
+    UserService.approveSendGroupRequest(obj)
+      .then(function(data) {
+        $scope.getGroupData();
+      })
+  }
+
   $scope.createGroup = function() {
     var obj = {
       you: $scope.storage.user.userId,
