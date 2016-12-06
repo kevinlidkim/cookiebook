@@ -193,7 +193,6 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
           console.log(data);
         })
     },
-<<<<<<< HEAD
     approveSendGroupRequest : function(obj) {
       return $http.post('/group/approveSendGroupRequest', obj)
         .success(function(data) {
@@ -203,12 +202,8 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
           console.log(data);
         })
     },
-    sendMessage : function(obj) {
-      return $http.post('/sendMessage', obj)
-=======
     leaveGroup : function(obj) {
       return $http.post('/group/leave', obj)
->>>>>>> 25ac12151ced3c4f1b54caadefa29100837a33f0
         .success(function(data) {
           // console.log(data);
           return data;
