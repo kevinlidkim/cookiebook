@@ -70,6 +70,10 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
         .then(function(data) {
           $scope.storage.customerData = data.data.data;
         })
+      EmployeeService.getCustomerGroup(obj)
+        .then(function(groups) {
+          $scope.storage.customerGroup = groups.data.data;
+        })
   }
 
 }]);

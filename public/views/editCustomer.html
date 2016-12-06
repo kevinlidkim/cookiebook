@@ -26,36 +26,45 @@
       </div>
       <div class="form-group">
         <label for="zipcode">Zipcode</label>
-        <input type="text" id="zipcode" class="form-control" ng-model=""/>
+        <input type="text" id="zipcode" class="form-control"/>
       </div>
       <div class="form-group">
         <label for="telephone">Telephone</label>
-        <input type="text" id="telephone" class="form-control" ng-model=""/>
+        <input type="text" id="telephone" class="form-control"/>
       </div>
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" class="form-control" ng-model=""/>
+        <input type="email" id="email" class="form-control"/>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" class="form-control" ng-model=""/>
+        <input type="password" id="password" class="form-control"/>
       </div>
       <div class="form-group">
         <label for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" class="form-control" ng-model=""/>
+        <input type="password" id="confirmPassword" class="form-control"/>
       </div>
       <div class="form-group">
         <label for="adPreference">Ad Preference</label>
-        <input type="text" id="adPreference" class="form-control" ng-model=""/>
+        <input type="text" id="adPreference" class="form-control"/>
       </div>
       <div class="form-group">
         <label for="creditCard">Credit Card</label>
-        <input type="text" id="creditCard" class="form-control" ng-model=""/>
+        <input type="text" id="creditCard" class="form-control"/>
       </div>
       <div class="form-group">
-        <button type="submit" class="btn btn-primary" ng-click="">Update</button>
+        <button type="submit" class="btn btn-primary">Update</button>
       </div>
     </form>
+  </div>
+  <br>
+
+  <p>----------------------------------------------------------</p>
+
+  <h3>Groups {{storage.customerData.person.firstName}} {{storage.customerData.person.lastName}} is part of</h3>
+  <br>
+  <div ng-repeat="custGroup in storage.customerGroup">
+    <p>{{custGroup.groupName}} ({{custGroup.type}})</p>
   </div>
 
 </div>

@@ -224,3 +224,40 @@ exports.getCustomerData = function(req, res) {
         })
     })
 }
+
+exports.getCustomerGroup = function(req, res) {
+
+  var data = {};
+
+  db.MemberOfGroup.findAll({ where: {user: req.body.userId} })
+    .then(function(member) {
+      data.member = member;
+
+      var promise = [];
+      _.forEach(member, function(group) {
+        promise.push(db.Group.find({ where: {groupId: group.group} }));
+      })
+
+      Promise.all(promise).then(values => {
+        data.groups = values;
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Got all groups from customer',
+          data: data.groups
+        })
+      })
+      .catch(function() {
+        return res.status(500).json({
+          status: 'Failed to get groups from customer'
+        })
+      })
+
+    })
+
+}
+
+exports.getCustomerTransactions = function(req, res) {
+
+  var data = {};
+}
