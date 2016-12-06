@@ -74,6 +74,10 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
         .then(function(groups) {
           $scope.storage.customerGroup = groups.data.data;
         })
+      EmployeeService.getCustomerTransactions(obj)
+        .then(function(sales) {
+          $scope.storage.customerSales = sales.data.data;
+        })
   }
 
 }]);

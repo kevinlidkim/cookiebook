@@ -260,4 +260,64 @@ exports.getCustomerGroup = function(req, res) {
 exports.getCustomerTransactions = function(req, res) {
 
   var data = {};
+
+  // Get all accounts owned by user
+  db.OwnsPurchaseAccount.findAll({ where: {owner: req.body.userId} })
+    .then(function(accounts) {
+      data.accounts = accounts;
+
+      // Get all sales from accounts
+      var promise = [];
+      _.forEach(accounts, function(account) {
+        promise.push(db.Sales.findAll({ where: {accountNumber: account.accountNumber} }));
+      })
+
+      Promise.all(promise).then(values => {
+        var sales = [].concat.apply([], values);
+        data.sales = sales;
+
+        // Get all ads from sales
+        var promiseSale = [];
+        _.forEach(sales, function(sale) {
+          promiseSale.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId} }));
+        })
+
+        Promise.all(promiseSale).then(results => {
+          data.ads = results;
+
+          var ads = _.keyBy(data.ads, 'advertisementId');
+          var dataValues = [];
+
+          for(var i = 0; i < data.sales.length; i++) {
+            var result = {
+              transactionId: data.sales[i].transactionId,
+              dateTimeSold: data.sales[i].dateTimeSold,
+              advertisementId: data.sales[i].advertisementId,
+              numberOfUnits: data.sales[i].numberOfUnits,
+              accountNumber: data.sales[i].accountNumber,
+              adType: ads[data.sales[i].advertisementId].adType,
+              company: ads[data.sales[i].advertisementId].company,
+              itemName: ads[data.sales[i].advertisementId].itemName,
+              unitPrice: ads[data.sales[i].advertisementId].unitPrice
+            }
+            dataValues.push(result);
+          }
+          data.transactions = dataValues;
+
+        })
+        .then(function() {
+          return res.status(200).json({
+            status: 'Successfully retrieved customer transactions',
+            data: data.transactions
+          })
+        })
+        .catch(function(err) {
+          return res.status(500).json({
+            status: 'Failed to retrieve customer transactions'
+          })
+        })
+      })
+
+    })
+
 }
