@@ -5,7 +5,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
 
   $scope.loadSalesPage = function() {
     $scope.loadAllAds();
-    $scope.loadMonthlyReport();
+    $scope.getRichestUser();
   }
 
   $scope.loadAllAds = function() {
@@ -59,6 +59,15 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
           $scope.companyAds = data.data.data.ads;
         })
     }
+  }
+
+  $scope.getRichestUser = function() {
+
+    ManagerService.getRichestUser()
+      .then(function(data) {
+        // console.log(data.data.data);
+        $scope.storage.richestUser = data.data.data;
+      })
   }
 
 }]);

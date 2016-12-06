@@ -275,3 +275,139 @@ exports.companySearch = function(req, res) {
       })
     })
 }
+
+exports.getRichestUser = function(req, res) {
+
+  var data = {};
+
+  // Get all sales
+  db.Sales.findAll()
+    .then(function(sales) {
+      data.sales = sales;
+
+      // Get all ads from the sales
+      var promise = [];
+      _.forEach(sales, function(sale) {
+        promise.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId} }));
+      })
+
+      Promise.all(promise).then(values => {
+        data.ads = values;
+
+        // Get all account relation involved in sales
+        var promiseRelation = [];
+        _.forEach(data.sales, function(trans) {
+          promiseRelation.push(db.OwnsPurchaseAccount.find({ where: {accountNumber: trans.accountNumber} }));
+        })
+
+        Promise.all(promiseRelation).then(results => {
+          data.accounts = results;
+
+          // Get all users from accounts
+          var promiseUser = [];
+          _.forEach(data.accounts, function(account) {
+            promiseUser.push(db.User.find({ where: {userId: account.owner} }));
+          })
+
+          Promise.all(promiseUser).then(gotUsers => {
+            data.users = gotUsers;
+
+            // Strip the arrays of duplicate values
+            var accountMap = _.keyBy(data.accounts, 'accountNumber');
+            var adMap = _.keyBy(data.ads, 'advertisementId');
+            var userMap = _.keyBy(data.users, 'userId');
+
+            var map = {
+              account: accountMap,
+              ad: adMap,
+              user: userMap
+            }
+            data.map = map;
+
+            // Now we calculate how much money was spent for each transaction
+            var costOfSales = [];
+            _.forEach(data.sales, function(cost) {
+
+              var quantity = 0;
+              if (cost.numberOfUnits) {
+                quantity = cost.numberOfUnits;
+              } else {
+                quantity = 1;
+              }
+
+              var price = adMap[cost.advertisementId].unitPrice * quantity;
+
+              var result = {
+                price: price,
+                accountNumber: cost.accountNumber,
+              }
+              costOfSales.push(result);
+            })
+
+            // Give each account an array of transactions
+            _.forEach(accountMap, function(accObj) {
+              accObj.transactions = [];
+            })
+
+            // Now we link each transaction to its appropriate account
+            _.forEach(costOfSales, function(trans) {
+              accountMap[trans.accountNumber].transactions.push(trans.price);
+            })
+
+            // Now we get the sum of transactions
+            _.forEach(accountMap, function(acc) {
+              acc.sum = _.sum(acc.transactions);
+            })
+
+            // Give each user an array of accounts
+            _.forEach(userMap, function(userObj) {
+              userObj.accounts = [];
+            })
+
+            // Now we link the account to the respective user
+            _.forEach(accountMap, function(bankAcc) {
+              userMap[bankAcc.owner].accounts.push(bankAcc.sum);
+            })
+
+            // Now we sum up purchases over all bank accounts for each user
+            _.forEach(userMap, function(user) {
+              user.sum = _.sum(user.accounts);
+            })
+
+            // Now we sort and reverse the array to get user with most money spent
+            var sortedArray = _.reverse(_.sortBy(userMap, 'sum'));
+            data.richestUser = sortedArray[0];
+            data.spent = data.richestUser.sum;
+
+          })
+          .then(function() {
+            return db.Person.find({ where: {personId: data.richestUser.personId} });
+          })
+          .then(function(richPerson) {
+            data.richestPerson = richPerson;
+            var richObj = {
+              firstName: richPerson.firstName,
+              lastName: richPerson.lastName,
+              userId: data.richestUser.userId,
+              personId: data.richestUser.personId,
+              spent: data.spent
+            }
+            data.rich = richObj;
+          })
+          .then(function() {
+            return res.status(200).json({
+              status: 'Successfully found user who spent the most money',
+              data: data.rich
+            })
+          })
+          .catch(function(err) {
+            console.log(err);
+            return res.status(500).json({
+              status: 'Failed to find user who spent the most money'
+            })
+          })
+        })
+      })
+
+    })
+}

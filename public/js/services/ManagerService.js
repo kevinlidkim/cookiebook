@@ -46,6 +46,15 @@ angular.module('ManagerServ', []).factory('ManagerService', ['$q', '$timeout', '
         .error(function(data) {
           console.log(data);
         })
+    },
+    getRichestUser : function() {
+      return $http.get('/getRichestUser')
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        }) 
     }
 
   }

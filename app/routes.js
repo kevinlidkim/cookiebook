@@ -97,6 +97,7 @@ module.exports = function(app, passport) {
   app.post('/salesSearchUser', managers.salesSearchUser);
   app.post('/salesSearchItem', managers.salesSearchItem);
   app.post('/companySearch', managers.companySearch);
+  app.get('/getRichestUser', managers.getRichestUser);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');
