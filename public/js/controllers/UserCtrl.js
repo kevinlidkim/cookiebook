@@ -127,6 +127,18 @@ angular.module('UserCtrl', []).controller('UserController', ['$location', '$scop
       })
   }
 
+  $scope.approveSendGroupRequest = function(groupId) {
+    console.log(groupId);
+    var obj = {
+      user: $scope.storage.user.userId,
+      group : groupId
+    };
+    UserService.approveSendGroupRequest(obj)
+      .then(function(data) {
+        $scope.getGroupData();
+      })
+  }
+
   $scope.createGroup = function() {
     var obj = {
       you: $scope.storage.user.userId,
@@ -156,9 +168,9 @@ angular.module('UserCtrl', []).controller('UserController', ['$location', '$scop
       })
   }
 
-  $scope.editGroup = function(groupId) {
-    console.log(groupId);
-  }
+  // $scope.editGroup = function(groupId) {
+  //   console.log(groupId);
+  // }
 
   // this is a user sending a request to join a group
   $scope.joinGroupRequest = function(groupId) {
@@ -167,6 +179,51 @@ angular.module('UserCtrl', []).controller('UserController', ['$location', '$scop
       group: groupId
     }
     UserService.joinGroupRequest(obj);
+  }
+
+  $scope.isGroupOwner = function() {
+    var owner = false;
+    var groups = $scope.storage.groupData.ownsGroup;
+    for (var i = 0; i < groups.length; i++) {
+      if (groups[i].groupId == $scope.storage.group.groupId) {
+        owner = true;
+      }
+    }
+    return owner;
+  }
+
+  $scope.leaveGroup = function() {
+    var obj = {
+      group: $scope.storage.group,
+      user: $scope.storage.user
+    }
+    UserService.leaveGroup(obj)
+      .then(function(data) {
+        $scope.getGroupData();
+        $location.path('/groups');
+      })
+  }
+
+  // $scope.removeGroupMember = function(member) {
+  //   UserService.removeGroupMember(member)
+  //     .then(function(data) {
+  //       console.log(data);
+  //       var obj = {
+  //         id: $scope.storage.group.groupId
+  //       };
+  //       return PageService.loadGroupMembers(obj);
+  //     })
+  // }
+
+    $scope.deleteGroup = function(groupId) {
+    var obj = {
+      groupId : groupId
+    }
+    UserService.deleteGroup(obj)
+      .then(function(data) {
+        //console.log(data);
+        $scope.getGroupData();
+      })
   }
 
   $scope.createMessage = function(user) {
@@ -209,17 +266,6 @@ angular.module('UserCtrl', []).controller('UserController', ['$location', '$scop
       .then(function(data) {
         // console.log(data);
         $scope.loadMessages();
-      })
-  }
-
-  $scope.deleteGroup = function(groupId) {
-    var obj = {
-      groupId : groupId
-    }
-    UserService.deleteGroup(obj)
-      .then(function(data) {
-        console.log(data);
-        $scope.getGroupData();
       })
   }
 

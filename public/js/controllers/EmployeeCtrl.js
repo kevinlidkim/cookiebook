@@ -1,5 +1,9 @@
 angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', 'EmployeeService', function($scope, $localStorage, $sessionStorage, UserService, PageService, EmployeeService) {
 
+  $scope.errorMessage = "";
+  $scope.error = false;
+  $scope.searchedCustomer = false;
+
   $scope.createAd = function() {
     var adObj = $scope.ad;
     adObj.employeeId = $scope.storage.employee.employeeId;
@@ -30,6 +34,103 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
         $scope.loadEmployeeAds();
       })
   }
-  
-}]);
 
+  $scope.getCustomerMailingList = function() {
+    var obj = {
+      employeeId: $scope.storage.employee.employeeId
+    };
+    EmployeeService.getCustomerMailingList(obj)
+      .then(function(data) {
+        // console.log(data.data.data);
+        $scope.customerMailingList = data.data.data;
+      })
+  }
+
+  $scope.searchAllCustomer = function() {
+    if ($scope.customerSearch && $scope.customerSearch.name != "") {
+      var query = {
+        query: $scope.customerSearch.name
+      };
+      EmployeeService.searchAllCustomer(query)
+        .then(function(data) {
+         $scope.searchResults = data.data.data;
+         $scope.searchedCustomer = true;
+         $scope.customerSearch = "";
+         // console.log(data.data.data);
+        })
+    }
+  }
+
+  $scope.getCustomerData = function(userId) {
+      var obj = {
+        userId: userId
+      }
+      EmployeeService.getCustomerData(obj)
+        .then(function(data) {
+          $scope.storage.customerData = data.data.data;
+        })
+      EmployeeService.getCustomerGroup(obj)
+        .then(function(groups) {
+          $scope.storage.customerGroup = groups.data.data;
+        })
+      EmployeeService.getCustomerTransactions(obj)
+        .then(function(sales) {
+          $scope.storage.customerSales = sales.data.data;
+        })
+  }
+
+  $scope.updateCustomer = function() {
+    console.log($scope.storage.customerData);
+    console.log($scope.customerPerson);
+    console.log($scope.customerUser);
+    var personObj = $scope.customerPerson;
+    var userObj = $scope.customerUser;
+    var idObj = {
+      userId: $scope.storage.customerData.userId,
+      personId: $scope.storage.customerData.personId
+    }
+
+    if(userObj) {
+      if($scope.customerUser.password == $scope.customerUser.confirmPassword) {
+        $scope.error = false;
+        var obj = {
+          personObj: personObj,
+          userObj: userObj,
+          idObj: idObj
+        }
+        EmployeeService.updateCustomer(obj)
+          .then(function(data) {
+            $scope.storage.customerData = data.data.data;
+          })
+
+      } else {
+        $scope.errorMessage = "Passwords do not match";
+        $scope.error = true;
+      }
+    } else {
+      $scope.error = false;
+      var obj = {
+        personObj: personObj,
+        userObj: userObj,
+        idObj: idObj
+      }
+      EmployeeService.updateCustomer(obj)
+        .then(function(data) {
+          $scope.storage.customerData = data.data.data;
+          $scope.customerPerson.firstName = "";
+          $scope.customerPerson.lastName = "";
+          $scope.customerPerson.address = "";
+          $scope.customerPerson.city = "";
+          $scope.customerPerson.state = "";
+          $scope.customerPerson.zipcode = "";
+          $scope.customerPerson.telephone = "";
+          $scope.customerUser.email = "";
+          $scope.customerUser.password = "";
+          $scope.customerUser.confirmPassword = "";
+          $scope.customerUser.adPreferences = "";
+          $scope.customerPerson.creditCard = "";
+        })
+    }
+  }
+
+}]);

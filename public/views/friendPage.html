@@ -8,7 +8,7 @@
   <!-- <div ng-controller="PageController"> -->
 
   <!-- Load up posts -->
-  <div class="post_card_wide mdl-card mdl-shadow--2dp" ng-repeat="posts in storage.friendPage.data.finalData; ">
+  <div class="post_card_wide mdl-card mdl-shadow--2dp" ng-repeat="posts in storage.friendPage.data.reverse">
     <div class="mdl-card__title">
       <h2 class="mdl-card__title-text postedBy"> {{storage.friend.firstName}} {{storage.friend.lastName}}: </h2>
     </div>

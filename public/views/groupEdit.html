@@ -24,4 +24,12 @@
     </form>
   </div>
 
+  <br>
+  <br>
+  <h3>List of Members</h3>
+  <div ng-repeat="groupMembs in storage.groupMembers">
+    <p class="in-line_add">{{groupMembs.firstName}} {{groupMembs.lastName}}</p>
+    <button type="submit" class="btn btn-default" ng-controller="UserController" ng-click="removeGroupMember(groupMembs)">Remove</button></a>
+  </div>
+
 </div>

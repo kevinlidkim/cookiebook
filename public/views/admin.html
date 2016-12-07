@@ -3,8 +3,8 @@
     <h2>Admin Page</h2>
     <br>
 
-    <a ng-controller="ManagerController" ng-href="/sales"><button type="submit" class="btn btn-primary">Sales</button></a>
-    <a ng-controller="ManagerController" ng-href="/employees"><button type="submit" class="btn btn-primary">Employees</button></a>
+    <a ng-controller="ManagerController" ng-href="/sales"><button type="submit" class="btn btn-primary" ng-click="loadSalesPage()">Sales</button></a>
+    <a ng-controller="ManagerController" ng-href="/employees"><button type="submit" class="btn btn-primary" ng-click="getBestEmployee()">Employees</button></a>
 
   </div>
 

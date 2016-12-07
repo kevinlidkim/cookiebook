@@ -12,7 +12,8 @@ module.exports = function(app, passport) {
   var comments = require('./controllers/comments');
   var groups = require('./controllers/groups');
   var likes = require('./controllers/likes');
-  var employees = require('./controllers/employees')
+  var employees = require('./controllers/employees');
+  var managers = require('./controllers/managers');
 
   app.get('/persons/find', persons.findAll); // lists all persons
   app.get('/yo', users.findAll); // lists all users
@@ -58,6 +59,7 @@ module.exports = function(app, passport) {
   app.post('/purchaseItem', users.purchaseItem);
 
   app.post('/query/all', users.queryAll);
+  app.post('/query/customers', employees.queryAllCustomers);
 
   app.post('/page/friend', pages.getFriendPageId);
   app.post('/friend/request', users.sendFriendRequest);
@@ -72,20 +74,37 @@ module.exports = function(app, passport) {
   app.post('/group/joinRequest', groups.joinGroupRequest);
   app.post('/group/sendRequest', groups.sendGroupRequest);
   app.post('/group/approveRequest', groups.approveGroupRequest);
+  app.post('/group/approveSendGroupRequest', groups.approveSendGroupRequest);
   app.post('/page/groupRequests', groups.loadGroupRequest);
+  app.post('/group/leave', groups.leaveGroup);
+  app.post('/group/loadMembers', groups.loadGroupMembers);
+  app.post('/group/remove', groups.removeGroupMember);
 
   app.post('/sendMessage', users.sendMessage);
   app.post('/loadMessages', users.loadMessages);
   app.post('/deleteMessage', users.deleteMessage);
 
+  app.post('/customer/get', employees.getCustomerData);
+  app.post('/customer/update', employees.updateCustomer);
+  app.post('/customer/group', employees.getCustomerGroup);
+  app.post('/customer/sales', employees.getCustomerTransactions);
+
   app.post('/isEmployee', users.isEmployee);
   app.post('/createAd', employees.createAd);
   app.post('/loadEmployeeAds', employees.loadEmployeeAds);
   app.post('/deleteEmployeeAd', employees.deleteEmployeeAd);
+  app.post('/getCustomerMailingList', employees.getCustomerMailingList);
 
   app.post('/loadAds', pages.loadAds);
 
   app.post('/isManager', users.isManager);
+  app.get('/loadAllAds', managers.loadAllAds);
+  app.post('/loadMonthlyReport', managers.loadMonthlyReport);
+  app.post('/salesSearchUser', managers.salesSearchUser);
+  app.post('/salesSearchItem', managers.salesSearchItem);
+  app.post('/companySearch', managers.companySearch);
+  app.get('/getRichestUser', managers.getRichestUser);
+  app.get('/getBestEmployee', managers.getBestEmployee);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');

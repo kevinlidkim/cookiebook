@@ -214,7 +214,7 @@ exports.queryAll = function(req, res) {
   var data = {};
   var arrayOfPersons;
   var users = [];
-  
+
     db.Group.findAll({ where: Sequelize.or(
       ["groupName like ?", '%' + req.body.query + '%'],
       ["type like ?", '%' + req.body.query + '%']
@@ -232,7 +232,7 @@ exports.queryAll = function(req, res) {
         _.forEach(persons, function(person) {
           array.push(db.User.find({ where: {personId: person.personId} }))
         })
-        
+
         Promise.all(array).then(arrayOfUsers => {
           data.users = arrayOfUsers;
 
@@ -266,7 +266,7 @@ exports.queryAll = function(req, res) {
         })
 
       })
-      
+
     })
 
 }
@@ -403,7 +403,7 @@ exports.getFriendData = function(req, res) {
 }
 
 exports.acceptFriendRequest = function(req, res) {
-  
+
   var obj = {
     user: req.body.you,
     friend: req.body.friend

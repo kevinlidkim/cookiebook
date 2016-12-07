@@ -18,7 +18,7 @@
   <!-- <div ng-controller="PageController"> -->
 
   <!-- Load up posts -->
-  <div class="post_card_wide mdl-card mdl-shadow--2dp" ng-repeat="posts in storage.page.data.finalData; ">
+  <div class="post_card_wide mdl-card mdl-shadow--2dp" ng-repeat="posts in storage.page.data.reverse">
   
     <div class="btn-group">
      <button ng-show="!postEditPressed" type="button" class="btn btn-warning" ng-click="postEditPressed=!postEditPressed" ng-init="postEditPressed=false">Edit</button>

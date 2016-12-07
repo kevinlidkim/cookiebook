@@ -74,7 +74,7 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
         return false;
       }
     },
-    
+
     getUserStatus : function() {
       return $http.get('/status')
         .success(function(data) {
@@ -193,6 +193,44 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
           console.log(data);
         })
     },
+    approveSendGroupRequest : function(obj) {
+      return $http.post('/group/approveSendGroupRequest', obj)
+        .success(function(data) {
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    leaveGroup : function(obj) {
+      return $http.post('/group/leave', obj)
+        .success(function(data) {
+          // console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    removeGroupMember : function(obj) {
+      return $http.post('/group/remove', obj)
+        .success(function(data) {
+          // console.log(data);
+        })
+        error(function(data) {
+          console.log(data);
+        })
+    },
+    deleteGroup : function(obj) {
+      return $http.post('/group/delete', obj)
+        .success(function(data) {
+          // console.log(data);
+          return data;
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
     sendMessage : function(obj) {
       return $http.post('/sendMessage', obj)
         .success(function(data) {
@@ -216,16 +254,6 @@ angular.module('UserServ', []).factory('UserService', ['$q', '$timeout', '$http'
     deleteMessage : function(obj) {
       return $http.post('/deleteMessage', obj)
         .success(function(data) {
-          return data;
-        })
-        .error(function(data) {
-          console.log(data);
-        })
-    },
-    deleteGroup : function(obj) {
-      return $http.post('/group/delete', obj)
-        .success(function(data) {
-          // console.log(data);
           return data;
         })
         .error(function(data) {
