@@ -103,6 +103,7 @@ module.exports = function(app, passport) {
   app.post('/salesSearchItem', managers.salesSearchItem);
   app.post('/companySearch', managers.companySearch);
   app.get('/getRichestUser', managers.getRichestUser);
+  app.get('/getBestEmployee', managers.getBestEmployee);
 
   app.get('*', function(req, res) {
     res.sendfile('./public/index.html');

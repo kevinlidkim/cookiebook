@@ -411,3 +411,124 @@ exports.getRichestUser = function(req, res) {
 
     })
 }
+
+exports.getBestEmployee = function(req, res) {
+
+  var data = {};
+
+  // Get all sales
+  db.Sales.findAll()
+    .then(function(sales) {
+      data.sales = sales;
+
+      // Get all ads from sales
+      var promise = [];
+      _.forEach(sales, function(sale) {
+        promise.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId} }));
+      })
+
+      Promise.all(promise).then(values => {
+        data.ads = values;
+
+        // Get all relation from ads
+        var promiseRelation = [];
+        _.forEach(values, function(ad) {
+          promiseRelation.push(db.AdPostedBy.find({ where: {advertisement: ad.advertisementId} }));
+        })
+
+        Promise.all(promiseRelation).then(results => {
+          data.adPostedBy = results;
+
+          // Get all employees from relation
+          var promiseEmployees = [];
+          _.forEach(results, function(rel) {
+            promiseEmployees.push(db.Employee.find({ where: {employeeId: rel.employee} }));
+          })
+
+          Promise.all(promiseEmployees).then(resolved => {
+            data.employees = resolved;
+
+            // Strip the arrays of duplicate values
+            var employeeMap = _.keyBy(data.employees, 'employeeId');
+            var adMap = _.keyBy(data.ads, 'advertisementId');
+            var relationMap = _.keyBy(data.adPostedBy, 'advertisement');
+
+            // Now we calculate how much money was spent for each transaction
+            var costOfSales = [];
+            _.forEach(data.sales, function(cost) {
+
+              var quantity = 0;
+              if (cost.numberOfUnits) {
+                quantity = cost.numberOfUnits;
+              } else {
+                quantity = 1;
+              }
+
+              var price = adMap[cost.advertisementId].unitPrice * quantity;
+
+              var result = {
+                price: price,
+                advertisementId: cost.advertisementId
+              }
+              costOfSales.push(result);
+            })
+
+            // Give each employee an ad posted array
+            _.forEach(employeeMap, function(emp) {
+              emp.ads = [];
+            })
+
+            // Now we link ad sales to employee
+            _.forEach(costOfSales, function(trans) {
+              var simplify = relationMap[trans.advertisementId].employee
+              employeeMap[simplify].ads.push(trans.price);
+            })
+
+            // Now we sum up sales for each employee
+            _.forEach(employeeMap, function(empl) {
+              empl.sum = _.sum(empl.ads);
+            })
+
+            // Now we sort and reverse the array to get user with most money spent
+            var sortedArray = _.reverse(_.sortBy(employeeMap, 'sum'));
+            data.bestEmp = sortedArray[0];
+            data.earned = data.bestEmp.sum;
+
+          })
+          .then(function() {
+            return db.User.find({ where: {userId: data.bestEmp.userId} });
+          })
+          .then(function(bestUser) {
+            data.bestUser = bestUser;
+            return db.Person.find({ where: {personId: data.bestUser.personId} });
+          })
+          .then(function(bestPerson) {
+            data.bestPerson = bestPerson;
+            var bestObj = {
+              firstName: bestPerson.firstName,
+              lastName: bestPerson.lastName,
+              userId: data.bestUser.userId,
+              personId: data.bestUser.personId,
+              employeeId: data.bestEmp.employeeId,
+              earned: data.earned
+            }
+            data.best = bestObj;
+          })
+          .then(function() {
+            return res.status(200).json({
+              status: 'Successfully found employee who generated most revenue',
+              data: data.best
+            })
+          })
+          .catch(function(err) {
+            console.log(err);
+            return res.status(500).json({
+              status: 'Failed to find employee who generated most revenue'
+            })
+          })
+
+        })
+
+      })
+    })
+}
