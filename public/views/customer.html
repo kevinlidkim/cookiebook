@@ -7,7 +7,7 @@
 
     <form class="navbar-form" role="search">
       <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search" ng-model="customerSearch">
+        <input type="text" class="form-control" placeholder="Search" ng-model="customerSearch.name">
       </div>
       <button type="submit" class="btn btn-default" ng-click="searchAllCustomer()">Search</button>
     </form>
@@ -17,7 +17,7 @@
 
       <h3>Customers</h3>
       <div ng-repeat="customers in searchResults.users">
-        <p class="in-line_add">Customer {{customers.firstName}}  {{customers.lastName}}</p>
+        <p class="in-line_add">{{customers.firstName}}  {{customers.lastName}}</p>
         <a ng-href="/editCustomer" ng-click="getCustomerData(customers.userId)"><button type="submit" class="btn btn-default">Edit</button></a>
       </div>
 

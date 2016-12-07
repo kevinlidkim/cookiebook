@@ -1,6 +1,6 @@
 <div class="jumbotron cookie_body">
 
-  <h2>Edit Customer {{storage.customerData.person.firstName}} {{storage.customerData.person.lastName}}'s data</h2>
+  <h2>Edit Customer {{storage.customerData.firstName}} {{storage.customerData.lastName}}'s data</h2>
 
   <div class="form-container">
     <form class="form">
@@ -26,34 +26,34 @@
       </div>
       <div class="form-group">
         <label for="zipcode">Zipcode</label>
-        <input type="text" id="zipcode" class="form-control" ng-model=""/>
+        <input type="text" id="zipcode" class="form-control" ng-model="customerPerson.zipcode"/>
       </div>
       <div class="form-group">
         <label for="telephone">Telephone</label>
-        <input type="text" id="telephone" class="form-control" ng-model=""/>
+        <input type="number" id="telephone" class="form-control" ng-model="customerPerson.telephone"/>
       </div>
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" class="form-control" ng-model=""/>
+        <input type="email" id="email" class="form-control" ng-model="customerUser.email"/>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" class="form-control" ng-model=""/>
+        <input type="password" id="password" class="form-control" ng-model="customerUser.password"/>
       </div>
       <div class="form-group">
         <label for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" class="form-control" ng-model=""/>
+        <input type="password" id="confirmPassword" class="form-control" ng-model="customerUser.confirmPassword"/>
       </div>
       <div class="form-group">
         <label for="adPreference">Ad Preference</label>
-        <input type="text" id="adPreference" class="form-control" ng-model=""/>
+        <input type="text" id="adPreference" class="form-control" ng-model="customerUser.adPreferences"/>
       </div>
       <div class="form-group">
         <label for="creditCard">Credit Card</label>
-        <input type="text" id="creditCard" class="form-control" ng-model=""/>
+        <input type="number" id="creditCard" class="form-control" ng-model="customerPerson.creditCard"/>
       </div>
       <div class="form-group">
-        <button type="submit" class="btn btn-primary" ng-click="">Update</button>
+        <button type="submit" class="btn btn-primary" ng-click="updateCustomer()">Update</button>
       </div>
     </form>
   </div>

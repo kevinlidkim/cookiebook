@@ -43,8 +43,19 @@ angular.module('EmployeeServ', []).factory('EmployeeService', ['$q', '$timeout',
     },
 
     searchAllCustomer : function(query) {
-      return $http.post('/query/customers', obj)
+      return $http.post('/query/customers', query)
         .success(function(data) {
+          return data;
+        })
+        .error(function(err) {
+          console.log(data);
+        })
+    },
+
+    updateCustomer : function(obj) {
+      return $http.post('/customer/update', obj)
+        .success(function(data) {
+          console.log(data);
           return data;
         })
         .error(function(err) {

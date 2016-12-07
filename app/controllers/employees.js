@@ -205,10 +205,12 @@ exports.getCustomerData = function(req, res) {
   var data = {};
   db.User.find({ where: {userId: req.body.userId} })
     .then(function(user) {
-      data.user = user;
+      data.userId = user.userId;
       db.Person.find({ where: {personId: user.personId} })
         .then(function(person) {
-          data.person = person;
+          data.firstName = person.firstName;
+          data.lastName = person.lastName;
+          data.personId = person.personId;
         })
         .then(function() {
           return res.status(200).json({
@@ -223,4 +225,112 @@ exports.getCustomerData = function(req, res) {
           })
         })
     })
+}
+
+exports.updateCustomer = function(req, res) {
+    var obj = {};
+
+    if (req.body.personObj) {
+      db.Person.update(req.body.personObj, {
+        where: {
+          personId: req.body.idObj.personId
+        }
+      })
+        .then(function() {
+          if (req.body.userObj) {
+            if (req.body.userObj.password) {
+              var salt = makeSalt();
+              var hashedPassword = encryptPassword(req.body.userObj.password, salt);
+              req.body.userObj.salt = salt;
+              req.body.userObj.hashedPassword = hashedPassword;
+            }
+            db.User.update(req.body.userObj, {
+              where: {
+                userId: req.body.idObj.userId
+              }
+            })
+              .then(function() {
+                return db.Person.find({ where: {personId: req.body.idObj.personId} })
+              })
+              .then(function(person) {
+                obj.personId = person.personId;
+                obj.firstName = person.firstName;
+                obj.lastName = person.lastName;
+                return db.User.find({ where: {personId: person.personId} })
+              })
+              .then(function(user) {
+                obj.userId = user.userId;
+                return res.status(200).json({
+                  data: obj,
+                  status: 'Update customer successful'
+                })
+              })
+              .catch(function(err) {
+                console.log(err);
+                return res.status(500).json({
+                  status: 'Error updating customer'
+                })
+              })
+          } else {
+            db.Person.find({ where: {personId: req.body.idObj.personId} })
+              .then(function(person) {
+                obj.personId = person.personId;
+                obj.firstName = person.firstName;
+                obj.lastName = person.lastName;
+                return db.User.find({ where: {personId: person.personId} })
+              })
+              .then(function(user) {
+                obj.userId = user.userId;
+                return res.status(200).json({
+                  data: obj,
+                  status: 'Update customer successful'
+                })
+              })
+          }
+
+        })
+        .catch(function(err) {
+          console.log(err);
+          return res.status(200).json({
+            status: 'Error updating customer person'
+          })
+        })
+    } else if (req.body.userObj) {
+      if (req.body.userObj.password) {
+        var salt = makeSalt();
+        var hashedPassword = encryptPassword(req.body.userObj.password, salt);
+        req.body.userObj.salt = salt;
+        req.body.userObj.hashedPassword = hashedPassword;
+      }
+      db.User.update(req.body.userObj, {
+        where: {
+          userId: req.body.idObj.userId
+        }
+      })
+        .then(function() {
+          return db.User.find({ where: {userId: req.body.idObj.userId} })
+        })
+        .then(function(user) {
+          obj.userId = user.userId;
+          return db.Person.find({ where: {personId: user.personId} })
+        })
+        .then(function(person) {
+          obj.firstName = person.firstName,
+          obj.lastName = person.lastName,
+          obj.personId = person.personId
+        })
+        .then(function() {
+          return res.status(200).json({
+            data: obj,
+            status: 'Update customer successful'
+          })
+        })
+        .catch(function(err) {
+          console.log(err);
+          return res.status(500).json({
+            status: 'Error updating customer'
+          })
+        })
+    }
+
 }

@@ -48,7 +48,7 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
 
   $scope.searchAllCustomer = function() {
     var query = {
-      query: $scope.customerSearch
+      query: $scope.customerSearch.name
     }
 
     if ($scope.customerSearch != "") {
@@ -64,12 +64,66 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
 
   $scope.getCustomerData = function(userId) {
       var obj = {
-        userId = userId
+        userId: userId
       }
       EmployeeService.getCustomerData(obj)
         .then(function(data) {
           $scope.storage.customerData = data.data.data;
         })
+  }
+
+  $scope.updateCustomer = function() {
+    console.log($scope.storage.customerData);
+    console.log($scope.customerPerson);
+    console.log($scope.customerUser);
+    var personObj = $scope.customerPerson;
+    var userObj = $scope.customerUser;
+    var idObj = {
+      userId: $scope.storage.customerData.userId,
+      personId: $scope.storage.customerData.personId
+    }
+
+    if(userObj) {
+      if($scope.customerUser.password == $scope.customerUser.confirmPassword) {
+        $scope.error = false;
+        var obj = {
+          personObj: personObj,
+          userObj: userObj,
+          idObj: idObj
+        }
+        EmployeeService.updateCustomer(obj)
+          .then(function(data) {
+            $scope.storage.customerData = data.data.data;
+          })
+
+      } else {
+        $scope.errorMessage = "Passwords do not match";
+        $scope.error = true;
+      }
+    } else {
+      $scope.error = false;
+      var obj = {
+        personObj: personObj,
+        userObj: userObj,
+        idObj: idObj
+      }
+      EmployeeService.updateCustomer(obj)
+        .then(function(data) {
+          $scope.storage.customerData = data.data.data;
+          $scope.customerPerson.firstName = "";
+          $scope.customerPerson.lastName = "";
+          $scope.customerPerson.address = "";
+          $scope.customerPerson.city = "";
+          $scope.customerPerson.state = "";
+          $scope.customerPerson.zipcode = "";
+          $scope.customerPerson.telephone = "";
+          $scope.customerUser.email = "";
+          $scope.customerUser.password = "";
+          $scope.customerUser.confirmPassword = "";
+          $scope.customerUser.adPreferences = "";
+          $scope.customerPerson.creditCard = "";
+        })
+    }
   }
 
 }]);
