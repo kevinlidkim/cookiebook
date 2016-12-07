@@ -57,5 +57,23 @@
       </div>
     </form>
   </div>
+  <br>
+
+  <p>----------------------------------------------------------</p>
+
+  <h3>Groups {{storage.customerData.person.firstName}} {{storage.customerData.person.lastName}} is part of</h3>
+  <br>
+  <div ng-repeat="custGroup in storage.customerGroup">
+    <p>{{custGroup.groupName}} ({{custGroup.type}})</p>
+  </div>
+  <br>
+
+  <p>----------------------------------------------------------</p>
+
+  <h3>Customer Transactions</h3>
+  <br>
+    <div ng-repeat="custSale in storage.customerSales">
+      <p>{{custSale.accountNumber}} purchased {{custSale.numberOfUnits}} {{custSale.itemName}} from {{custSale.company}} for ${{custSale.unitPrice}} each at {{custSale.dateTimeSold}}</p>
+    </div>
 
 </div>

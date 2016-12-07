@@ -55,6 +55,15 @@ angular.module('ManagerServ', []).factory('ManagerService', ['$q', '$timeout', '
         .error(function(data) {
           console.log(data);
         }) 
+    },
+    getBestEmployee : function() {
+      return $http.get('/getBestEmployee')
+        .success(function(data) {
+          // console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
     }
 
   }

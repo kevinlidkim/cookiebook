@@ -47,11 +47,10 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
   }
 
   $scope.searchAllCustomer = function() {
-    var query = {
-      query: $scope.customerSearch.name
-    }
-
-    if ($scope.customerSearch != "") {
+    if ($scope.customerSearch && $scope.customerSearch.name != "") {
+      var query = {
+        query: $scope.customerSearch.name
+      };
       EmployeeService.searchAllCustomer(query)
         .then(function(data) {
          $scope.searchResults = data.data.data;
@@ -69,6 +68,14 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
       EmployeeService.getCustomerData(obj)
         .then(function(data) {
           $scope.storage.customerData = data.data.data;
+        })
+      EmployeeService.getCustomerGroup(obj)
+        .then(function(groups) {
+          $scope.storage.customerGroup = groups.data.data;
+        })
+      EmployeeService.getCustomerTransactions(obj)
+        .then(function(sales) {
+          $scope.storage.customerSales = sales.data.data;
         })
   }
 

@@ -70,5 +70,13 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       })
   }
 
+  $scope.getBestEmployee = function() {
+
+    ManagerService.getBestEmployee()
+      .then(function(data) {
+        $scope.storage.bestEmployee = data.data.data;
+      })
+  }
+
 }]);
 

@@ -42,13 +42,13 @@ angular.module('EmployeeServ', []).factory('EmployeeService', ['$q', '$timeout',
         })
     },
 
-    searchAllCustomer : function(query) {
-      return $http.post('/query/customers', query)
+    searchAllCustomer : function(obj) {
+      return $http.post('/query/customers', obj)
         .success(function(data) {
           return data;
         })
         .error(function(err) {
-          console.log(data);
+          console.log(err);
         })
     },
 
@@ -69,7 +69,27 @@ angular.module('EmployeeServ', []).factory('EmployeeService', ['$q', '$timeout',
           return data;
         })
         .error(function(err) {
-          console.log(data);
+          console.log(err);
+        })
+    },
+
+    getCustomerGroup : function(obj) {
+      return $http.post('/customer/group', obj)
+        .success(function(data) {
+          //console.log(data);
+        })
+        .error(function(err) {
+          console.log(err);
+        })
+    },
+
+    getCustomerTransactions : function(obj) {
+      return $http.post('/customer/sales', obj)
+        .success(function(data) {
+          //console.log(data);
+        })
+        .error(function(err) {
+          console.log(err);
         })
     }
 

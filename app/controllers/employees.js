@@ -163,17 +163,17 @@ exports.queryAllCustomers = function(req, res) {
     ["lastName like ?", '%' + req.body.query + '%']
     ) })
     .then(function(persons) {
-      arrayOfPersons = persons;
+      arrayOfPersons = _.compact(persons);
 
       _.forEach(persons, function(person) {
         array.push(db.User.find({ where: {personId: person.personId} }))
       })
 
       Promise.all(array).then(arrayOfUsers => {
-        data.users = arrayOfUsers;
+        var compactUser = _.compact(arrayOfUsers);
 
         var people = _.keyBy(arrayOfPersons, 'personId');
-        _.forEach(arrayOfUsers, function(user) {
+        _.forEach(compactUser, function(user) {
           var result = {
             email: user.email,
             userId: user.userId,
@@ -332,5 +332,102 @@ exports.updateCustomer = function(req, res) {
           })
         })
     }
+
+}
+
+exports.getCustomerGroup = function(req, res) {
+
+  var data = {};
+
+  db.MemberOfGroup.findAll({ where: {user: req.body.userId} })
+    .then(function(member) {
+      data.member = member;
+
+      var promise = [];
+      _.forEach(member, function(group) {
+        promise.push(db.Group.find({ where: {groupId: group.group} }));
+      })
+
+      Promise.all(promise).then(values => {
+        data.groups = values;
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Got all groups from customer',
+          data: data.groups
+        })
+      })
+      .catch(function() {
+        return res.status(500).json({
+          status: 'Failed to get groups from customer'
+        })
+      })
+
+    })
+
+}
+
+exports.getCustomerTransactions = function(req, res) {
+
+  var data = {};
+
+  // Get all accounts owned by user
+  db.OwnsPurchaseAccount.findAll({ where: {owner: req.body.userId} })
+    .then(function(accounts) {
+      data.accounts = accounts;
+
+      // Get all sales from accounts
+      var promise = [];
+      _.forEach(accounts, function(account) {
+        promise.push(db.Sales.findAll({ where: {accountNumber: account.accountNumber} }));
+      })
+
+      Promise.all(promise).then(values => {
+        var sales = [].concat.apply([], values);
+        data.sales = sales;
+
+        // Get all ads from sales
+        var promiseSale = [];
+        _.forEach(sales, function(sale) {
+          promiseSale.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId} }));
+        })
+
+        Promise.all(promiseSale).then(results => {
+          data.ads = results;
+
+          var ads = _.keyBy(data.ads, 'advertisementId');
+          var dataValues = [];
+
+          for(var i = 0; i < data.sales.length; i++) {
+            var result = {
+              transactionId: data.sales[i].transactionId,
+              dateTimeSold: data.sales[i].dateTimeSold,
+              advertisementId: data.sales[i].advertisementId,
+              numberOfUnits: data.sales[i].numberOfUnits,
+              accountNumber: data.sales[i].accountNumber,
+              adType: ads[data.sales[i].advertisementId].adType,
+              company: ads[data.sales[i].advertisementId].company,
+              itemName: ads[data.sales[i].advertisementId].itemName,
+              unitPrice: ads[data.sales[i].advertisementId].unitPrice
+            }
+            dataValues.push(result);
+          }
+          data.transactions = dataValues;
+
+        })
+        .then(function() {
+          return res.status(200).json({
+            status: 'Successfully retrieved customer transactions',
+            data: data.transactions
+          })
+        })
+        .catch(function(err) {
+          return res.status(500).json({
+            status: 'Failed to retrieve customer transactions'
+          })
+        })
+      })
+
+    })
 
 }
