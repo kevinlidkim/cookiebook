@@ -158,54 +158,49 @@ exports.deleteComment = function(req, res) {
     });
   }
 
-  exports.commentedBy = function(req, res) {
+exports.commentedBy = function(req, res) {
 
-    var data = {};
-    var promiseArrayRelations = [];
-    var promiseArray = [];
-    var commentedByArray = [];
+  var data = {};
+  var promiseArrayRelations = [];
+  var promiseArray = [];
+  var commentedByArray = [];
 
-    db.CommentedOn.findAll({where: {post : req.body.post}})
-    .then(function(relation){
+  db.CommentedOn.findAll({where: {post : req.body.post}})
+  .then(function(relation){
 
-      _.forEach(relation, function(relation) {
-        promiseArrayRelations[relation.comment] = relation.user;
-        promiseArray.push(db.User.find({ where: {userId: relation.user} }));
-      })  
+    _.forEach(relation, function(relation) {
+      promiseArrayRelations[relation.comment] = relation.user;
+      promiseArray.push(db.User.find({ where: {userId: relation.user} }));
+    })  
 
-      Promise.all(promiseArrayRelations).then(values1 => {
-        data.arrayCommentedOn = values1;
+    Promise.all(promiseArrayRelations).then(values1 => {
+      data.arrayCommentedOn = values1;
 
-        Promise.all(promiseArray).then(values => {
-          _.forEach(values, function(values){
-            commentedByArray.push(db.Person.find({where: {personId: values.personId}}))
-          })
+      Promise.all(promiseArray).then(values => {
+        _.forEach(values, function(values){
+          commentedByArray.push(db.Person.find({where: {personId: values.personId}}))
+        })
 
-          Promise.all(commentedByArray).then(commentedByArray=> {
-            data.arrayCommentedBy = commentedByArray;
-          })
-          .then(function(){
-            return res.status(200).json({
-              status: 'Successfully found Person commentedBy array',
-              data: data
+        Promise.all(commentedByArray).then(commentedByArray=> {
+          data.arrayCommentedBy = commentedByArray;
+        })
+        .then(function(){
+          return res.status(200).json({
+            status: 'Successfully found Person commentedBy array',
+            data: data
 
-            });
-          })
-          .catch(function(err) {
-            console.log(err);
-            return res.status(500).json({
-              status: 'Error finding Person commentedBy array'
-            });
           });
         })
+        .catch(function(err) {
+          console.log(err);
+          return res.status(500).json({
+            status: 'Error finding Person commentedBy array'
+          });
+        });
       })
     })
+  })
 }
-
-
-
-
-
 // exports.findAll = function(req, res) {
 
 //   db.Comment.findAll()
