@@ -1,7 +1,8 @@
 <div class="jumbotron cookie_body">
 
   <h2>Edit Customer {{storage.customerData.firstName}} {{storage.customerData.lastName}}'s data</h2>
-
+  <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+  
   <div class="form-container">
     <form class="form">
       <div class="form-group">

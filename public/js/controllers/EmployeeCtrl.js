@@ -79,12 +79,75 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
         })
   }
 
+  $scope.simplifyPersonObj = function(personObj) {
+    if (personObj != undefined) {
+      var obj = {};
+      if(personObj.firstName && personObj.firstName != "") {
+        obj.firstName = personObj.firstName;
+      }
+      if(personObj.lastName && personObj.lastName != "") {
+        obj.lastName = personObj.lastName;
+      }
+      if(personObj.address && personObj.address != "") {
+        obj.address = personObj.address;
+      }
+      if(personObj.city && personObj.city != "") {
+        obj.city = personObj.address;
+      }
+      if(personObj.state && personObj.state != "") {
+        obj.state = personObj.state;
+      }
+      if(personObj.zipCode && personObj.zipCode != "") {
+        obj.zipCode = personObj.zipCode;
+      }
+      if(personObj.telephone && personObj.telephone != "") {
+        obj.telephone = personObj.telephone;
+      }
+      if(Object.keys(obj).length == 0) {
+        return undefined;
+      }
+      else{
+        return obj;
+      }
+    }
+    else {
+      return null;
+    }
+  }
+
+  $scope.simplifyUserObj = function(userObj) {
+    if(userObj != undefined) {
+      var obj = {}
+      if(userObj.email && userObj.email != "") {
+        obj.email = userObj.email;
+      }
+      if(userObj.password && userObj.password != "") {
+        obj.password = userObj.password;
+      }
+      if(userObj.confirmPassword && userObj.confirmPassword != "") {
+        obj.confirmPassword = userObj.confirmPassword;
+      }
+      if(userObj.adPreferences && userObj.adPreferences != "") {
+        obj.adPreferences = userObj.adPreferences;
+      }
+      if(Object.keys(obj).length == 0) {
+        return undefined;
+      }
+      else{
+        return obj;
+      }
+    }
+    else {
+      return null;
+    }
+  }
+
   $scope.updateCustomer = function() {
-    console.log($scope.storage.customerData);
-    console.log($scope.customerPerson);
-    console.log($scope.customerUser);
-    var personObj = $scope.customerPerson;
-    var userObj = $scope.customerUser;
+    //console.log($scope.storage.customerData);
+    //console.log($scope.customerPerson);
+    //console.log($scope.customerUser);
+    var personObj = $scope.simplifyPersonObj($scope.customerPerson);
+    var userObj = $scope.simplifyUserObj($scope.customerUser);
     var idObj = {
       userId: $scope.storage.customerData.userId,
       personId: $scope.storage.customerData.personId
@@ -107,20 +170,25 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
         $scope.errorMessage = "Passwords do not match";
         $scope.error = true;
       }
-      $scope.storage.customerData = data.data.data;
+      if($scope.customerPerson == null || $scope.customerPerson == undefined) {
+        $scope.customerPerson = {};
+      }
+      if($scope.customerUser == null || $scope.customerUser == undefined) {
+        $scope.customerUser = {};
+      }
       $scope.customerPerson.firstName = "";
       $scope.customerPerson.lastName = "";
       $scope.customerPerson.address = "";
       $scope.customerPerson.city = "";
       $scope.customerPerson.state = "";
-      $scope.customerPerson.zipcode = "";
+      $scope.customerPerson.zipCode = "";
       $scope.customerPerson.telephone = "";
       $scope.customerUser.email = "";
       $scope.customerUser.password = "";
       $scope.customerUser.confirmPassword = "";
       $scope.customerUser.adPreferences = "";
       $scope.customerPerson.creditCard = "";
-    } else {
+    } else if(personObj) {
       $scope.error = false;
       var obj = {
         personObj: personObj,
@@ -129,16 +197,22 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
       }
       EmployeeService.updateCustomer(obj)
         .then(function(data) {
+          if($scope.customerPerson == null || $scope.customerPerson == undefined) {
+            $scope.customerPerson = {};
+          }
           $scope.storage.customerData = data.data.data;
           $scope.customerPerson.firstName = "";
           $scope.customerPerson.lastName = "";
           $scope.customerPerson.address = "";
           $scope.customerPerson.city = "";
           $scope.customerPerson.state = "";
-          $scope.customerPerson.zipcode = "";
+          $scope.customerPerson.zipCode = "";
           $scope.customerPerson.telephone = "";
           $scope.customerPerson.creditCard = "";
         })
+    } else {
+      $scope.errorMessage = "Cannot Update Data when fields are empty."
+      $scope.error = true;
     }
   }
 

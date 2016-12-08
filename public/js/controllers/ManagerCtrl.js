@@ -137,13 +137,13 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       }
     }
     else {
-      return personObj;
+      return null;
     }
   }
 
   $scope.simplifyEmployeeObj = function(employeeObj) {
-    var obj = {}
     if(employeeObj != undefined) {
+      var obj = {}
       if(employeeObj.hourlyRate && employeeObj.hourlyRate != "") {
         obj.hourlyRate = employeeObj.hourlyRate;
       }
@@ -155,7 +155,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       }
     }
     else {
-      return employeeObj;
+      return null;
     }
   }
 
@@ -183,6 +183,12 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
           console.log(data);
           $scope.storage.employeeData = data.data.data;
         })
+      if($scope.employeePerson == null || $scope.employeePerson == undefined) {
+        $scope.employeePerson = {};
+      }
+      if($scope.employeeEmployee == null || $scope.employeeEmployee == undefined) {
+        $scope.employeeEmployee = {};
+      }
       $scope.employeePerson.firstName = "";
       $scope.employeePerson.lastName = "";
       $scope.employeePerson.address = "";
@@ -199,6 +205,9 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       }
       ManagerService.updateEmployee(obj)
         .then(function(data) {
+          if($scope.employeePerson == null || $scope.employeePerson == undefined) {
+            $scope.employeePerson = {};
+          }
           $scope.storage.employeeData = data.data.data;
           $scope.employeePerson.firstName = "";
           $scope.employeePerson.lastName = "";
