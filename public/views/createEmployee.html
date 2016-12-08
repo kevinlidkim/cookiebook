@@ -1,0 +1,26 @@
+<div class="jumbotron cookie_body">
+
+  <h2>Create Employee</h2>
+  <br>
+  <div ng-show="!employeeCreated">
+    <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+
+    <div class="form-container">
+      <form class="form">
+        <div class="form-group">
+          <label for="ssn">SSN</label>
+          <input type="number" id="ssn" class="form-control" ng-model="createEmployee.ssn" required/>
+        </div>
+        <div class="form-group">
+          <label for="hourlyRate">Hourly Rate</label>
+          <input type="number" step="0.01" id="hourlyRate" class="form-control" ng-model="createEmployee.hourlyRate"/>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary" ng-click="createEmployee(storage.newEmployeeUserId)">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div ng-show="employeeCreated" class="alert alert-danger">Employee Created Successfully</div>
+
+</div>

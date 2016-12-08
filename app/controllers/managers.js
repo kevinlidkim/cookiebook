@@ -532,3 +532,232 @@ exports.getBestEmployee = function(req, res) {
       })
     })
 }
+
+exports.queryAllEmployees = function(req, res) {
+    var userArray = [];
+    var data = {};
+    var arrayOfPersons;
+    var arrayOfUsers;
+    var employees = [];
+    var array = [];
+
+    db.Person.findAll({ where: Sequelize.or(
+      ["firstName like ?", '%' + req.body.query + '%'],
+      ["lastName like ?", '%' + req.body.query + '%']
+      ) })
+      .then(function(persons) {
+        arrayOfPersons = _.compact(persons);
+        _.forEach(persons, function(person) {
+          userArray.push(db.User.find({ where: {personId: person.personId} }))
+        })
+        Promise.all(userArray).then(usersArray => {
+          arrayOfUsers = _.compact(usersArray);
+          //console.log(usersArray);
+          //console.log(arrayOfUsers);
+
+          _.forEach(usersArray, function(user) {
+            array.push(db.Employee.find({ where: {userId: user.userId} }))
+          })
+          Promise.all(array).then(arrayOfEmployees => {
+              //console.log(arrayOfEmployees);
+              //console.log(arrayOfPersons);
+              //console.log(arrayOfUsers);
+            var compactEmployees = _.compact(arrayOfEmployees);
+            var people = _.keyBy(arrayOfPersons, 'personId');
+            var users = _.keyBy(arrayOfUsers, 'userId');
+
+            _.forEach(compactEmployees, function(employee) {
+              var result = {
+                employeeId: employee.employeeId,
+                email: users[employee.userId].email,
+                userId: employee.userId,
+                personId: users[employee.userId].personId,
+                firstName: people[users[employee.userId].personId].firstName,
+                lastName:  people[users[employee.userId].personId].lastName
+              }
+              employees.push(result);
+            })
+
+            data.employees = employees;
+          })
+          .then(function() {
+            return res.status(200).json({
+              status: 'Manager query for employees successful',
+              data: data
+            })
+          })
+          .catch(function(err) {
+            console.log(err);
+            return res.status(500).json({
+              status: 'Error querying employees for search by manager'
+            })
+          })
+        })
+      })
+}
+
+exports.getEmployeeData = function(req, res) {
+  var data = {};
+  db.Employee.find({ where: {employeeId: req.body.employeeId} })
+    .then(function(employee) {
+      data.employeeId = employee.employeeId;
+      data.hourlyRate = employee.hourlyRate;
+      db.User.find({ where: {userId: employee.userId} })
+        .then(function(user) {
+          data.userId = user.userId;
+          db.Person.find({ where: {personId: user.personId} })
+            .then(function(person) {
+              data.firstName = person.firstName;
+              data.lastName = person.lastName;
+              data.personId = person.personId;
+            })
+            .then(function() {
+              return res.status(200).json({
+                status: 'Successfully retrieved employee information',
+                data: data
+              })
+            })
+            .catch(function(err) {
+              console.log(err);
+              return res.status(500).json({
+                status: 'Error retrieving employee information'
+              })
+            })
+        })
+    })
+}
+
+exports.updateEmployee = function(req, res) {
+  var obj = {};
+
+  if (req.body.personObj) {
+    db.Person.update(req.body.personObj, {
+      where: {
+        personId: req.body.idObj.personId
+      }
+    })
+      .then(function() {
+        if (req.body.employeeObj) {
+          db.Employee.update(req.body.employeeObj, {
+            where: {
+              employeeId: req.body.idObj.employeeId
+            }
+          })
+            .then(function() {
+              return db.Person.find({ where: {personId: req.body.idObj.personId} })
+            })
+            .then(function(person) {
+              obj.personId = person.personId;
+              obj.firstName = person.firstName;
+              obj.lastName = person.lastName;
+              return db.Employee.find({ where: {employeeId: req.body.idObj.employeeId} })
+            })
+            .then(function(employee) {
+              obj.employeeId = employee.employeeId;
+              return res.status(200).json({
+                data: obj,
+                status: 'Update employee successful'
+              })
+            })
+            .catch(function(err) {
+              console.log(err);
+              return res.status(500).json({
+                status: 'Error updating employee'
+              })
+            })
+        } else {
+          db.Person.find({ where: {personId: req.body.idObj.personId} })
+            .then(function(person) {
+              obj.personId = person.personId;
+              obj.firstName = person.firstName;
+              obj.lastName = person.lastName;
+              return db.Employee.find({ where: {employeeId: req.body.idObj.employeeId} })
+            })
+            .then(function(employee) {
+              obj.employeeId = employee.employeeId;
+              return res.status(200).json({
+                data: obj,
+                status: 'Update employee successful'
+              })
+            })
+        }
+
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(200).json({
+          status: 'Error updating employee'
+        })
+      })
+  } else if (req.body.employeeObj) {
+    db.Employee.update(req.body.employeeObj, {
+      where: {
+        employeeId: req.body.idObj.employeeId
+      }
+    })
+      .then(function() {
+        return db.Employee.find({ where: {employeeId: req.body.idObj.employeeId} })
+      })
+      .then(function(employee) {
+        obj.employeeId = employee.employeeId;
+        return db.Person.find({ where: {personId: req.body.idObj.personId} })
+      })
+      .then(function(person) {
+        obj.firstName = person.firstName,
+        obj.lastName = person.lastName,
+        obj.personId = person.personId
+      })
+      .then(function() {
+        return res.status(200).json({
+          data: obj,
+          status: 'Update employee successful'
+        })
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Error updating employee'
+        })
+      })
+  }
+}
+
+exports.createEmployee = function(req, res) {
+  var obj = {};
+  // Check if employee with userId already exists
+  db.Employee.find({ where: {userId: req.body.userId} })
+    .then(function(employee) {
+      // Create new employee if none exists
+      if(!employee) {
+        var date = new Date();
+        req.body.employeeObj.startDate = date;
+        req.body.employeeObj.userId = req.body.userId;
+        db.Employee.create(req.body.employeeObj)
+          .then(function() {
+            obj.result = true;
+            obj.message = "Employee successfully created."
+            return res.status(200).json({
+              status: 'Employee successfully created.',
+              data: obj
+            })
+          })
+          .catch(function(err) {
+            obj.result = false;
+            obj.message = "Error creating employee.";
+            return res.status(500).json({
+              status: 'Error creating employee.',
+              data: obj
+            })
+          })
+      }
+      // Indicate error otherwise
+      else {
+        obj.result = false;
+        obj.message = "Error: Customer is already an employe."
+        return res.status(500).json({
+          status: 'Customer with given email already exists.',
+          data: obj
+        })
+      }
+    })
+}

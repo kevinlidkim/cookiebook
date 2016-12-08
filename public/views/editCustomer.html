@@ -1,13 +1,15 @@
 <div class="jumbotron cookie_body">
 
   <h2>Edit Customer {{storage.customerData.firstName}} {{storage.customerData.lastName}}'s data</h2>
-
+  <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+  
   <div class="form-container">
     <form class="form">
       <div class="form-group">
         <label for="firstName">First Name</label>
         <input type="text" id="firstName" class="form-control" ng-model="customerPerson.firstName"/>
       </div>
+      <!--<button type="submit" class="btn btn-primary" ng-click="">Delete firstName</button>-->
       <div class="form-group">
         <label for="lastName">Last Name</label>
         <input type="text" id="lastName" class="form-control" ng-model="customerPerson.lastName"/>
@@ -25,8 +27,8 @@
         <input type="text" id="state" class="form-control" ng-model="customerPerson.state"/>
       </div>
       <div class="form-group">
-        <label for="zipcode">Zipcode</label>
-        <input type="text" id="zipcode" class="form-control" ng-model="customerPerson.zipcode"/>
+        <label for="zipcode">Zip Code</label>
+        <input type="number" id="zipcode" class="form-control" ng-model="customerPerson.zipCode"/>
       </div>
       <div class="form-group">
         <label for="telephone">Telephone</label>

@@ -1,0 +1,59 @@
+<div class="jumbotron cookie_body">
+
+  <h2>Create Customer</h2>
+  <br>
+
+  <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+  <div ng-show="customerCreated" class="alert alert-danger">Customer Created Successfully</div>
+  <div class="form-container">
+    <form class="form">
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" class="form-control" ng-model="createCustomerPerson.firstName" required/>
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" class="form-control" ng-model="createCustomerPerson.lastName" required/>
+      </div>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" id="address" class="form-control" ng-model="createCustomerPerson.address"/>
+      </div>
+      <div class="form-group">
+        <label for="city">City</label>
+        <input type="text" id="city" class="form-control" ng-model="createCustomerPerson.city"/>
+      </div>
+      <div class="form-group">
+        <label for="state">State</label>
+        <input type="text" id="state" class="form-control" ng-model="createCustomerPerson.state"/>
+      </div>
+      <div class="form-group">
+        <label for="zipcode">Zip Code</label>
+        <input type="text" id="zipcode" class="form-control" ng-model="createCustomerPerson.zipCode"/>
+      </div>
+      <div class="form-group">
+        <label for="telephone">Telephone</label>
+        <input type="number" id="telephone" class="form-control" ng-model="createCustomerPerson.telephone"/>
+      </div>
+      <!-- <div class="form-group">
+        <label for="gender">Gender</label>
+        <div id="gender" class="form-group">
+          <input type="radio" class="radio-inline" ng-model="createCustomer.gender" value="M">Male</input>
+          <input type="radio" class="radio-inline" ng-model="createCustomer.gender" value-"F">Female</input>
+        </div>
+    </div> -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" class="form-control" ng-model="createCustomerUser.email" required/>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" class="form-control" ng-model="createCustomerUser.password" required/>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" ng-click="createCustomer()">Create</button>
+      </div>
+    </form>
+  </div>
+
+</div>

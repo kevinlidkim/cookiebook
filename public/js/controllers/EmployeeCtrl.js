@@ -2,7 +2,13 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
 
   $scope.errorMessage = "";
   $scope.error = false;
+  $scope.noEntriesError = "No matching entries exist.";
+  $scope.errorMessageCustomerSearchResults = "";
+  $scope.errorCustomerSearchResults = false;
+  $scope.errorMessageCustomerSearch = "";
+  $scope.errorCustomerSearch = false;
   $scope.searchedCustomer = false;
+  $scope.customerCreated = false;
 
   $scope.createAd = function() {
     var adObj = $scope.ad;
@@ -47,17 +53,31 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
   }
 
   $scope.searchAllCustomer = function() {
+    $scope.errorMessageCustomerSearchResults = "";
+    $scope.errorCustomerSearchResults = false;
+    $scope.errorMessageCustomerSearch = "";
+    $scope.errorCustomerSearch = false;
+
     if ($scope.customerSearch && $scope.customerSearch.name != "") {
       var query = {
         query: $scope.customerSearch.name
       };
       EmployeeService.searchAllCustomer(query)
         .then(function(data) {
-         $scope.searchResults = data.data.data;
-         $scope.searchedCustomer = true;
-         $scope.customerSearch = "";
-         // console.log(data.data.data);
+          $scope.searchResults = data.data.data;
+          console.log($scope.searchResults);
+          if($scope.searchResults.users.length == 0) {
+            $scope.errorMessageCustomerSearchResults = $scope.noEntriesError;
+            $scope.errorCustomerSearchResults = true;
+          }
+          $scope.searchedCustomer = true;
+          $scope.customerSearch = "";
+          // console.log(data.data.data);
         })
+    } else {
+      $scope.errorMessageCustomerSearch = "Cannot Search when Name is empty";
+      $scope.errorCustomerSearch = true;
+      $scope.searchedCustomer = false;
     }
   }
 
@@ -79,12 +99,75 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
         })
   }
 
+  $scope.simplifyPersonObj = function(personObj) {
+    if (personObj != undefined) {
+      var obj = {};
+      if(personObj.firstName && personObj.firstName != "") {
+        obj.firstName = personObj.firstName;
+      }
+      if(personObj.lastName && personObj.lastName != "") {
+        obj.lastName = personObj.lastName;
+      }
+      if(personObj.address && personObj.address != "") {
+        obj.address = personObj.address;
+      }
+      if(personObj.city && personObj.city != "") {
+        obj.city = personObj.address;
+      }
+      if(personObj.state && personObj.state != "") {
+        obj.state = personObj.state;
+      }
+      if(personObj.zipCode && personObj.zipCode != "") {
+        obj.zipCode = personObj.zipCode;
+      }
+      if(personObj.telephone && personObj.telephone != "") {
+        obj.telephone = personObj.telephone;
+      }
+      if(Object.keys(obj).length == 0) {
+        return undefined;
+      }
+      else{
+        return obj;
+      }
+    }
+    else {
+      return null;
+    }
+  }
+
+  $scope.simplifyUserObj = function(userObj) {
+    if(userObj != undefined) {
+      var obj = {}
+      if(userObj.email && userObj.email != "") {
+        obj.email = userObj.email;
+      }
+      if(userObj.password && userObj.password != "") {
+        obj.password = userObj.password;
+      }
+      if(userObj.confirmPassword && userObj.confirmPassword != "") {
+        obj.confirmPassword = userObj.confirmPassword;
+      }
+      if(userObj.adPreferences && userObj.adPreferences != "") {
+        obj.adPreferences = userObj.adPreferences;
+      }
+      if(Object.keys(obj).length == 0) {
+        return undefined;
+      }
+      else{
+        return obj;
+      }
+    }
+    else {
+      return null;
+    }
+  }
+
   $scope.updateCustomer = function() {
-    console.log($scope.storage.customerData);
-    console.log($scope.customerPerson);
-    console.log($scope.customerUser);
-    var personObj = $scope.customerPerson;
-    var userObj = $scope.customerUser;
+    //console.log($scope.storage.customerData);
+    //console.log($scope.customerPerson);
+    //console.log($scope.customerUser);
+    var personObj = $scope.simplifyPersonObj($scope.customerPerson);
+    var userObj = $scope.simplifyUserObj($scope.customerUser);
     var idObj = {
       userId: $scope.storage.customerData.userId,
       personId: $scope.storage.customerData.personId
@@ -107,7 +190,25 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
         $scope.errorMessage = "Passwords do not match";
         $scope.error = true;
       }
-    } else {
+      if($scope.customerPerson == null || $scope.customerPerson == undefined) {
+        $scope.customerPerson = {};
+      }
+      if($scope.customerUser == null || $scope.customerUser == undefined) {
+        $scope.customerUser = {};
+      }
+      $scope.customerPerson.firstName = "";
+      $scope.customerPerson.lastName = "";
+      $scope.customerPerson.address = "";
+      $scope.customerPerson.city = "";
+      $scope.customerPerson.state = "";
+      $scope.customerPerson.zipCode = "";
+      $scope.customerPerson.telephone = "";
+      $scope.customerUser.email = "";
+      $scope.customerUser.password = "";
+      $scope.customerUser.confirmPassword = "";
+      $scope.customerUser.adPreferences = "";
+      $scope.customerPerson.creditCard = "";
+    } else if(personObj) {
       $scope.error = false;
       var obj = {
         personObj: personObj,
@@ -116,21 +217,60 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
       }
       EmployeeService.updateCustomer(obj)
         .then(function(data) {
+          if($scope.customerPerson == null || $scope.customerPerson == undefined) {
+            $scope.customerPerson = {};
+          }
           $scope.storage.customerData = data.data.data;
           $scope.customerPerson.firstName = "";
           $scope.customerPerson.lastName = "";
           $scope.customerPerson.address = "";
           $scope.customerPerson.city = "";
           $scope.customerPerson.state = "";
-          $scope.customerPerson.zipcode = "";
+          $scope.customerPerson.zipCode = "";
           $scope.customerPerson.telephone = "";
-          $scope.customerUser.email = "";
-          $scope.customerUser.password = "";
-          $scope.customerUser.confirmPassword = "";
-          $scope.customerUser.adPreferences = "";
           $scope.customerPerson.creditCard = "";
         })
+    } else {
+      $scope.errorMessage = "Cannot Update Data when fields are empty."
+      $scope.error = true;
     }
+  }
+
+  $scope.createCustomer = function() {
+    $scope.errorMessage = "";
+    $scope.error = false;
+    $scope.customerCreated = false;
+    var personObj = $scope.simplifyPersonObj($scope.createCustomerPerson);
+    var userObj = $scope.simplifyUserObj($scope.createCustomerUser);
+    if (userObj && personObj) {
+      var obj = {
+        personObj: personObj,
+        userObj: userObj
+      }
+      EmployeeService.createCustomer(obj)
+        .then(function(data) {
+          console.log(data.data.data.message);
+          if($scope.customerPerson == null || $scope.customerPerson == undefined) {
+            $scope.customerPerson = {};
+          }
+          if($scope.customerUser == null || $scope.customerUser == undefined) {
+            $scope.customerUser = {};
+          }
+          $scope.customerCreated = data.data.data.result;
+        })
+    } else {
+      $scope.errorMessage = "Cannot Create Customer when fields are empty."
+      $scope.error = true;
+    }
+    $scope.createCustomerPerson.firstName = "";
+    $scope.createCustomerPerson.lastName = "";
+    $scope.createCustomerPerson.address = "";
+    $scope.createCustomerPerson.city = "";
+    $scope.createCustomerPerson.state = "";
+    $scope.createCustomerPerson.zipCode = "";
+    $scope.createCustomerPerson.telephone = "";
+    $scope.createCustomerUser.email = "";
+    $scope.createCustomerUser.password = "";
   }
 
 }]);

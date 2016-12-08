@@ -2,6 +2,11 @@ angular.module('UserCtrl', []).controller('UserController', ['$location', '$scop
 
   $scope.storage = $localStorage;
   $scope.errorMessage = "";
+  $scope.noEntriesError = "No matching entries exist.";
+  $scope.errorGroupSearchMessage = "";
+  $scope.errorUserSearchMessage = "";
+  $scope.errorGroupSearch = false;
+  $scope.errorUserSearch = false;
   $scope.error = false;
   $scope.homeSearch = "";
   $scope.searched = false;
@@ -79,16 +84,35 @@ angular.module('UserCtrl', []).controller('UserController', ['$location', '$scop
     var query = {
       query: $scope.homeSearch
     }
-
+    $scope.errorUserSearchMessage = "";
+    $scope.errorUserSearch = false;
+    $scope.errorGroupSearchMessage = "";
+    $scope.errorGroupSearch = false;
+    //$scope.errorGroupSearchMessage = "";
+    //$error.errorUserSearchMessage = "";
     if ($scope.homeSearch != "") {
       UserService.searchAll(query)
         .then(function(data) {
-         $scope.searchResults = data.data.data;
-         $scope.searched = true;
-         $scope.homeSearch = "";
+          $scope.searchResults = data.data.data;
+          if($scope.searchResults.users.length == 0) {
+            $scope.errorUserSearchMessage = $scope.noEntriesError;
+            $scope.errorUserSearch = true;
+          }
+          if($scope.searchResults.groups.length == 0) {
+            $scope.errorGroupSearchMessage = $scope.noEntriesError;
+            $scope.errorGroupSearch = true;
+          }
+          $scope.errorMessage = "";
+          $scope.error = false;
+          $scope.searched = true;
+          $scope.homeSearch = "";
 
          // console.log(data.data.data);
         })
+    } else {
+      $scope.searched = false;
+      $scope.errorMessage = "Cannot Search when Name is empty."
+      $scope.error = true;
     }
   }
 

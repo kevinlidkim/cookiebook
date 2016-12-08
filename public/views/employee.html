@@ -12,21 +12,46 @@
 
     <form class="navbar-form" role="search">
       <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search">
+        <input type="text" class="form-control" placeholder="Search" ng-model="employeeSearch.name">
       </div>
-      <button type="submit" class="btn btn-default">Search</button>
+      <button type="submit" class="btn btn-default" ng-click="searchAllEmployee()">Search</button>
     </form>
 
-    <div ng-show="">
+    <div ng-show="errorEmployeeSearch" class="alert alert-danger">{{errorMessageEmployeeSearch}}</div>
+    <div ng-show="searchedEmployee">
       <h2>Search Results</h2>
 
       <h3>Employees</h3>
-      <div>
-        <p class="in-line_add">Employee name</p>
-        <a ng-href="/editEmployee" ng-click=""><button type="submit" class="btn btn-default">Edit</button></a>
+      <div ng-show="errorEmployeeSearchResults" class="alert alert-danger">{{errorMessageEmployeeSearchResults}}</div>
+      <div ng-repeat="employees in searchResults.employees">
+        <p class="in-line_add">{{employees.firstName}} {{employees.lastName}}</p>
+        <a ng-href="/editEmployee" ng-click="getEmployeeData(employees.employeeId)"><button type="submit" class="btn btn-default">Edit</button></a>
       </div>
 
     </div>
+
+    <p>Search for Customers</p>
+
+    <form class="navbar-form" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search" ng-model="customerSearch.name">
+      </div>
+      <button type="submit" class="btn btn-default" ng-click="searchAllCustomer()">Search</button>
+    </form>
+
+    <div ng-show="errorCustomerSearch" class="alert alert-danger">{{errorMessageCustomerSearch}}</div>
+    <div ng-show="searchedCustomer">
+      <h2>Search Results</h2>
+
+      <h3>Customers</h3>
+      <div ng-show="errorCustomerSearchResults" class="alert alert-danger">{{errorMessageCustomerSearchResults}}</div>
+      <div ng-repeat="customers in searchResults.users">
+        <p class="in-line_add">{{customers.firstName}}  {{customers.lastName}}</p>
+        <a ng-href="/createEmployee" ng-click="prepAddEmployee(customers.userId)"><button type="submit" class="btn btn-default">Add New Employee</button></a>
+      </div>
+
+    </div>
+
   </div>
 
 </div>

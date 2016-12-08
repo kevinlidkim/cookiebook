@@ -59,7 +59,17 @@ angular.module('EmployeeServ', []).factory('EmployeeService', ['$q', '$timeout',
           return data;
         })
         .error(function(err) {
-          console.log(data);
+          console.log(err);
+        })
+    },
+
+    createCustomer : function(obj) {
+      return $http.post('/customer/create', obj)
+        .success(function(data) {
+          return data;
+        })
+        .error(function(err) {
+          console.log(err);
         })
     },
 

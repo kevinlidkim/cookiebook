@@ -1,6 +1,18 @@
 var db = require('../../config/db');
+var crypto = require('crypto');
 var _ = require('lodash');
 
+var makeSalt = function() {
+  return crypto.randomBytes(16).toString('base64');
+}
+
+var encryptPassword = function(password, salt) {
+  if (!password || !salt) {
+    return '';
+  }
+  salt = new Buffer(salt, 'base64');
+  return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
+}
 
 exports.createAd = function(req, res) {
 
@@ -430,4 +442,64 @@ exports.getCustomerTransactions = function(req, res) {
 
     })
 
+}
+
+exports.createCustomer = function(req, res) {
+  var obj = {};
+  // Check if a customer with the given email exists
+  db.User.find({ where: { email: req.body.userObj.email }})
+    .then(function(user) {
+      // Create new customer when they do not exist
+      if (!user) {
+        var person = db.Person.create(req.body.personObj)
+          .then(function(newPerson) {
+            var date = new Date();
+            var salt = makeSalt();
+            var hashedPassword = encryptPassword(req.body.password, salt);
+            req.body.userObj.accountCreateDate = date;
+            req.body.userObj.personId = newPerson.personId;
+            req.body.userObj.salt = salt;
+            req.body.userObj.hashedPassword = encryptPassword(req.body.userObj.password, salt);
+            return db.User.create(req.body.userObj);
+          })
+          .then(function(returnUser) {
+            var newPage = {
+              postCount: 0
+            }
+            db.Page.create(newPage)
+              .then(function(page) {
+                var relation = {
+                  page: page.pageId,
+                  owner: returnUser.userId
+                }
+                return db.OwnsPage.create(relation);
+              })
+              .then(function() {
+                obj.result = true;
+                obj.message = "Customer successfully created."
+                return res.status(200).json({
+                  status: 'Customer successfully created.',
+                  data: obj
+                })
+              })
+              .catch(function(err) {
+                obj.result = false;
+                obj.message = "Error creating customer.";
+                return res.status(500).json({
+                  status: 'Error creating customer.',
+                  data: obj
+                })
+              })
+          })
+      }
+      // Indicate error otherwise
+      else {
+        obj.result = false;
+        obj.message = "Error: Customer with given email already exists."
+        return res.status(500).json({
+          status: 'Customer with given email already exists.',
+          data: obj
+        })
+      }
+    })
 }

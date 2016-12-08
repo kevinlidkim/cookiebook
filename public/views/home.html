@@ -12,10 +12,12 @@
       <button type="submit" class="btn btn-default" ng-click="searchAll()">Submit</button>
     </form>
 
+    <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
     <div ng-show="searched">
       <h2>Search Results</h2>
 
       <h3>Users</h3>
+      <div ng-show="errorUserSearch" class="alert alert-danger">{{errorUserSearchMessage}}</div>
       <div ng-repeat="users in searchResults.users">
         <p class="in-line_add">{{users.firstName}} {{users.lastName}}</p>
         <button type="submit" class="btn btn-default" ng-click="sendFriendRequest(users.userId)">Add</button>
@@ -23,6 +25,7 @@
       </div>
 
       <h3>Groups</h3>
+      <div ng-show="errorGroupSearch" class="alert alert-danger">{{errorGroupSearchMessage}}</div>
       <div ng-repeat="groups in searchResults.groups">
         <p class="in-line_add">{{groups.groupName}} ({{groups.type}})</p>
         <button type="submit" class="btn btn-default" ng-click="joinGroupRequest(groups.groupId)">Join</button>
