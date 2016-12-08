@@ -71,21 +71,21 @@ exports.makeComment = function(req, res) {
 
 exports.updateComment = function(req, res) {
 
-    db.Comment.update({content: req.body.content}, {
-      where: {
-        commentId: req.body.comment
-      }
-    })
-    .then(function(){
-       return res.status(200).json({
-        status: 'Successfully updated post',
-        });
-    })
-    .catch(function(err) {
-      return res.status(500).json({
-        status: 'Error posting'
-      });
-    })
+  db.Comment.update({content: req.body.content}, {
+    where: {
+      commentId: req.body.comment
+    }
+  })
+  .then(function(){
+   return res.status(200).json({
+    status: 'Successfully updated post',
+  });
+ })
+  .catch(function(err) {
+    return res.status(500).json({
+      status: 'Error posting'
+    });
+  })
 }
 
 exports.deleteComment = function(req, res) {
@@ -130,17 +130,17 @@ exports.deleteComment = function(req, res) {
               console.log("Deleted commentedOn relation.");
 
               if(LikesComment != null){
-                
+
                   LikesComment.destroy();                         ///CHECK THESE FOR NULL BEFORE DELETEING 
                   console.log("delted LikesComment relation");
 
-              }
+                }
 
-              comment.destroy();
-              console.log("DELETED COMMENT");
-              console.log("Successfully decreased comment Count in PostId: " + req.body.post);
+                comment.destroy();
+                console.log("DELETED COMMENT");
+                console.log("Successfully decreased comment Count in PostId: " + req.body.post);
 
-            })
+              })
           })
         })
       })
@@ -158,53 +158,52 @@ exports.deleteComment = function(req, res) {
     });
   }
 
-exports.commentedBy = function(req, res) {
+  exports.commentedBy = function(req, res) {
 
-  var data = {};
-
-  db.CommentedOn.findAll({where: {post : req.body.post}})
-  .then(function(relation){
-    var promiseArray = [];
+    var data = {};
     var promiseArrayRelations = [];
-    _.forEach(relation, function(relation) {
+    var promiseArray = [];
+    var commentedByArray = [];
 
-      //var relationData = {}
+    db.CommentedOn.findAll({where: {post : req.body.post}})
+    .then(function(relation){
 
-      //relationData[relation.comment] = relation.user;
-
+      _.forEach(relation, function(relation) {
         promiseArrayRelations[relation.comment] = relation.user;
-
-
-        //push(relationData);
-
-        promiseArray.push(db.Person.find({ where: {personId: relation.user} }));
-    })  
-
-    Promise.all(promiseArray).then(values => {
-        data.arrayCommentedBy = values;
-    }).then(function(){
+        promiseArray.push(db.User.find({ where: {userId: relation.user} }));
+      })  
 
       Promise.all(promiseArrayRelations).then(values1 => {
         data.arrayCommentedOn = values1;
-      })
-      .then(function(){
-        return res.status(200).json({
-          status: 'Successfully found Person commentedBy array',
-          data: data
 
-        });
+        Promise.all(promiseArray).then(values => {
+          _.forEach(values, function(values){
+            commentedByArray.push(db.Person.find({where: {personId: values.personId}}))
+          })
+
+          Promise.all(commentedByArray).then(commentedByArray=> {
+            data.arrayCommentedBy = commentedByArray;
+          })
+          .then(function(){
+            return res.status(200).json({
+              status: 'Successfully found Person commentedBy array',
+              data: data
+
+            });
+          })
+          .catch(function(err) {
+            console.log(err);
+            return res.status(500).json({
+              status: 'Error finding Person commentedBy array'
+            });
+          });
+        })
       })
-      .catch(function(err) {
-        console.log(err);
-        return res.status(500).json({
-          status: 'Error finding Person commentedBy array'
-        });
-      });
     })
-
-  })
-
 }
+
+
+
 
 
 // exports.findAll = function(req, res) {

@@ -397,7 +397,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
           $scope.commented_On[postId] = arrayCommentedOn;
           $scope.commented_By[postId] = arrayCommentedBy;
 
-          //console.log(arrayCommentedBy[]);
+          console.log(arrayCommentedBy);
           //console.log(data.data.data);
 
           //$scope.comment_By_PersonId.postIndex[index] = personData.data.data.personId;
@@ -408,7 +408,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.isMyComment = function(postId, commentId) {
 
     if($scope.commented_On[postId] != null){
-      if($scope.commented_On[postId][commentId] == $scope.storage.user.userId) {
+      if($scope.commented_On[postId][commentId] == $scope.storage.user.personId) {
         return true;
       }
     }
