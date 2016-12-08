@@ -108,8 +108,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         likes: 0
       };
 
-      console.log($scope.storage);
-
       PageService.postStatus(data)
         .then(function() {
           PageService.loadPage(data)
@@ -251,9 +249,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   }
 
   $scope.postFriendComment = function(index, postId) {
-
-    console.log($scope.newFriendComment[index]);
-    console.log($scope.newFriendComment[index]);
 
     if ($scope.newFriendComment[index] !="" && $scope.newFriendComment[index]) {
       var data = {
@@ -397,10 +392,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
           $scope.commented_On[postId] = arrayCommentedOn;
           $scope.commented_By[postId] = arrayCommentedBy;
 
-          console.log(arrayCommentedBy);
-          //console.log(data.data.data);
-
-          //$scope.comment_By_PersonId.postIndex[index] = personData.data.data.personId;
     })
   }
 
@@ -425,34 +416,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
 
     return false
   }
-
-  // $scope.getCommentedByName = function(postId, commentIndex) {
-
-  //   var fullName;
-
-  //   if(postId != null) {
-  //     var data = {
-  //       post: postId
-  //     }
-  //   }
-
-  //   PageService.commentedBy(data)
-  //       .then(function(data){
-
-  //         var arrayCommentedBy = data.data.data.arrayCommentedBy;
-
-  //         $scope.commented_By[postId] = arrayCommentedBy;
-
-  //   })
-  //   .then(function() {
-
-  //         fullName = $scope.commented_By[postId][commentIndex].firstName + " " + $scope.commented_By[postId][commentIndex].lastName;
-
-  //         console.log(fullName);
-
-  //         return fullName;
-  //   })
-  // }
 
   $scope.postGroupStatus = function() {
     if ($scope.newGroupStatus != "") {
