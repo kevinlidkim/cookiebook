@@ -1,15 +1,45 @@
 <div class="jumbotron cookie_body">
 
-  <h2>Edit employee's data</h2>
-
+  <h2>Edit Employee {{storage.employeeData.firstName}} {{storage.employeeData.lastName}}'s data</h2>
+  <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+  
   <div class="form-container">
     <form class="form">
       <div class="form-group">
-        <label for="hourlyRate">Hourly Rate</label>
-        <input type="number" step="0.01" id="hourlyRate" class="form-control" />
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" class="form-control" ng-model="employeePerson.firstName"/>
+      </div>
+      <!--<button type="submit" class="btn btn-primary" ng-click="">Delete firstName</button>-->
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" class="form-control" ng-model="employeePerson.lastName"/>
       </div>
       <div class="form-group">
-        <button type="submit" class="btn btn-primary" ng-click="">Update</button>
+        <label for="address">Address</label>
+        <input type="text" id="address" class="form-control" ng-model="employeePerson.address"/>
+      </div>
+      <div class="form-group">
+        <label for="city">City</label>
+        <input type="text" id="city" class="form-control" ng-model="employeePerson.city"/>
+      </div>
+      <div class="form-group">
+        <label for="state">State</label>
+        <input type="text" id="state" class="form-control" ng-model="employeePerson.state"/>
+      </div>
+      <div class="form-group">
+        <label for="zipcode">Zip Code</label>
+        <input type="number" id="zipcode" class="form-control" ng-model="employeePerson.zipCode"/>
+      </div>
+      <div class="form-group">
+        <label for="telephone">Telephone</label>
+        <input type="number" id="telephone" class="form-control" ng-model="employeePerson.telephone"/>
+      </div>
+      <div class="form-group">
+        <label for="hourlyRate">Hourly Rate</label>
+        <input type="number" step="0.01" id="hourlyRate" class="form-control" ng-model="employeeEmployee.hourlyRate"/>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" ng-click="updateEmployee()">Update</button>
       </div>
     </form>
   </div>

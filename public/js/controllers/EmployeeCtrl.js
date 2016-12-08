@@ -107,6 +107,19 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
         $scope.errorMessage = "Passwords do not match";
         $scope.error = true;
       }
+      $scope.storage.customerData = data.data.data;
+      $scope.customerPerson.firstName = "";
+      $scope.customerPerson.lastName = "";
+      $scope.customerPerson.address = "";
+      $scope.customerPerson.city = "";
+      $scope.customerPerson.state = "";
+      $scope.customerPerson.zipcode = "";
+      $scope.customerPerson.telephone = "";
+      $scope.customerUser.email = "";
+      $scope.customerUser.password = "";
+      $scope.customerUser.confirmPassword = "";
+      $scope.customerUser.adPreferences = "";
+      $scope.customerPerson.creditCard = "";
     } else {
       $scope.error = false;
       var obj = {
@@ -124,10 +137,6 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
           $scope.customerPerson.state = "";
           $scope.customerPerson.zipcode = "";
           $scope.customerPerson.telephone = "";
-          $scope.customerUser.email = "";
-          $scope.customerUser.password = "";
-          $scope.customerUser.confirmPassword = "";
-          $scope.customerUser.adPreferences = "";
           $scope.customerPerson.creditCard = "";
         })
     }

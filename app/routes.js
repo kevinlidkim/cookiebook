@@ -60,6 +60,7 @@ module.exports = function(app, passport) {
 
   app.post('/query/all', users.queryAll);
   app.post('/query/customers', employees.queryAllCustomers);
+  app.post('/query/employees', managers.queryAllEmployees);
 
   app.post('/page/friend', pages.getFriendPageId);
   app.post('/friend/request', users.sendFriendRequest);
@@ -88,6 +89,9 @@ module.exports = function(app, passport) {
   app.post('/customer/update', employees.updateCustomer);
   app.post('/customer/group', employees.getCustomerGroup);
   app.post('/customer/sales', employees.getCustomerTransactions);
+
+  app.post('/employee/get', managers.getEmployeeData);
+  app.post('/employee/update', managers.updateEmployee);
 
   app.post('/isEmployee', users.isEmployee);
   app.post('/createAd', employees.createAd);
