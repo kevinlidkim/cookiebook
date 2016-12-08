@@ -1,7 +1,8 @@
 angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', 'EmployeeService', 'ManagerService', function($scope, $localStorage, $sessionStorage, UserService, PageService, EmployeeService, ManagerService) {
 
   $scope.errorMessage = "";
-  $scope.error = false;
+  $scope.errorMessageEmployeeSearch = "";
+  $scope.errorEmployeeSearch = false;
   $scope.searchedSales = false;
   $scope.searchedCompany = false;
   $scope.searchedEmployee = false;
@@ -83,6 +84,8 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
 
   $scope.searchAllEmployee = function() {
     if ($scope.employeeSearch && $scope.employeeSearch.name != "") {
+      $scope.errorMessageEmployeeSearch = "";
+      $scope.errorEmployeeSearch = false;
       var query = {
         query: $scope.employeeSearch.name
       };
@@ -92,6 +95,9 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
           $scope.searchedEmployee = true;
           $scope.employeeSearch = "";
         })
+    } else {
+        $scope.errorMessageEmployeeSearch = "Cannot Search when Name is empty";
+        $scope.errorEmployeeSearch = true;
     }
   }
 
