@@ -279,7 +279,7 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
     }
     EmployeeService.deleteCustomer(obj)
       .then(function(data) {
-        console.log(data);
+        // console.log(data);
       })
   }
 

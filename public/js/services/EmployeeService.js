@@ -76,7 +76,7 @@ angular.module('EmployeeServ', []).factory('EmployeeService', ['$q', '$timeout',
     deleteCustomer : function(obj) {
       return $http.post('/customer/delete', obj)
         .success(function(data) {
-          return data;
+          // console.log(data);
         })
         .error(function(err) {
           console.log(err);

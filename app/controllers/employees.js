@@ -523,7 +523,7 @@ exports.deleteCustomer = function(req, res) {
       var promiseArrayMessagesReceived = [];
 
       _.forEach(sentMessageToDelete, function(sentMessage) {
-        promiseArrayMessagesReceived.push(db.Message.find({ where: {message: sentMessage.message} }))
+        promiseArrayMessagesReceived.push(db.Message.find({ where: {messageId: sentMessage.message} }))
       })
 
       Promise.all(promiseArrayMessagesReceived).then(values => {
@@ -587,7 +587,7 @@ exports.deleteCustomer = function(req, res) {
                     // Get all the comment and like relations from the posts
                     var promiseArrayComments = [];
                     var promiseArrayLikesPost = [];
-                    _.forEach(values, function(post) {
+                    _.forEach(values2, function(post) {
                       promiseArrayComments.push(db.CommentedOn.findAll({ where: {post: post.postId} }));
                       promiseArrayLikesPost.push(db.LikesPost.findAll({ where: {post: post.postId} }));
                     })
@@ -619,6 +619,8 @@ exports.deleteCustomer = function(req, res) {
                           .then(function() {
                             // Now that all customer info is collected, we begin to delete it
 
+                            var deleteAllThisFirst = [];
+
                             // Delete each member of group relation
                             _.forEach(data.memberOfGroupToDelete, function(memberOfGroupToDelete) {
                               return db.MemberOfGroup.destroy({ where: {user: memberOfGroupToDelete.user} });
@@ -649,7 +651,7 @@ exports.deleteCustomer = function(req, res) {
                               });
                             })
 
-                            // Delete each frends with relation
+                            // Delete each friends with relation
                             _.forEach(data.friendsWithToDelete, function(friendsWithToDelete) {
                               return db.FriendsWith.destroy({
                                 where: Sequelize.or(
@@ -665,70 +667,78 @@ exports.deleteCustomer = function(req, res) {
                             })
 
                             // Delete each purchase account
-                            _.forEach(data.purchaseAccountToDelete, function(purchaseAccountToDelete) {
-                              return db.PurchaseAccount.destroy({ where: {accountNumber: purchaseAccountToDelete.accountNumber}});
-                            })
+                            // _.forEach(data.purchaseAccountToDelete, function(purchaseAccountToDelete) {
+                            //   return db.PurchaseAccount.destroy({ where: {accountNumber: purchaseAccountToDelete.accountNumber}});
+                            // })
 
                             // Delete each likes comment relation
                             _.forEach(data.commentLikesToDelete, function(commentLikesToDelete) {
-                              return db.LikesComment.destroy({ where: {comment: commentLikesToDelete.comment} });
+                              deleteAllThisFirst.push(db.LikesComment.destroy({ where: {comment: commentLikesToDelete.comment} }));
                             })
+
 
                             // Delete each commented on relation
                             _.forEach(data.commentRelationsToDelete, function(commentRelationToDelete) {
-                              return db.CommentedOn.destroy({ where: {comment: commentRelationToDelete.comment} });
-                            })
-
-                            // Delete each comment
-                            _.forEach(data.commentsToDelete, function(commentToDelete) {
-                              return db.Comment.destroy({ where: {commentId: commentToDelete.commentId} });
+                              deleteAllThisFirst.push(db.CommentedOn.destroy({ where: {comment: commentRelationToDelete.comment} }));
                             })
 
                             // Delete each likes post relation
                             _.forEach(data.likesPostToDelete, function(likesPostToDelete) {
-                              return db.LikesPost.destroy({ where: {post: likesPostToDelete.post} });
+                              deleteAllThisFirst.push(db.LikesPost.destroy({ where: {post: likesPostToDelete.post} }));
                             })
 
                             // Delete each posted on relation
                             _.forEach(data.postedOnToDelete, function(postedOnToDelete) {
-                              return db.PostedOn.destroy({ where: {post: postedOnToDelete.post} });
+                              deleteAllThisFirst.push(db.PostedOn.destroy({ where: {post: postedOnToDelete.post} }));
                             })
 
-                            // Delete each post
-                            _.forEach(data.postsToDelete, function(postToDelete) {
-                              return db.Post.destroy({ where:{postId: postToDelete.postId} })
+                            deleteAllThisFirst.push(db.OwnsPage.destroy({ where: {owner: data.ownsPageToDelete.owner} }));
+
+                            Promise.all(deleteAllThisFirst).then(deletedRelations => {
+                              
+                            })
+                            .then(function() {
+                              // Delete each comment
+                              _.forEach(data.commentsToDelete, function(commentToDelete) {
+                                return db.Comment.destroy({ where: {commentId: commentToDelete.commentId} });
+                              })
+                            })
+                            .then(function() {
+                              // Delete each post
+                              _.forEach(data.postsToDelete, function(postToDelete) {
+                                return db.Post.destroy({ where: {postId: postToDelete.postId} })
+                              })
+                            })
+                            .then(function() {
+                              // Delete the page
+                              return db.Page.destroy({ where: {pageId: data.pageToDelete.pageId} });
+                            })
+                            .then(function() {
+                              return db.SendGroupRequest.destroy({ where: {user: req.body.userId}});
+                            })
+                            .then(function() {
+                              return db.JoinGroupRequest.destroy({ where: {user: req.body.userId} });
+                            })
+                            .then(function() {
+                              // Delete the customer account data
+                              return db.User.destroy({ where: {userId: req.body.userId} })
+                            })
+                            .then(function() {
+                              // Delete the person info associated with the customer
+                              return db.Person.destroy({ where: {personId: req.body.personId} });
+                            })
+                            .then(function() {
+                              return res.status(200).json({
+                                status: 'Successfully deleted customer'
+                              })
+                            })
+                            .catch(function(err) {
+                              console.log(err);
+                              return res.status(500).json({
+                                status: 'Failed to delete customer'
+                              })
                             })
 
-                            return db.OwnsPage.destroy({ where: {owner: data.ownsPageToDelete.owner} });
-                          })
-                          .then(function() {
-                            // Delete the page
-                            return db.Page.destroy({ where: {pageId: data.pageToDelete.pageId} });
-                          })
-                          .then(function() {
-                            return db.SendGroupRequest.destroy({ where: {user: req.body.userId}});
-                          })
-                          .then(function() {
-                            return db.JoinGroupRequest.destroy({ where: {user: req.body.userId} });
-                          })
-                          .then(function() {
-                            // Delete the customer account data
-                            return db.User.destroy({ where: {userId: req.body.userId} })
-                          })
-                          .then(function() {
-                            // Delete the person info associated with the customer
-                            return db.Person.destroy({ where: {personId: req.body.personId} });
-                          })
-                          .then(function() {
-                            return res.status(200).json({
-                              status: 'Successfully deleted customer'
-                            })
-                          })
-                          .catch(function(err) {
-                            console.log(err);
-                            return res.status(500).json({
-                              status: 'Failed to delete customer'
-                            })
                           })
                         })
                       })

@@ -22,6 +22,7 @@ module.exports = function(app, passport) {
   app.get('/yoposts', posts.findAll);
   app.get('/yoyoposts', posts.findAll2);
   app.get('/yocom', comments.findAll);
+  app.get('/yoyocom', comments.findAll2);
   app.get('/yofr', persons.findAll2);
   app.get('/yofw', persons.findAll3);
   app.get('/yogroup', persons.findAll4);
