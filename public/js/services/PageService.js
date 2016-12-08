@@ -163,10 +163,21 @@ angular.module('PageServ', []).factory('PageService', ['$q', '$timeout', '$http'
     commentedBy : function(sendData) {
       return $http.post('/commentedBy', sendData)
         .success(function(data){
-          // console.log(data);
+           //console.log(data);
         })
         .error(function(data){
-          //console.log(data);
+            //console.log(data);
+          return null;
+        });
+    },
+
+    postedBy: function(sendData) {
+      return $http.post('/postedBy', sendData)
+        .success(function(data){
+           //console.log(data);
+        })
+        .error(function(data){
+            console.log(data);
           return null;
         });
     },

@@ -44,6 +44,7 @@ module.exports = function(app, passport) {
   app.post('/post', posts.makePost);
   app.post('/updatePost', posts.updatePost);
   app.post('/deletePost', posts.deletePost);
+  app.post('/postedBy', posts.postedBy);
   app.post('/comment', comments.makeComment);
   app.post('/updateComment', comments.updateComment);
   app.post('/deleteComment', comments.deleteComment);
