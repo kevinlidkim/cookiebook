@@ -2,7 +2,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
 
   $scope.errorMessage = "";
   $scope.noEntriesError = "No matching entries exist.";
-  $scope.errorEmployeeSearchResultsMessage = "";
+  $scope.errorMessageEmployeeSearchResults = "";
   $scope.errorEmployeeSearchResults = false;
   $scope.errorMessageEmployeeSearch = "";
   $scope.errorEmployeeSearch = false;
@@ -86,10 +86,11 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
   }
 
   $scope.searchAllEmployee = function() {
+    $scope.errorMessageEmployeeSearch = "";
+    $scope.errorEmployeeSearch = false;
+
     if ($scope.employeeSearch && $scope.employeeSearch.name != "") {
-      $scope.errorMessageEmployeeSearch = "";
-      $scope.errorEmployeeSearch = false;
-      $scope.errorEmployeeSearchResultsMessage = "";
+      $scope.errorMessageEmployeeSearchResults = "";
       $scope.errorEmployeeSearchResults = false;
 
       var query = {
@@ -100,7 +101,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
         .then(function(data) {
           $scope.searchResults = data.data.data;
           if($scope.searchResults.employees.length == 0) {
-            $scope.errorEmployeeSearchResultsMessage = $scope.noEntriesError;
+            $scope.errorMessageEmployeeSearchResults = $scope.noEntriesError;
             $scope.errorEmployeeSearchResults = true;
           }
           console.log($scope.searchResults);

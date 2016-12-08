@@ -12,10 +12,12 @@
       <button type="submit" class="btn btn-default" ng-click="searchAllCustomer()">Search</button>
     </form>
 
+    <div ng-show="errorCustomerSearch" class="alert alert-danger">{{errorMessageCustomerSearch}}</div>
     <div ng-show="searchedCustomer">
       <h2>Search Results</h2>
 
       <h3>Customers</h3>
+      <div ng-show="errorCustomerSearchResults" class="alert alert-danger">{{errorMessageCustomerSearchResults}}</div>
       <div ng-repeat="customers in searchResults.users">
         <p class="in-line_add">{{customers.firstName}}  {{customers.lastName}}</p>
         <a ng-href="/editCustomer" ng-click="getCustomerData(customers.userId)"><button type="submit" class="btn btn-default">Edit</button></a>

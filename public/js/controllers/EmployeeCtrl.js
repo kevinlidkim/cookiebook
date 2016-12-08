@@ -2,6 +2,11 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
 
   $scope.errorMessage = "";
   $scope.error = false;
+  $scope.noEntriesError = "No matching entries exist.";
+  $scope.errorMessageCustomerSearchResults = "";
+  $scope.errorCustomerSearchResults = false;
+  $scope.errorMessageCustomerSearch = "";
+  $scope.errorCustomerSearch = false;
   $scope.searchedCustomer = false;
 
   $scope.createAd = function() {
@@ -47,17 +52,31 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
   }
 
   $scope.searchAllCustomer = function() {
+    $scope.errorMessageCustomerSearchResults = "";
+    $scope.errorCustomerSearchResults = false;
+    $scope.errorMessageCustomerSearch = "";
+    $scope.errorCustomerSearch = false;
+    $scope.searchedCustomer = false;
+
     if ($scope.customerSearch && $scope.customerSearch.name != "") {
       var query = {
         query: $scope.customerSearch.name
       };
       EmployeeService.searchAllCustomer(query)
         .then(function(data) {
-         $scope.searchResults = data.data.data;
-         $scope.searchedCustomer = true;
-         $scope.customerSearch = "";
-         // console.log(data.data.data);
+          $scope.searchResults = data.data.data;
+          console.log($scope.searchResults);
+          if($scope.searchResults.users.length == 0) {
+            $scope.errorMessageCustomerSearchResults = $scope.noEntriesError;
+            $scope.errorCustomerSearchResults = true;
+          }
+          $scope.searchedCustomer = true;
+          $scope.customerSearch = "";
+          // console.log(data.data.data);
         })
+    } else {
+      $scope.errorMessageCustomerSearch = "Cannot Search when Name is empty";
+      $scope.errorCustomerSearch = true;
     }
   }
 
