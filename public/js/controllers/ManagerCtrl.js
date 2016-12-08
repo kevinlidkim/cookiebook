@@ -88,6 +88,8 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
   $scope.searchAllEmployee = function() {
     $scope.errorMessageEmployeeSearch = "";
     $scope.errorEmployeeSearch = false;
+    $scope.errorMessageEmployeeSearchResults = "";
+    $scope.errorEmployeeSearchResults = false;
 
     if ($scope.employeeSearch && $scope.employeeSearch.name != "") {
       $scope.errorMessageEmployeeSearchResults = "";
@@ -111,6 +113,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
     } else {
         $scope.errorMessageEmployeeSearch = "Cannot Search when Name is empty";
         $scope.errorEmployeeSearch = true;
+        $scope.searchedEmployee = false;
     }
   }
 

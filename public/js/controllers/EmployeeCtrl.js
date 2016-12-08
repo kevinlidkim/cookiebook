@@ -56,7 +56,6 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
     $scope.errorCustomerSearchResults = false;
     $scope.errorMessageCustomerSearch = "";
     $scope.errorCustomerSearch = false;
-    $scope.searchedCustomer = false;
 
     if ($scope.customerSearch && $scope.customerSearch.name != "") {
       var query = {
@@ -77,6 +76,7 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
     } else {
       $scope.errorMessageCustomerSearch = "Cannot Search when Name is empty";
       $scope.errorCustomerSearch = true;
+      $scope.searchedCustomer = false;
     }
   }
 
