@@ -84,6 +84,10 @@ angular.module('UserCtrl', []).controller('UserController', ['$location', '$scop
     var query = {
       query: $scope.homeSearch
     }
+    $scope.errorUserSearchMessage = "";
+    $scope.errorUserSearch = false;
+    $scope.errorGroupSearchMessage = "";
+    $scope.errorGroupSearch = false;
     //$scope.errorGroupSearchMessage = "";
     //$error.errorUserSearchMessage = "";
     if ($scope.homeSearch != "") {

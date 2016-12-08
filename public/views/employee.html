@@ -9,7 +9,6 @@
     <p>----------------------------------------------------------</p>
 
     <p>Search for Employees</p>
-    <div ng-show="errorEmployeeSearch" class="alert alert-danger">{{errorMessageEmployeeSearch}}</div>
 
     <form class="navbar-form" role="search">
       <div class="form-group">
@@ -18,10 +17,12 @@
       <button type="submit" class="btn btn-default" ng-click="searchAllEmployee()">Search</button>
     </form>
 
+    <div ng-show="errorEmployeeSearch" class="alert alert-danger">{{errorMessageEmployeeSearch}}</div>
     <div ng-show="searchedEmployee">
       <h2>Search Results</h2>
 
       <h3>Employees</h3>
+      <div ng-show="errorEmployeeSearchResults" class="alert alert-danger">{{errorEmployeeSearchResultsMessage}}</div>
       <div ng-repeat="employees in searchResults.employees">
         <p class="in-line_add">{{employees.firstName}} {{employees.lastName}}</p>
         <a ng-href="/editEmployee" ng-click="getEmployeeData(employees.employeeId)"><button type="submit" class="btn btn-default">Edit</button></a>
