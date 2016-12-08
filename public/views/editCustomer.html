@@ -83,5 +83,20 @@
     <div ng-repeat="custSale in storage.customerSales">
       <p>{{custSale.accountNumber}} purchased {{custSale.numberOfUnits}} {{custSale.itemName}} from {{custSale.company}} for ${{custSale.unitPrice}} each at {{custSale.dateTimeSold}}</p>
     </div>
+  <br>
+
+  <p>----------------------------------------------------------</p>
+
+  <h3>Recommended Products</h3>
+  <br>
+  <div ng-show="!loadedSuggestions">
+    <button type="submit" class="btm btn-primary" ng-click="loadAdSuggestions()">Load Suggested Products</button>
+  </div>
+  <div ng-show="loadedSuggestions" ng-repeat="product in storage.suggestedProducts">
+    <p>{{product.itemName}}</p>
+  </div>
+
+  </div>
+
 
 </div>

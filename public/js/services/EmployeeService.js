@@ -111,6 +111,16 @@ angular.module('EmployeeServ', []).factory('EmployeeService', ['$q', '$timeout',
         .error(function(err) {
           console.log(err);
         })
+    },
+
+    loadAdSuggestions : function(obj) {
+      return $http.post('/loadSuggestedAds', obj)
+        .success(function(data) {
+          return data;
+        })
+        .error(function(err) {
+          console.log(err);
+        })
     }
 
   }
