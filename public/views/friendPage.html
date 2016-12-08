@@ -50,11 +50,11 @@
 
     <div class="mdl-textfield mdl-js-textfield">
       <label for="newFriendComment">Post a comment (post index {{postIndex}})</label>
-      <textarea class="mdl-textfield__input" type="text" ng-model="newFriendComment[commentIndex]" ng-init="newComment[commentIndex]='Type Comment Here...'"></textarea>
+      <textarea class="mdl-textfield__input" type="text" ng-model="newFriendComment[$index]></textarea>
     </div>
 
     <div class="mdl-card__actions mdl-card--border">
-      <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="postFriendComment(commentIndex, posts.postId)">
+      <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="postFriendComment($index, posts.postId)">
         Comment
       </a>
     </div>

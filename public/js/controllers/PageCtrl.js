@@ -415,6 +415,17 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     return false;
   }
 
+  $scope.isMyPost = function(postIndex) {
+
+
+    if($scope.posted_By_PersonId[postIndex] != null) {
+      if($scope.posted_By_PersonId[postIndex] == $scope.storage.user.personId) 
+        return true;
+    }
+
+    return false
+  }
+
   // $scope.getCommentedByName = function(postId, commentIndex) {
 
   //   var fullName;

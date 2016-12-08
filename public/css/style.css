@@ -152,6 +152,10 @@ body {
   border-radius: 4px !important;
 }
 
+.btn-group {
+  width: 100%;
+}
+
 .commentedBy {
   text-transform: uppercase;
   color: blue;

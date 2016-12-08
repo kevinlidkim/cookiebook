@@ -189,58 +189,11 @@ exports.commentedBy = function(req, res) {
           status: 'Error finding Person commentedBy array'
         });
       });
-
-
     })
 
-    
-
-
-    
   })
 
 }
-
-
-///OLD COMMENTED BY 
-// db.CommentedOn.find({
-//     where: {
-//       comment : req.body.comment
-//     }
-//   }).then(function(commentedOn){
-//     db.User.find({
-//       where: {
-//         userId : commentedOn.user
-//       }
-//     }).then(function(user){
-//       db.Person.find({
-//         where: {
-//           personId: user.personId
-//         }
-//       })
-//       .then(function(person){
-//         return res.status(200).json({
-//           status: 'Successfully found Person commentedBy',
-//           data: person
-//         });
-
-//       })
-//       .catch(function(err) {
-//         console.log(err);
-//         return res.status(500).json({
-//           status: 'Error finding Person commentedBy'
-//         });
-//       });
-//     })
-//   })
-
-
-
-
-
-
-
-
 
 
 // exports.findAll = function(req, res) {

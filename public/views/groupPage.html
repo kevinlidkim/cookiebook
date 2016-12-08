@@ -1,4 +1,4 @@
-<div class="jumbotron text-center">
+  <div class="jumbotron text-center">
 
   <h2>Page</h2>
   <br>
@@ -17,6 +17,18 @@
 
   <div class="post_card_wide mdl-card mdl-shadow--2dp" ng-repeat="posts in storage.groupPage.data.reverse" ng-init="post_Id=posts.postId; postIndex=$index; commentedBy(post_Id)">
 
+  <div ng-if="isMyPost(postIndex) || isGroupOwner()">
+    <div class="btn-group">
+     <button ng-show="!postEditPressed" type="button" class="btn btn-warning" ng-click="postEditPressed=!postEditPressed" ng-init="postEditPressed=false">Edit</button>
+     <button ng-show="postEditPressed" type="button" class="btn btn-success" ng-click="updateStatus(editStatus, post_Id, 'page'); postEditPressed=!postEditPressed">Submit</button>
+     <button type="button" class="btn btn-danger" ng-click="deletePost(post_Id)">DELETE</button>
+    </div>
+
+    <div ng-show="postEditPressed" class="mdl-textfield mdl-js-textfield">
+    <textarea class="mdl-textfield__input" type="text" ng-model="editStatus" ng-init="editStatus=posts.content"></textarea>
+    </div>
+  </div>
+
     <div class="mdl-card__title">
       <h2 for="posted_By" class="postedBy" ng-model="posted_By[postIndex]" ng-init="postedBy(postIndex, posts.postId)">
         {{posted_By[postIndex]}}: </h2>
@@ -33,7 +45,7 @@
     <div class="mdl-card__supporting-text">
       <div class="comment_card_wide mdl-card mdl-shadow--2dp" ng-repeat="comment in posts.comments" ng-init="comment_Id=comment.commentId; commentIndex=$index">
 
-        <div ng-if=isMyComment(post_Id,comment_Id)>
+        <div ng-if="isMyComment(post_Id,comment_Id) || isGroupOwner()">
           <button ng-show="!commentEditPressed" type="button" class="btn btn-warning" ng-click="commentEditPressed=!commentEditPressed" ng-init="commentEditPressed=false">Edit</button>
           <button ng-show="commentEditPressed" type="button" class="btn btn-success" ng-click="updateComment(editComment, comment.commentId, groupPage); commentEditPressed=!commentEditPressed">Submit</button>
           <button type="button" class="btn btn-danger" ng-click="deleteComment(comment.commentId)">DELETE</button> 
@@ -56,11 +68,11 @@
 
       <div class="mdl-textfield mdl-js-textfield">
         <label for="newGroupComment">Post a comment (post index {{postIndex}})</label>
-        <textarea class="mdl-textfield__input" type="text" ng-model="newGroupComment[commentIndex]"></textarea>
+        <textarea class="mdl-textfield__input" type="text" ng-model="newGroupComment[$index]"></textarea>
       </div>
 
       <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="postGroupComment(commentIndex, posts.postId)">
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="postGroupComment($index, posts.postId)">
           Comment
         </a>
       </div>

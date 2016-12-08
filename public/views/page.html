@@ -8,7 +8,7 @@
   <!-- Post status here -->
   <div class="mdl-textfield mdl-js-textfield">
     <label for="newStatus">What's on your mind?</label>
-    <textarea class="mdl-textfield__input" type="text" ng-model="newStatus" ng-init="newStatus='Type Status Here...'"></textarea>
+    <textarea class="mdl-textfield__input" type="text" ng-model="newStatus" ></textarea>
   </div>
   <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" ng-click="postStatus()">
     Post
@@ -25,10 +25,11 @@
      <button ng-show="postEditPressed" type="button" class="btn btn-success" ng-click="updateStatus(editStatus, post_Id, 'page'); postEditPressed=!postEditPressed">Submit</button>
      <button type="button" class="btn btn-danger" ng-click="deletePost(post_Id)">DELETE</button>
    </div>
+
    <div ng-show="postEditPressed" class="mdl-textfield mdl-js-textfield">
     <textarea class="mdl-textfield__input" type="text" ng-model="editStatus" ng-init="editStatus=posts.content"></textarea>
-
   </div>
+
   <div class="mdl-card__title">
     <h2 for="posted_By" class="postedBy" ng-model="posted_By[postIndex]" ng-init="postedBy(postIndex, post_Id)">
       {{posted_By[postIndex]}}: </h2>
@@ -75,11 +76,11 @@
 
   <div class="mdl-textfield mdl-js-textfield">
     <label for="newComment">Post a comment (post index {{postIndex}})</label>
-    <textarea class="mdl-textfield__input" type="text" ng-model="newComment[commentIndex]" ng-init="newComment[commentIndex]='Type Comment Here...'"></textarea>
+    <textarea class="mdl-textfield__input" type="text" ng-model="newComment[$index]"></textarea>
   </div>
 
   <div class="mdl-card__actions mdl-card--border">
-    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="postComment(commentIndex, post_Id)">
+    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="postComment($index, post_Id)">
       Comment
     </a>
   </div>
