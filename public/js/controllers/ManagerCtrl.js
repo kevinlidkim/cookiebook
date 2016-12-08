@@ -291,6 +291,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
 
   $scope.prepAddEmployee = function(userId) {
     $scope.storage.newEmployeeUserId = userId;
+    $scope.employeeCreated = false;
     console.log("Prep add employee complete");
   }
 
