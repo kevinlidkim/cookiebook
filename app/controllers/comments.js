@@ -1,4 +1,5 @@
 var db = require('../../config/db');
+var _ = require('lodash');
 
 exports.findAll = function(req, res) {
 
@@ -147,37 +148,99 @@ exports.deleteComment = function(req, res) {
   }
 
 exports.commentedBy = function(req, res) {
-  db.CommentedOn.find({
-    where: {
-      comment : req.body.comment
-    }
-  }).then(function(commentedOn){
-    db.User.find({
-      where: {
-        userId : commentedOn.user
-      }
-    }).then(function(user){
-      db.Person.find({
-        where: {
-          personId: user.personId
-        }
-      })
-      .then(function(person){
-        return res.status(200).json({
-          status: 'Successfully found Person commentedBy',
-          data: person
-        });
 
+  var data = {};
+
+  db.CommentedOn.findAll({where: {post : req.body.post}})
+  .then(function(relation){
+    var promiseArray = [];
+    var promiseArrayRelations = [];
+    _.forEach(relation, function(relation) {
+
+      //var relationData = {}
+
+      //relationData[relation.comment] = relation.user;
+
+        promiseArrayRelations[relation.comment] = relation.user;
+
+
+        //push(relationData);
+
+        promiseArray.push(db.Person.find({ where: {personId: relation.user} }));
+    })  
+
+    Promise.all(promiseArray).then(values => {
+        data.arrayCommentedBy = values;
+    }).then(function(){
+
+      Promise.all(promiseArrayRelations).then(values1 => {
+        data.arrayCommentedOn = values1;
+      })
+      .then(function(){
+        return res.status(200).json({
+          status: 'Successfully found Person commentedBy array',
+          data: data
+
+        });
       })
       .catch(function(err) {
         console.log(err);
         return res.status(500).json({
-          status: 'Error finding Person commentedBy'
+          status: 'Error finding Person commentedBy array'
         });
       });
+
+
     })
+
+    
+
+
+    
   })
+
 }
+
+
+///OLD COMMENTED BY 
+// db.CommentedOn.find({
+//     where: {
+//       comment : req.body.comment
+//     }
+//   }).then(function(commentedOn){
+//     db.User.find({
+//       where: {
+//         userId : commentedOn.user
+//       }
+//     }).then(function(user){
+//       db.Person.find({
+//         where: {
+//           personId: user.personId
+//         }
+//       })
+//       .then(function(person){
+//         return res.status(200).json({
+//           status: 'Successfully found Person commentedBy',
+//           data: person
+//         });
+
+//       })
+//       .catch(function(err) {
+//         console.log(err);
+//         return res.status(500).json({
+//           status: 'Error finding Person commentedBy'
+//         });
+//       });
+//     })
+//   })
+
+
+
+
+
+
+
+
 
 
 // exports.findAll = function(req, res) {

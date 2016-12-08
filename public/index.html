@@ -55,6 +55,7 @@
 			<li ng-show="isManager()"><a ng-controller="ManagerController" ng-href="/admin">Admin</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
+			<li ng-show="isLoggedIn()"><a id="nav-userName">{{storage.name}}</a></li>
 			<li ng-show="isLoggedIn()">
 				<a id="nav-logout" ng-controller="LogoutController" ng-click="logout()" href="">Logout</a>
 			</li>

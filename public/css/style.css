@@ -34,6 +34,16 @@ body {
   padding-right: 0px;
 }
 
+#nav-userName:hover{
+  background-color: #3e7bd9 !important;
+  color: #fda41a !important;
+  cursor: default !important;
+}
+
+/*#nav-userName{
+  text-transform: uppercase;
+}*/
+
 .login_prompt_container{
   padding-left: 0px;
   height: 820px;

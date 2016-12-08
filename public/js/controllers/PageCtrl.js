@@ -6,9 +6,11 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.newFriendComment = [];
   $scope.newGroupStatus = "";
   $scope.newGroupComment = [];
-  $scope.commented_By=[];
-  $scope.comment_By_PersonId=[];
-  $scope.isMyComment=[];
+  $scope.commented_By={};
+  $scope.commented_On={};
+  $scope.posted_By={};
+  $scope.posted_By_PersonId=[];
+  //$scope.isMyComment={};
   $scope.groupSearch = "";
   $scope.searched = false;
 
@@ -119,7 +121,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     }
   }
 
-  $scope.updateStatus = function(editStatus, postId) {
+  $scope.updateStatus = function(editStatus, postId, origin) {
 
     if (editStatus != "") {
       var data = {
@@ -131,15 +133,24 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         .then(function() {
           PageService.loadPage(data)
             .then(function(pageData) {
-              $scope.getUserPage();
+              if(origin == "page"){
+              $scope.getUserPage(); //updates storage so that checkLikePost will be accurate
+
+            // } else if(origin == "friendPage"){
+            //   $scope.getFriendPage($scope.storage.friend);
+
+            } else if(origin == "groupPage"){
+              $scope.getGroupPage($scope.storage.group); 
+
+            }
             })
         });
     }
   }
 
-  $scope.updateComment = function(editComment, commentId){
+  $scope.updateComment = function(editComment, commentId, origin){
 
-     if (editComment != "") {
+    if (editComment != "") {
       var data = {
         content: editComment,
         comment: commentId,
@@ -149,13 +160,19 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         .then(function() {
           PageService.loadPage(data)
             .then(function(pageData) {
-              $scope.getUserPage();
-              //TO SEE CHANGES ON FRIENDS PAGE
-              $scope.getFriendPage($scope.storage.friend);     
+              if(origin == "page"){
+              $scope.getUserPage(); //updates storage so that checkLikePost will be accurate
+
+            } else if(origin == "friendPage"){
+              $scope.getFriendPage($scope.storage.friend);
+
+            } else if(origin == "groupPage"){
+              $scope.getGroupPage($scope.storage.group); 
+
+            } 
             })
         });
     }
-
   }
 
   $scope.postComment = function(index, postId) {
@@ -191,6 +208,8 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
           $scope.getUserPage();
           //TO SEE CHANGES ON FRIENDS PAGE. 
           $scope.getFriendPage($scope.storage.friend);
+          $scope.getGroupPage($scope.storage.group); 
+
         })
     }
   }
@@ -222,15 +241,20 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         PageService.deletePost(postData)
           .then(function() {
             $scope.getUserPage();
+            $scope.getGroupPage($scope.storage.group); 
+
           })
 
       }
 
     }
-
   }
 
   $scope.postFriendComment = function(index, postId) {
+
+    console.log($scope.newFriendComment[index]);
+    console.log($scope.newFriendComment[index]);
+
     if ($scope.newFriendComment[index] !="" && $scope.newFriendComment[index]) {
       var data = {
         page: $scope.storage.friendPageId,
@@ -239,6 +263,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         content: $scope.newFriendComment[index],
         likes: 0
       };
+
 
       PageService.postComment(data)
         .then(function() {
@@ -252,7 +277,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     }
   }
 
-  $scope.likesPost = function(postId) {
+  $scope.likesPost = function(postId, origin) {
     if(postId != null) {
       var data = {
         post: postId,
@@ -261,13 +286,19 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
 
       PageService.likesPost(data)
         .then(function(){
-          $scope.getUserPage(); //updates storage so that checkLikePost will be accurate
+            if(origin == "page"){
+              $scope.getUserPage(); //updates storage so that checkLikePost will be accurate
+            } else if(origin == "friendPage"){
+              $scope.getFriendPage($scope.storage.friend);
+            } else if(origin == "groupPage"){
+              $scope.getGroupPage($scope.storage.group); 
+            }
+
           })
     }
-
   }
 
-  $scope.likesComment = function(commentId) {
+  $scope.likesComment = function(commentId, origin) {
     if(commentId != null) {
       var data = {
         comment: commentId,
@@ -276,15 +307,32 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
 
       PageService.likesComment(data)
         .then(function(){
-          $scope.getUserPage(); //updates storage so that checkLikePost will be accurate
+          if(origin == "page"){
+              $scope.getUserPage(); //updates storage so that checkLikePost will be accurate
+            } else if(origin == "friendPage"){
+              $scope.getFriendPage($scope.storage.friend);
+            } else if(origin == "groupPage"){
+              $scope.getGroupPage($scope.storage.group); 
+            }
+
         })
     }
   }
 
-  $scope.checkLikesPost = function(postId) {
+  $scope.checkLikesPost = function(postId, origin) {
 
-    var array = $scope.storage.page.data.pageData.arrayOfLikesPost;
+    var array;
     var found = false;
+
+    if(origin == "page"){
+      array = $scope.storage.page.data.pageData.arrayOfLikesPost;
+    } else if(origin == "friendPage") {
+      array = $scope.storage.friendPage.data.pageData.arrayOfLikesPost;
+
+    } else if(origin == "groupPage") {
+      array = $scope.storage.groupPage.data.pageData.arrayOfLikesPost;
+
+    }
 
     for(var i = 0; i < array.length; i++){
         if(array[i].post == postId){
@@ -295,10 +343,18 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     return found;
   }
 
-  $scope.checkLikesComment = function(commentId) {
+  $scope.checkLikesComment = function(commentId, origin) {
 
-    var array = $scope.storage.page.data.pageData.arrayOfLikesComment;
+    var array;
     var found = false;
+
+    if(origin == "page"){
+      array = $scope.storage.page.data.pageData.arrayOfLikesComment;
+    } else if(origin == "friendPage") {
+      array = $scope.storage.friendPage.data.pageData.arrayOfLikesComment;
+    } else if(origin == "groupPage") {
+      array = $scope.storage.groupPage.data.pageData.arrayOfLikesComment;
+    }
 
     for(var i = 0; i < array.length; i++){
         if(array[i].comment == commentId){
@@ -309,30 +365,83 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     return found;
   }
 
-  $scope.commentedBy = function(index, commentId) {
+  $scope.postedBy = function(index, postId) {
 
-    if(commentId != null) {
+    if(postId != null) {
       var data = {
-        comment: commentId,
-        user: $scope.storage.user.userId
+        post: postId
       }
+    }
 
+    PageService.postedBy(data)
+      .then(function(personData){
+        $scope.posted_By[index] = personData.data.data.firstName + " " + personData.data.data.lastName;
+        $scope.posted_By_PersonId[index] = personData.data.data.personId;
+      })
+  }
+
+  $scope.commentedBy = function(postId) {
+
+    if(postId != null) {
+      var data = {
+        post: postId
+      }
     }
 
     PageService.commentedBy(data)
-        .then(function(personData){
-          $scope.commented_By[index] = personData.data.data.firstName + " " + personData.data.data.lastName;
-          $scope.comment_By_PersonId[index] = personData.data.data.personId;
-        })
+        .then(function(data){
+
+          var arrayCommentedOn = data.data.data.arrayCommentedOn;
+          var arrayCommentedBy = data.data.data.arrayCommentedBy;
+
+          $scope.commented_On[postId] = arrayCommentedOn;
+          $scope.commented_By[postId] = arrayCommentedBy;
+
+          //console.log(arrayCommentedBy[]);
+          //console.log(data.data.data);
+
+          //$scope.comment_By_PersonId.postIndex[index] = personData.data.data.personId;
+    })
   }
 
-  $scope.isMyComment = function(index) {
 
-      if($scope.comment_By_PersonId[index] == $scope.storage.user.userId) {
-          return true;
+  $scope.isMyComment = function(postId, commentId) {
+
+    if($scope.commented_On[postId] != null){
+      if($scope.commented_On[postId][commentId] == $scope.storage.user.userId) {
+        return true;
       }
+    }
     return false;
   }
+
+  // $scope.getCommentedByName = function(postId, commentIndex) {
+
+  //   var fullName;
+
+  //   if(postId != null) {
+  //     var data = {
+  //       post: postId
+  //     }
+  //   }
+
+  //   PageService.commentedBy(data)
+  //       .then(function(data){
+
+  //         var arrayCommentedBy = data.data.data.arrayCommentedBy;
+
+  //         $scope.commented_By[postId] = arrayCommentedBy;
+
+  //   })
+  //   .then(function() {
+
+  //         fullName = $scope.commented_By[postId][commentIndex].firstName + " " + $scope.commented_By[postId][commentIndex].lastName;
+
+  //         console.log(fullName);
+
+  //         return fullName;
+  //   })
+  // }
 
   $scope.postGroupStatus = function() {
     if ($scope.newGroupStatus != "") {
@@ -376,7 +485,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         })
 
     }
-  },
+  }
 
   $scope.isGroupOwner = function() {
     var owner = false;
@@ -429,7 +538,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         })
     }
   }
-
   // this is a group page owner sending a request for a user to join
   $scope.sendGroupRequest = function(userId) {
     if (userId == $scope.storage.user.userId) {

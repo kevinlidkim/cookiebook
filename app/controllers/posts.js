@@ -72,7 +72,6 @@ exports.makePost = function(req, res) {
         status: 'Error posting'
       });
     });
-
 }
 
 exports.updatePost = function(req, res) {
@@ -160,6 +159,39 @@ exports.deletePost = function(req, res) {
         status: 'Error deleting post'
       });
     });
+}
+
+exports.postedBy = function(req, res) {
+  db.PostedOn.find({
+    where: {
+      post : req.body.post
+    }
+  }).then(function(postedOn){
+    db.User.find({
+      where: {
+        userId : postedOn.user
+      }
+    }).then(function(user){
+      db.Person.find({
+        where: {
+          personId: user.personId
+        }
+      })
+      .then(function(person){
+        return res.status(200).json({
+          status: 'Successfully found Person commentedBy',
+          data: person
+        });
+
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Error finding Person commentedBy'
+        });
+      });
+    })
+  })
 }
 
 // exports.findAll = function(req, res) {
