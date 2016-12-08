@@ -259,7 +259,7 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
           $scope.customerCreated = data.data.data.result;
         })
     } else {
-      $scope.errorMessage = "Cannot Create Custoner when fields are empty."
+      $scope.errorMessage = "Cannot Create Customer when fields are empty."
       $scope.error = true;
     }
     $scope.createCustomerPerson.firstName = "";

@@ -91,6 +91,15 @@ angular.module('ManagerServ', []).factory('ManagerService', ['$q', '$timeout', '
         .error(function(err) {
           console.log(err);
         })
+    },
+    createEmployee : function(obj) {
+      return $http.post('/employee/create', obj)
+        .success(function(data) {
+          return data;
+        })
+        .error(function(err) {
+          console.log(err);
+        });
     }
 
   }

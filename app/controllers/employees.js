@@ -463,7 +463,6 @@ exports.createCustomer = function(req, res) {
             return db.User.create(req.body.userObj);
           })
           .then(function(returnUser) {
-            //return done(null, returnUser);
             var newPage = {
               postCount: 0
             }

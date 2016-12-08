@@ -93,6 +93,7 @@ module.exports = function(app, passport) {
 
   app.post('/employee/get', managers.getEmployeeData);
   app.post('/employee/update', managers.updateEmployee);
+  app.post('/employee/create', managers.createEmployee);
 
   app.post('/isEmployee', users.isEmployee);
   app.post('/createAd', employees.createAd);

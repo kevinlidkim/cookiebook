@@ -1,5 +1,6 @@
 angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$localStorage', '$sessionStorage', 'UserService', 'PageService', 'EmployeeService', 'ManagerService', function($scope, $localStorage, $sessionStorage, UserService, PageService, EmployeeService, ManagerService) {
 
+  $scope.storage.newEmployeeUserId;
   $scope.errorMessage = "";
   $scope.noEntriesError = "No matching entries exist.";
   $scope.errorMessageEmployeeSearchResults = "";
@@ -9,6 +10,13 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
   $scope.searchedSales = false;
   $scope.searchedCompany = false;
   $scope.searchedEmployee = false;
+  $scope.errorMessageCustomerSearchResults = "";
+  $scope.errorCustomerSearchResults = false;
+  $scope.errorMessageCustomerSearch = "";
+  $scope.errorCustomerSearch = false;
+  $scope.searchedCustomer = false;
+  $scope.customerCreated = false;
+  $scope.employeeCreated = false;
 
   $scope.loadSalesPage = function() {
     $scope.loadAllAds();
@@ -85,11 +93,44 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       })
   }
 
+  $scope.searchAllCustomer = function() {
+    $scope.errorMessageCustomerSearchResults = "";
+    $scope.errorCustomerSearchResults = false;
+    $scope.errorMessageCustomerSearch = "";
+    $scope.errorCustomerSearch = false;
+    $scope.errorEmployeeSearch = false;
+    $scope.searchedEmployee = false;
+
+    if ($scope.customerSearch && $scope.customerSearch.name != "") {
+      var query = {
+        query: $scope.customerSearch.name
+      };
+      EmployeeService.searchAllCustomer(query)
+        .then(function(data) {
+          $scope.searchResults = data.data.data;
+          console.log($scope.searchResults);
+          if($scope.searchResults.users.length == 0) {
+            $scope.errorMessageCustomerSearchResults = $scope.noEntriesError;
+            $scope.errorCustomerSearchResults = true;
+          }
+          $scope.searchedCustomer = true;
+          $scope.customerSearch = "";
+          // console.log(data.data.data);
+        })
+    } else {
+      $scope.errorMessageCustomerSearch = "Cannot Search when Name is empty";
+      $scope.errorCustomerSearch = true;
+      $scope.searchedCustomer = false;
+    }
+  }
+
   $scope.searchAllEmployee = function() {
     $scope.errorMessageEmployeeSearch = "";
     $scope.errorEmployeeSearch = false;
     $scope.errorMessageEmployeeSearchResults = "";
     $scope.errorEmployeeSearchResults = false;
+    $scope.errorCustomerSearch = false;
+    $scope.searchedCustomer = false;
 
     if ($scope.employeeSearch && $scope.employeeSearch.name != "") {
       $scope.errorMessageEmployeeSearchResults = "";
@@ -166,6 +207,9 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
   $scope.simplifyEmployeeObj = function(employeeObj) {
     if(employeeObj != undefined) {
       var obj = {}
+      if(employeeObj.ssn && employeeObj.ssn != "") {
+        obj.ssn = employeeObj.ssn;
+      }
       if(employeeObj.hourlyRate && employeeObj.hourlyRate != "") {
         obj.hourlyRate = employeeObj.hourlyRate;
       }
@@ -243,6 +287,41 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       $scope.errorMessage = "Cannot Update Data when fields are empty."
       $scope.error = true;
     }
+  }
+
+  $scope.prepAddEmployee = function(userId) {
+    $scope.storage.newEmployeeUserId = userId;
+    console.log("Prep add employee complete");
+  }
+
+  $scope.createEmployee = function(userId) {
+    //console.log("clicked...");
+    //console.log(userId);
+    $scope.errorMessage = "";
+    $scope.error = false;
+    $scope.employeeCreated = false;
+
+    var employeeObj = $scope.simplifyEmployeeObj($scope.createEmployee);
+    if(employeeObj) {
+      var obj = {
+        employeeObj: employeeObj,
+        userId: userId
+      }
+      ManagerService.createEmployee(obj)
+        .then(function(data) {
+          console.log(data.data.data.message);
+          if($scope.createEmployee == null || $scope.createEmployee == undefined) {
+            $scope.createEmployee = {};
+          }
+          $scope.employeeCreated = data.data.data.result;
+        })
+    } else {
+      $scope.errorMessage = "Cannot Create Employee when fields are empty."
+      $scope.error = true;
+    }
+
+    $scope.createEmployee.ssn = "";
+    $scope.createEmployee.hourlyRate = "";
   }
 
 }]);

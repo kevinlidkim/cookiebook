@@ -629,7 +629,7 @@ exports.getEmployeeData = function(req, res) {
 
 exports.updateEmployee = function(req, res) {
   var obj = {};
-  
+
   if (req.body.personObj) {
     db.Person.update(req.body.personObj, {
       where: {
@@ -720,4 +720,44 @@ exports.updateEmployee = function(req, res) {
         })
       })
   }
+}
+
+exports.createEmployee = function(req, res) {
+  var obj = {};
+  // Check if employee with userId already exists
+  db.Employee.find({ where: {userId: req.body.userId} })
+    .then(function(employee) {
+      // Create new employee if none exists
+      if(!employee) {
+        var date = new Date();
+        req.body.employeeObj.startDate = date;
+        req.body.employeeObj.userId = req.body.userId;
+        db.Employee.create(req.body.employeeObj)
+          .then(function() {
+            obj.result = true;
+            obj.message = "Employee successfully created."
+            return res.status(200).json({
+              status: 'Employee successfully created.',
+              data: obj
+            })
+          })
+          .catch(function(err) {
+            obj.result = false;
+            obj.message = "Error creating employee.";
+            return res.status(500).json({
+              status: 'Error creating employee.',
+              data: obj
+            })
+          })
+      }
+      // Indicate error otherwise
+      else {
+        obj.result = false;
+        obj.message = "Error: Customer is already an employe."
+        return res.status(500).json({
+          status: 'Customer with given email already exists.',
+          data: obj
+        })
+      }
+    })
 }
