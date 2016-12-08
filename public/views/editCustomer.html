@@ -1,8 +1,14 @@
 <div class="jumbotron cookie_body">
 
   <h2>Edit Customer {{storage.customerData.firstName}} {{storage.customerData.lastName}}'s data</h2>
+  <a ng-href="/customers" ng-click="deleteCustomer(storage.customerData.personId, storage.customerData.userId)">
+    <button class="btn btn-primary">Delete Employee</button>
+  </a>
+  <br>
+  <br>
+
   <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
-  
+
   <div class="form-container">
     <form class="form">
       <div class="form-group">

@@ -88,6 +88,7 @@ module.exports = function(app, passport) {
   app.post('/customer/get', employees.getCustomerData);
   app.post('/customer/create', employees.createCustomer);
   app.post('/customer/update', employees.updateCustomer);
+  app.post('/customer/delete', employees.deleteCustomer);
   app.post('/customer/group', employees.getCustomerGroup);
   app.post('/customer/sales', employees.getCustomerTransactions);
 
