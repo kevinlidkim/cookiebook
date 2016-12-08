@@ -9,6 +9,7 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
   $scope.errorCustomerSearch = false;
   $scope.searchedCustomer = false;
   $scope.customerCreated = false;
+  $scope.loadedSuggestions = false;
 
   $scope.createAd = function() {
     var adObj = $scope.ad;
@@ -272,6 +273,7 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
     $scope.createCustomerUser.email = "";
     $scope.createCustomerUser.password = "";
   }
+
   $scope.deleteCustomer = function(personId, userId) {
     var obj = {
       personId: personId,
@@ -280,6 +282,18 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
     EmployeeService.deleteCustomer(obj)
       .then(function(data) {
         // console.log(data);
+      })
+  }
+
+  $scope.loadAdSuggestions = function() {
+    $scope.loadedSuggestions = false;
+    var obj = {
+        userId: $scope.storage.customerData.userId
+    }
+    EmployeeService.loadAdSuggestions(obj)
+      .then(function(data) {
+        $scope.storage.suggestedProducts = data.data.data;
+        $scope.loadedSuggestions = true;
       })
   }
 

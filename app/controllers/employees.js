@@ -695,7 +695,7 @@ exports.deleteCustomer = function(req, res) {
                             deleteAllThisFirst.push(db.OwnsPage.destroy({ where: {owner: data.ownsPageToDelete.owner} }));
 
                             Promise.all(deleteAllThisFirst).then(deletedRelations => {
-                              
+
                             })
                             .then(function() {
                               // Delete each comment
@@ -748,5 +748,39 @@ exports.deleteCustomer = function(req, res) {
             })
           })
         })
+    })
+}
+
+exports.loadSuggestedAds = function(req, res) {
+  var data = {}
+
+  db.OwnsPurchaseAccount.find({ where: {owner: req.body.userId} })
+    .then(function(ownsPurchaseAccount) {
+      return db.Sales.find({ where: {accountNumber: ownsPurchaseAccount.accountNumber} });
+    })
+    .then(function(sale) {
+      return db.Advertisement.find({ where: {advertisementId: sale.advertisementId} });
+    })
+    .then(function(advertisement) {
+      var companyName = advertisement.company;
+      var adType = advertisement.adType;
+      return db.Advertisement.findAll({
+        where: Sequelize.or(
+          ["company like ?", '%' + companyName + '%'],
+          ["adType like ?", '%' + adType + '%']
+        )
+      });
+    })
+    .then(function(suggestedAds) {
+      return res.status(200).json({
+        status: 'Successfully found similar ads',
+        data: suggestedAds
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to find ads to suggest'
+      })
     })
 }
