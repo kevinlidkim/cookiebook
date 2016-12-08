@@ -8,6 +8,7 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
   $scope.errorMessageCustomerSearch = "";
   $scope.errorCustomerSearch = false;
   $scope.searchedCustomer = false;
+  $scope.customerCreated = false;
 
   $scope.createAd = function() {
     var adObj = $scope.ad;
@@ -233,6 +234,43 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
       $scope.errorMessage = "Cannot Update Data when fields are empty."
       $scope.error = true;
     }
+  }
+
+  $scope.createCustomer = function() {
+    $scope.errorMessage = "";
+    $scope.error = false;
+    $scope.customerCreated = false;
+    var personObj = $scope.simplifyPersonObj($scope.createCustomerPerson);
+    var userObj = $scope.simplifyUserObj($scope.createCustomerUser);
+    if (userObj && personObj) {
+      var obj = {
+        personObj: personObj,
+        userObj: userObj
+      }
+      EmployeeService.createCustomer(obj)
+        .then(function(data) {
+          console.log(data.data.data.message);
+          if($scope.customerPerson == null || $scope.customerPerson == undefined) {
+            $scope.customerPerson = {};
+          }
+          if($scope.customerUser == null || $scope.customerUser == undefined) {
+            $scope.customerUser = {};
+          }
+          $scope.customerCreated = data.data.data.result;
+        })
+    } else {
+      $scope.errorMessage = "Cannot Create Custoner when fields are empty."
+      $scope.error = true;
+    }
+    $scope.createCustomerPerson.firstName = "";
+    $scope.createCustomerPerson.lastName = "";
+    $scope.createCustomerPerson.address = "";
+    $scope.createCustomerPerson.city = "";
+    $scope.createCustomerPerson.state = "";
+    $scope.createCustomerPerson.zipCode = "";
+    $scope.createCustomerPerson.telephone = "";
+    $scope.createCustomerUser.email = "";
+    $scope.createCustomerUser.password = "";
   }
 
 }]);

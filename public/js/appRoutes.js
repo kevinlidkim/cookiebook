@@ -98,6 +98,12 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       access: {restricted: true}
     })
 
+    .when('/createCustomer', {
+      templateUrl: 'views/createCustomer.html',
+      controller: 'EmployeeController',
+      access: {restricted: true}
+	})
+
     .when('/editCustomer', {
       templateUrl: 'views/editCustomer.html',
       controller: 'EmployeeController',
