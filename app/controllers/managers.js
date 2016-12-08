@@ -761,3 +761,22 @@ exports.createEmployee = function(req, res) {
       }
     })
 }
+
+exports.deleteEmployee = function(req, res) {
+  var data = {};
+  db.Employee.find({ where: {employeeId: req.body.employeeId} })
+    .then(function(employee) {
+      return employee.destroy();
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Successfully deleted employee'
+      })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to delete employee'
+      })
+    })
+}

@@ -22,6 +22,7 @@ module.exports = function(app, passport) {
   app.get('/yoposts', posts.findAll);
   app.get('/yoyoposts', posts.findAll2);
   app.get('/yocom', comments.findAll);
+  app.get('/yoyocom', comments.findAll2);
   app.get('/yofr', persons.findAll2);
   app.get('/yofw', persons.findAll3);
   app.get('/yogroup', persons.findAll4);
@@ -89,12 +90,14 @@ module.exports = function(app, passport) {
   app.post('/customer/get', employees.getCustomerData);
   app.post('/customer/create', employees.createCustomer);
   app.post('/customer/update', employees.updateCustomer);
+  app.post('/customer/delete', employees.deleteCustomer);
   app.post('/customer/group', employees.getCustomerGroup);
   app.post('/customer/sales', employees.getCustomerTransactions);
 
   app.post('/employee/get', managers.getEmployeeData);
   app.post('/employee/update', managers.updateEmployee);
   app.post('/employee/create', managers.createEmployee);
+  app.post('/employee/delete', managers.deleteEmployee);
 
   app.post('/isEmployee', users.isEmployee);
   app.post('/createAd', employees.createAd);

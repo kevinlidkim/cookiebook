@@ -12,6 +12,17 @@ exports.findAll = function(req, res) {
   });
 }
 
+exports.findAll2 = function(req, res) {
+
+  db.CommentedOn.findAll()
+  .then(function (users) {
+    res.status(200).json(users);
+  })
+  .catch(function (err) {
+    res.status(500).json(err);
+  });
+}
+
 exports.makeComment = function(req, res) {
   db.Comment.create(req.body)
   .then(function(comment) {

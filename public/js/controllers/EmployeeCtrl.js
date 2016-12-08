@@ -272,5 +272,15 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
     $scope.createCustomerUser.email = "";
     $scope.createCustomerUser.password = "";
   }
+  $scope.deleteCustomer = function(personId, userId) {
+    var obj = {
+      personId: personId,
+      userId: userId
+    }
+    EmployeeService.deleteCustomer(obj)
+      .then(function(data) {
+        // console.log(data);
+      })
+  }
 
 }]);

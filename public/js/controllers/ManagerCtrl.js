@@ -325,4 +325,18 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
     $scope.createEmployee.hourlyRate = "";
   }
 
+  $scope.deleteEmployee = function(employeeId) {
+    var obj = {
+      employeeId: employeeId
+    }
+    ManagerService.deleteEmployee(obj)
+      .then(function(data) {
+        console.log(data);
+        ManagerService.getBestEmployee()
+          .then(function(data1) {
+            $scope.storage.bestEmployee = data1.data.data;
+          })
+      })
+  }
+
 }]);
