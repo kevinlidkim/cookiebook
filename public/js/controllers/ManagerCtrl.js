@@ -92,6 +92,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       ManagerService.searchAllEmployee(query)
         .then(function(data) {
           $scope.searchResults = data.data.data;
+          console.log($scope.searchResults);
           $scope.searchedEmployee = true;
           $scope.employeeSearch = "";
         })
