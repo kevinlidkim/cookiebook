@@ -21,7 +21,7 @@
     <div class="btn-group">
      <button ng-show="!postEditPressed" type="button" class="btn btn-warning" ng-click="postEditPressed=!postEditPressed" ng-init="postEditPressed=false">Edit</button>
      <button ng-show="postEditPressed" type="button" class="btn btn-success" ng-click="updateStatus(editStatus, post_Id, 'groupPage'); postEditPressed=!postEditPressed">Submit</button>
-     <button type="button" class="btn btn-danger" ng-click="deletePost(post_Id)">DELETE</button>
+     <button type="button" class="btn btn-danger" ng-click="deleteGroupPost(post_Id)">DELETE</button>
     </div>
 
     <div ng-show="postEditPressed" class="mdl-textfield mdl-js-textfield">

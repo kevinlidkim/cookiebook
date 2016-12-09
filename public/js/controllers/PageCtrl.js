@@ -246,6 +246,42 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     }
   }
 
+  $scope.deleteGroupPost = function(postId) {
+
+    var postArray = $scope.storage.groupPage.data.finalData
+    // console.log(postArray);
+
+    for(post in postArray){
+      // console.log(postArray[post]);
+
+      if(postArray[post].postId == postId) {
+        // console.log("Found postId... beginning to delete Post")
+
+        var commentArray = postArray[post].comments;
+        //DELETE ALL COMMENTS ON THE POST.
+        for(var j = 0; j < commentArray.length; j++) {
+
+          $scope.deleteComment(commentArray[j].commentId);
+        }
+
+        //BEGIN DELETING POST.
+
+        var postData = {
+          post : postId
+        }
+
+        PageService.deletePost(postData)
+          .then(function() {
+            $scope.getUserPage();
+            $scope.getGroupPage($scope.storage.group); 
+
+          })
+
+      }
+
+    }
+  }
+
   $scope.postFriendComment = function(index, postId) {
 
     if ($scope.newFriendComment[index] !="" && $scope.newFriendComment[index]) {
