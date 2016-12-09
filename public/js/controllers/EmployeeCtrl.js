@@ -99,7 +99,7 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
           
         }
 
-        $scope.storage.manager.top5adsEmpolyee = top5Ads;
+        $scope.storage.employee.top5adsEmpolyee = top5Ads;
       })
   }
 
