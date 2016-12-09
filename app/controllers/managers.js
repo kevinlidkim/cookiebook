@@ -301,7 +301,7 @@ exports.getRichestUser = function(req, res) {
         })
 
         Promise.all(promiseRelation).then(results => {
-          data.accounts = results;
+          data.accounts = _.compact(results);
 
           // Get all users from accounts
           var promiseUser = [];
@@ -310,7 +310,7 @@ exports.getRichestUser = function(req, res) {
           })
 
           Promise.all(promiseUser).then(gotUsers => {
-            data.users = gotUsers;
+            data.users = _.compact(gotUsers);
 
             // Strip the arrays of duplicate values
             var accountMap = _.keyBy(data.accounts, 'accountNumber');
@@ -351,7 +351,10 @@ exports.getRichestUser = function(req, res) {
 
             // Now we link each transaction to its appropriate account
             _.forEach(costOfSales, function(trans) {
-              accountMap[trans.accountNumber].transactions.push(trans.price);
+              // Need to check because sales persist even if user is deleted
+              if (accountMap[trans.accountNumber]) {
+                accountMap[trans.accountNumber].transactions.push(trans.price);
+              }
             })
 
             // Now we get the sum of transactions
