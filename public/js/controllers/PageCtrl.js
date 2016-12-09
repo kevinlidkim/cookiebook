@@ -411,7 +411,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
       // console.log($scope.storage.user.userId);
       // console.log($scope.commented_On[postId][commentId][0]);
       // console.log($scope.commented_On[postId][commentId][0].includes($scope.storage.user.userId));
-      if($scope.commented_On[postId][commentId][0].includes($scope.storage.user.userId)) {
+      if($scope.commented_On[postId][commentId].includes($scope.storage.user.userId)) {
         return true;
       }
     }
