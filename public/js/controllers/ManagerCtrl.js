@@ -25,6 +25,10 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
   $scope.salesItemTotalSold = 0;
   $scope.salesItemTotalRevenue = 0;
 
+  $scope.searchedCustomerRevenue = false;
+  $scope.salesCustomerName = "";
+  $scope.salesCustomerSpent = 0;
+
 
   $scope.loadSalesPage = function() {
     $scope.loadAllAds();
@@ -58,7 +62,9 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       var obj = {
         query: $scope.searchField
       }
+
       $scope.searchedSales = true;
+      
       ManagerService.salesSearchItem(obj)
         .then(function(sales) {
           $scope.salesSearchItem = sales.data.data;
@@ -67,7 +73,37 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
         .then(function(results) {
           $scope.salesSearchUser = results.data.data;
         })
-    }
+      }
+  }
+
+  $scope.salesSearchCustomerRevenue = function () {
+
+    $scope.salesCustomerName = $scope.searchFieldCustomerRevenue;
+    var totalSpent = 0;
+
+    if($scope.searchFieldCustomerRevenue && $scope.searchFieldCustomerRevenue != "") {
+      var obj = {
+        query: $scope.searchFieldCustomerRevenue
+      }
+
+      $scope.searchedCustomerRevenue = true;
+
+      ManagerService.salesSearchUser(obj)
+        .then(function(results) {
+          $scope.salesSearchCustomer = results.data.data;
+
+
+
+          if($scope.salesSearchCustomer != null) {
+            for(var i = 0; i < $scope.salesSearchCustomer.length; i++){
+              totalSpent += $scope.salesSearchCustomer[i].unitPrice * $scope.salesSearchCustomer[i].numberOfUnits;
+            }
+
+          }
+
+          $scope.salesCustomerSpent = totalSpent;
+        })
+      }
   }
 
   $scope.salesSearchItemRevenue = function() {
@@ -87,8 +123,6 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
         .then(function(sales) {
           $scope.salesSearchItem = sales.data.data;
 
-          console.log(sales)
-
           if($scope.salesSearchItem != null){
 
             for(var i = 0; i < $scope.salesSearchItem.length; i++) {
@@ -96,15 +130,10 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
               totalRevenue += $scope.salesSearchItem[i].unitPrice * $scope.salesSearchItem[i].numberOfUnits;
             }
           }
-            $scope.salesItemTotalSold = unitsSold;
-            $scope.salesItemTotalRevenue = totalRevenue;
+          $scope.salesItemTotalSold = unitsSold;
+          $scope.salesItemTotalRevenue = totalRevenue;
         })
-      // ManagerService.salesSearchUser(obj)
-      //   .then(function(results) {
-      //     $scope.salesSearchUser = results.data.data;
-      //   })
     }
-
   }
 
   $scope.salesSearchItemTypeRevenue = function() {
@@ -137,12 +166,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
             $scope.salesItemTypeTotalSold = unitsSold;
             $scope.salesItemTypeTotalRevenue = totalRevenue;
         })
-      // ManagerService.salesSearchUser(obj)
-      //   .then(function(results) {
-      //     $scope.salesSearchUser = results.data.data;
-      //   })
     }
-
   }
 
   $scope.companySearch = function() {
@@ -345,7 +369,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       $scope.employeePerson.state = "";
       $scope.employeePerson.zipCode = "";
       $scope.employeeEmployee.hourlyRate = "";
-  } else if(personObj) {
+    } else if(personObj) {
       $scope.error = false;
       var obj = {
         personObj: personObj,

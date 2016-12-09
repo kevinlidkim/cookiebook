@@ -123,11 +123,15 @@
 
           <form class="navbar-form" role="search">
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="Search" ng-model="searchFieldItemTypeRevenue">
+              <input type="text" class="form-control" placeholder="Search" ng-model="searchFieldCustomerRevenue">
             </div>
             <button type="submit" class="btn btn-default" ng-click="salesSearchCustomerRevenue()">Search</button>
           </form>
 
+          <div ng-show="searchedCustomerRevenue">
+            <h3>Search Results for {{salesCustomerName}}</h3>
+              <p>Spent: ${{salesCustomerSpent}}</p>
+          </div>
         </div>
       </div>
     </div>
