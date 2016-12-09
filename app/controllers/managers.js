@@ -1,3 +1,4 @@
+
 var db = require('../../config/db');
 var _ = require('lodash');
 
@@ -206,6 +207,8 @@ exports.salesSearchItem = function(req, res) {
 
   var data = {};
 
+  console.log(req.body)
+
   db.Sales.findAll()
     .then(function(sales) {
       data.sales = sales;
@@ -220,10 +223,15 @@ exports.salesSearchItem = function(req, res) {
 
         if (data.ads.length > 0) {
           var ads = _.keyBy(data.ads, 'advertisementId');
+
+          console.log(ads);
+
           var dataValues = [];
 
           for (var i = 0; i < data.sales.length; i++) {
-            var result = {
+
+            if(ads[data.sales[i].advertisementId] != null){
+              var result = {
               transactionId: data.sales[i].transactionId,
               dateTimeSold: data.sales[i].dateTimeSold,
               advertisementId: data.sales[i].advertisementId,
@@ -233,8 +241,9 @@ exports.salesSearchItem = function(req, res) {
               company: ads[data.sales[i].advertisementId].company,
               itemName: ads[data.sales[i].advertisementId].itemName,
               unitPrice: ads[data.sales[i].advertisementId].unitPrice
+              }
+              dataValues.push(result);
             }
-            dataValues.push(result);
           }
           data.transactions = dataValues;
         }
