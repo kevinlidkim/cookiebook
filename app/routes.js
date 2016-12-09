@@ -112,6 +112,7 @@ module.exports = function(app, passport) {
   app.post('/loadMonthlyReport', managers.loadMonthlyReport);
   app.post('/salesSearchUser', managers.salesSearchUser);
   app.post('/salesSearchItem', managers.salesSearchItem);
+  //app.post('/salesSearchItemType', managers.salesSearchItemType);
   app.post('/companySearch', managers.companySearch);
   app.get('/getRichestUser', managers.getRichestUser);
   app.get('/getBestEmployee', managers.getBestEmployee);
