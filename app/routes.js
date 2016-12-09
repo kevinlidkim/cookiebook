@@ -101,6 +101,7 @@ module.exports = function(app, passport) {
 
   app.post('/isEmployee', users.isEmployee);
   app.post('/createAd', employees.createAd);
+  app.get('/loadTop5AdsEmployee', employees.loadTop5AdsEmployee);
   app.post('/loadEmployeeAds', employees.loadEmployeeAds);
   app.post('/deleteEmployeeAd', employees.deleteEmployeeAd);
   app.post('/loadSuggestedAds', employees.loadSuggestedAds);

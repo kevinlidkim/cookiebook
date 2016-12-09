@@ -142,29 +142,21 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <h3>Most Active Items</h3>
-
           <div ng-repeat="ads in storage.manager.top5ads">
             <p class="in-line_add">{{ads.itemName}} : {{ads.numberOfUnits}} sold</p>
           </div>
-          
         </div>
-        <div class="col-md-4">
-          <h3>BestSelling Items</h3>
-
-          <div ng-repeat="ads in storage.manager.top5adsEmpolyee">
-            <p class="in-line_add">{{ads.itemName}} : {{ads.numberOfUnits}} sold</p>
-          </div>
-          
-        </div>
-        <div class="col-md-4">
+        
+        <div class="col-md-6">
           <h3>List of all advertisements</h3>
           <div ng-repeat="allAds in storage.manager.ads">
             <p class="in-line_add">{{allAds.itemName}} ({{allAds.adType}}) by {{allAds.company}}</p>
           </div>
         </div>
       </div>
+
     </div>
 
 
