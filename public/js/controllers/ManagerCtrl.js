@@ -33,13 +33,149 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
   $scope.loadSalesPage = function() {
     $scope.loadAllAds();
     $scope.getRichestUser();
+    $scope.loadTop5Ads();
+    $scope.loadTop5AdsEmployee();
   }
 
   $scope.loadAllAds = function() {
 
     ManagerService.loadAllAds()
-      .then(function(ads) {
-        $scope.storage.manager.ads = ads.data.data;
+    .then(function(ads) {
+      $scope.storage.manager.ads = ads.data.data;
+    })
+  }
+
+  $scope.loadTop5Ads = function() {
+
+    var allAdsId_UnitSold = [];
+    var allAdsName = [];
+    var top5Ads = [];
+
+    ManagerService.loadTop5Ads()
+    .then(function(ads) {
+
+        var adArray = ads.data.data.advertisement;
+        var salesArray = ads.data.data.sales;
+
+        for(var i =0 ; i < adArray.length; i++){
+          allAdsId_UnitSold[adArray[i].advertisementId] = 0;
+        }
+
+        for(var i = 0; i < salesArray.length; i++) {
+
+          for(var j =0 ; j < adArray.length; j++){
+
+            if(salesArray[i].advertisementId == adArray[j].advertisementId){
+              allAdsId_UnitSold[adArray[j].advertisementId] += salesArray[i].numberOfUnits;
+              allAdsName[adArray[j].advertisementId] = adArray[j].itemName;
+            }
+          }
+        }
+
+        for(var i = 0; i < 5; i++){
+
+          var bestSellingAdId = 0;
+          var currBestSelling = 0;
+          var bestSellingCount = 0;
+
+          for(var j = 0; j < allAdsId_UnitSold.length; j++){
+
+            if(allAdsId_UnitSold[j] != null && allAdsId_UnitSold[j] > currBestSelling) {
+
+              currBestSelling = allAdsId_UnitSold[j];
+              bestSellingCount = allAdsId_UnitSold[j];
+              bestSellingAdId = j;
+
+            }
+
+          }
+
+          if(allAdsName[bestSellingAdId] != null){
+            var bestSellingObj = {
+              itemId: bestSellingAdId,
+              itemName: allAdsName[bestSellingAdId],
+              numberOfUnits: bestSellingCount
+            }
+
+            allAdsId_UnitSold[bestSellingAdId] = 0;
+            top5Ads[i] = bestSellingObj;
+          }
+          
+        }
+
+        $scope.storage.manager.top5ads = top5Ads;
+      })
+  }
+
+  $scope.loadTop5AdsEmployee = function() {
+
+    var allAdsId_UnitSold = [];
+    var allAdsName = [];
+    var top5Ads = [];
+    var employeeId = $scope.storage.employee.employeeId;
+
+    ManagerService.loadTop5Ads()
+    .then(function(ads) {
+
+        var adArray = ads.data.data.advertisement;
+        var salesArray = ads.data.data.sales;
+        var adPostedByArray = ads.data.data.adPostedBy;
+        console.log(adPostedByArray)
+
+        for(var i =0 ; i < adArray.length; i++){
+          allAdsId_UnitSold[adArray[i].advertisementId] = 0;
+        }
+
+        for(var i = 0; i < salesArray.length; i++) {
+
+          for(var j =0 ; j < adArray.length; j++){
+
+            if(salesArray[i].advertisementId == adArray[j].advertisementId){
+              allAdsId_UnitSold[adArray[j].advertisementId] += salesArray[i].numberOfUnits;
+              allAdsName[adArray[j].advertisementId] = adArray[j].itemName;
+            }
+          }
+        }
+
+        for(var i = 0; i < 5; i++){
+
+          var bestSellingAdId = 0;
+          var currBestSelling = 0;
+          var bestSellingCount = 0;
+
+          for(var j = 0; j < allAdsId_UnitSold.length; j++){
+
+            if(allAdsId_UnitSold[j] != null && allAdsId_UnitSold[j] > currBestSelling) {
+
+              for(var k = 0; k < adPostedByArray.length; k++) {
+                if(adPostedByArray[k].advertisement == j && employeeId == adPostedByArray[k].employee){ //&& is this emplyoee
+
+                  currBestSelling = allAdsId_UnitSold[j];
+                  bestSellingCount = allAdsId_UnitSold[j];
+                  bestSellingAdId = j;
+
+                }
+              }
+
+            }
+
+          }
+
+          if(allAdsName[bestSellingAdId] != null){
+            var bestSellingObj = {
+              itemId: bestSellingAdId,
+              itemName: allAdsName[bestSellingAdId],
+              numberOfUnits: bestSellingCount
+            }
+
+            allAdsId_UnitSold[bestSellingAdId] = 0;
+            top5Ads[i] = bestSellingObj;
+          }
+          
+        }
+
+        $scope.storage.manager.top5adsEmpolyee = top5Ads;
+        console.log(top5Ads)
       })
   }
 
@@ -50,9 +186,9 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
         month: $scope.chosenMonth
       }
       ManagerService.loadMonthlyReport(obj)
-        .then(function(sales) {
-          $scope.monthlyReport = sales.data.data;
-        })
+      .then(function(sales) {
+        $scope.monthlyReport = sales.data.data;
+      })
     }
   }
 
@@ -66,14 +202,14 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       $scope.searchedSales = true;
       
       ManagerService.salesSearchItem(obj)
-        .then(function(sales) {
-          $scope.salesSearchItem = sales.data.data;
-        })
+      .then(function(sales) {
+        $scope.salesSearchItem = sales.data.data;
+      })
       ManagerService.salesSearchUser(obj)
-        .then(function(results) {
-          $scope.salesSearchUser = results.data.data;
-        })
-      }
+      .then(function(results) {
+        $scope.salesSearchUser = results.data.data;
+      })
+    }
   }
 
   $scope.salesSearchCustomerRevenue = function () {
@@ -89,21 +225,21 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       $scope.searchedCustomerRevenue = true;
 
       ManagerService.salesSearchUser(obj)
-        .then(function(results) {
-          $scope.salesSearchCustomer = results.data.data;
+      .then(function(results) {
+        $scope.salesSearchCustomer = results.data.data;
 
 
 
-          if($scope.salesSearchCustomer != null) {
-            for(var i = 0; i < $scope.salesSearchCustomer.length; i++){
-              totalSpent += $scope.salesSearchCustomer[i].unitPrice * $scope.salesSearchCustomer[i].numberOfUnits;
-            }
-
+        if($scope.salesSearchCustomer != null) {
+          for(var i = 0; i < $scope.salesSearchCustomer.length; i++){
+            totalSpent += $scope.salesSearchCustomer[i].unitPrice * $scope.salesSearchCustomer[i].numberOfUnits;
           }
 
-          $scope.salesCustomerSpent = totalSpent;
-        })
-      }
+        }
+
+        $scope.salesCustomerSpent = totalSpent;
+      })
+    }
   }
 
   $scope.salesSearchItemRevenue = function() {
@@ -120,19 +256,19 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       $scope.searchedItemRevenue = true;
 
       ManagerService.salesSearchItem(obj)
-        .then(function(sales) {
-          $scope.salesSearchItem = sales.data.data;
+      .then(function(sales) {
+        $scope.salesSearchItem = sales.data.data;
 
-          if($scope.salesSearchItem != null){
+        if($scope.salesSearchItem != null){
 
-            for(var i = 0; i < $scope.salesSearchItem.length; i++) {
-              unitsSold += $scope.salesSearchItem[i].numberOfUnits;
-              totalRevenue += $scope.salesSearchItem[i].unitPrice * $scope.salesSearchItem[i].numberOfUnits;
-            }
+          for(var i = 0; i < $scope.salesSearchItem.length; i++) {
+            unitsSold += $scope.salesSearchItem[i].numberOfUnits;
+            totalRevenue += $scope.salesSearchItem[i].unitPrice * $scope.salesSearchItem[i].numberOfUnits;
           }
-          $scope.salesItemTotalSold = unitsSold;
-          $scope.salesItemTotalRevenue = totalRevenue;
-        })
+        }
+        $scope.salesItemTotalSold = unitsSold;
+        $scope.salesItemTotalRevenue = totalRevenue;
+      })
     }
   }
 
@@ -150,22 +286,22 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       $scope.searchedItemTypeRevenue = true;
 
       ManagerService.salesSearchItemType(obj)
-        .then(function(sales) {
+      .then(function(sales) {
 
-          console.log(sales)
+        console.log(sales)
 
-          $scope.salesSearchItemType = sales.data.data;
-          
-          if($scope.salesSearchItemType != null){
+        $scope.salesSearchItemType = sales.data.data;
 
-            for(var i = 0; i < $scope.salesSearchItemType.length; i++) {
-              unitsSold += $scope.salesSearchItemType[i].numberOfUnits;
-              totalRevenue += $scope.salesSearchItemType[i].unitPrice * $scope.salesSearchItemType[i].numberOfUnits;
-            }
+        if($scope.salesSearchItemType != null){
+
+          for(var i = 0; i < $scope.salesSearchItemType.length; i++) {
+            unitsSold += $scope.salesSearchItemType[i].numberOfUnits;
+            totalRevenue += $scope.salesSearchItemType[i].unitPrice * $scope.salesSearchItemType[i].numberOfUnits;
           }
-            $scope.salesItemTypeTotalSold = unitsSold;
-            $scope.salesItemTypeTotalRevenue = totalRevenue;
-        })
+        }
+        $scope.salesItemTypeTotalSold = unitsSold;
+        $scope.salesItemTypeTotalRevenue = totalRevenue;
+      })
     }
   }
 
@@ -177,16 +313,16 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       }
       $scope.searchedCompany = true;
       ManagerService.companySearch(obj)
-        .then(function(data) {
-          $scope.companyAds = data.data.data.ads;
-        })
+      .then(function(data) {
+        $scope.companyAds = data.data.data.ads;
+      })
     }
   }
 
   $scope.getRichestUser = function() {
 
     ManagerService.getRichestUser()
-      .then(function(data) {
+    .then(function(data) {
         // console.log(data.data.data);
         $scope.storage.richestUser = data.data.data;
       })
@@ -195,9 +331,9 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
   $scope.getBestEmployee = function() {
 
     ManagerService.getBestEmployee()
-      .then(function(data) {
-        $scope.storage.bestEmployee = data.data.data;
-      })
+    .then(function(data) {
+      $scope.storage.bestEmployee = data.data.data;
+    })
   }
 
   $scope.searchAllCustomer = function() {
@@ -213,15 +349,15 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
         query: $scope.customerSearch.name
       };
       EmployeeService.searchAllCustomer(query)
-        .then(function(data) {
-          $scope.searchResults = data.data.data;
-          console.log($scope.searchResults);
-          if($scope.searchResults.users.length == 0) {
-            $scope.errorMessageCustomerSearchResults = $scope.noEntriesError;
-            $scope.errorCustomerSearchResults = true;
-          }
-          $scope.searchedCustomer = true;
-          $scope.customerSearch = "";
+      .then(function(data) {
+        $scope.searchResults = data.data.data;
+        console.log($scope.searchResults);
+        if($scope.searchResults.users.length == 0) {
+          $scope.errorMessageCustomerSearchResults = $scope.noEntriesError;
+          $scope.errorCustomerSearchResults = true;
+        }
+        $scope.searchedCustomer = true;
+        $scope.customerSearch = "";
           // console.log(data.data.data);
         })
     } else {
@@ -248,20 +384,20 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       };
 
       ManagerService.searchAllEmployee(query)
-        .then(function(data) {
-          $scope.searchResults = data.data.data;
-          if($scope.searchResults.employees.length == 0) {
-            $scope.errorMessageEmployeeSearchResults = $scope.noEntriesError;
-            $scope.errorEmployeeSearchResults = true;
-          }
-          console.log($scope.searchResults);
-          $scope.searchedEmployee = true;
-          $scope.employeeSearch = "";
-        })
+      .then(function(data) {
+        $scope.searchResults = data.data.data;
+        if($scope.searchResults.employees.length == 0) {
+          $scope.errorMessageEmployeeSearchResults = $scope.noEntriesError;
+          $scope.errorEmployeeSearchResults = true;
+        }
+        console.log($scope.searchResults);
+        $scope.searchedEmployee = true;
+        $scope.employeeSearch = "";
+      })
     } else {
-        $scope.errorMessageEmployeeSearch = "Cannot Search when Name is empty";
-        $scope.errorEmployeeSearch = true;
-        $scope.searchedEmployee = false;
+      $scope.errorMessageEmployeeSearch = "Cannot Search when Name is empty";
+      $scope.errorEmployeeSearch = true;
+      $scope.searchedEmployee = false;
     }
   }
 
@@ -270,9 +406,9 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       employeeId: employeeId
     };
     ManagerService.getEmployeeData(obj)
-      .then(function(data) {
-        $scope.storage.employeeData = data.data.data;
-      })
+    .then(function(data) {
+      $scope.storage.employeeData = data.data.data;
+    })
   }
 
   $scope.simplifyPersonObj = function(personObj) {
@@ -352,10 +488,10 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
         idObj: idObj
       }
       ManagerService.updateEmployee(obj)
-        .then(function(data) {
-          console.log(data);
-          $scope.storage.employeeData = data.data.data;
-        })
+      .then(function(data) {
+        console.log(data);
+        $scope.storage.employeeData = data.data.data;
+      })
       if($scope.employeePerson == null || $scope.employeePerson == undefined) {
         $scope.employeePerson = {};
       }
@@ -377,19 +513,19 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
         idObj: idObj
       }
       ManagerService.updateEmployee(obj)
-        .then(function(data) {
-          if($scope.employeePerson == null || $scope.employeePerson == undefined) {
-            $scope.employeePerson = {};
-          }
-          $scope.storage.employeeData = data.data.data;
-          $scope.employeePerson.firstName = "";
-          $scope.employeePerson.lastName = "";
-          $scope.employeePerson.address = "";
-          $scope.employeePerson.city = "";
-          $scope.employeePerson.state = "";
-          $scope.employeePerson.zipCode = "";
-          $scope.employeePerson.telephone = "";
-        })
+      .then(function(data) {
+        if($scope.employeePerson == null || $scope.employeePerson == undefined) {
+          $scope.employeePerson = {};
+        }
+        $scope.storage.employeeData = data.data.data;
+        $scope.employeePerson.firstName = "";
+        $scope.employeePerson.lastName = "";
+        $scope.employeePerson.address = "";
+        $scope.employeePerson.city = "";
+        $scope.employeePerson.state = "";
+        $scope.employeePerson.zipCode = "";
+        $scope.employeePerson.telephone = "";
+      })
     } else {
       $scope.errorMessage = "Cannot Update Data when fields are empty."
       $scope.error = true;
@@ -416,13 +552,13 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
         userId: userId
       }
       ManagerService.createEmployee(obj)
-        .then(function(data) {
-          console.log(data.data.data.message);
-          if($scope.createEmployee == null || $scope.createEmployee == undefined) {
-            $scope.createEmployee = {};
-          }
-          $scope.employeeCreated = data.data.data.result;
-        })
+      .then(function(data) {
+        console.log(data.data.data.message);
+        if($scope.createEmployee == null || $scope.createEmployee == undefined) {
+          $scope.createEmployee = {};
+        }
+        $scope.employeeCreated = data.data.data.result;
+      })
     } else {
       $scope.errorMessage = "Cannot Create Employee when fields are empty."
       $scope.error = true;
@@ -437,13 +573,13 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       employeeId: employeeId
     }
     ManagerService.deleteEmployee(obj)
-      .then(function(data) {
-        console.log(data);
-        ManagerService.getBestEmployee()
-          .then(function(data1) {
-            $scope.storage.bestEmployee = data1.data.data;
-          })
+    .then(function(data) {
+      console.log(data);
+      ManagerService.getBestEmployee()
+      .then(function(data1) {
+        $scope.storage.bestEmployee = data1.data.data;
       })
+    })
   }
 
 }]);

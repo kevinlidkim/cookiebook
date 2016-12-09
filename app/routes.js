@@ -110,6 +110,7 @@ module.exports = function(app, passport) {
 
   app.post('/isManager', users.isManager);
   app.get('/loadAllAds', managers.loadAllAds);
+  app.get('/loadTop5Ads', managers.loadTop5Ads);
   app.post('/loadMonthlyReport', managers.loadMonthlyReport);
   app.post('/salesSearchUser', managers.salesSearchUser);
   app.post('/salesSearchItem', managers.salesSearchItem);

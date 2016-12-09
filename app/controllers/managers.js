@@ -6,21 +6,56 @@ exports.loadAllAds = function(req, res) {
   var data = {};
 
   db.Advertisement.findAll()
-    .then(function(ads) {
-      data.ads = ads;
+  .then(function(ads) {
+    data.ads = ads;
+  })
+  .then(function() {
+    return res.status(200).json({
+      status: 'Loaded all ads',
+      data: data.ads
     })
-    .then(function() {
-      return res.status(200).json({
-        status: 'Loaded all ads',
-        data: data.ads
+  })
+  .catch(function(err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'Failed to load all ads'
+    })
+  })
+}
+
+exports.loadTop5Ads = function(req, res) {
+
+  var data ={};
+
+  db.Sales.findAll()
+  .then(function(sales){
+    data.sales = sales;
+
+    db.Advertisement.findAll()
+    .then(function(advertisement){
+      data.advertisement = advertisement;
+
+      db.AdPostedBy.findAll()
+      .then(function(adPostedBy){
+        data.adPostedBy = adPostedBy;
+
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Loaded top 5 ads',
+          data: data
+        })
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Failed Loaded top 5 ads'
+        })
       })
     })
-    .catch(function(err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'Failed to load all ads'
-      })
-    })
+
+  })
+
 }
 
 exports.loadMonthlyReport = function(req, res) {
@@ -30,49 +65,49 @@ exports.loadMonthlyReport = function(req, res) {
   var data = {};
 
   db.Sales.findAll({ where: {dateTimeSold: {$lt: endDate, $gt: startDate} }})
-    .then(function(sales) {
-      data.sales = sales;
+  .then(function(sales) {
+    data.sales = sales;
 
-      var promise = [];
-      _.forEach(sales, function(sale) {
-        promise.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId} }));
-      })
+    var promise = [];
+    _.forEach(sales, function(sale) {
+      promise.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId} }));
+    })
 
-      Promise.all(promise).then(values => {
-        data.ads = values;
+    Promise.all(promise).then(values => {
+      data.ads = values;
 
-        var ads = _.keyBy(data.ads, 'advertisementId');
-        var dataValues = [];
+      var ads = _.keyBy(data.ads, 'advertisementId');
+      var dataValues = [];
 
-        for(var i = 0; i < data.sales.length; i++) {
-          var result = {
-            transactionId: data.sales[i].transactionId,
-            dateTimeSold: data.sales[i].dateTimeSold,
-            advertisementId: data.sales[i].advertisementId,
-            numberOfUnits: data.sales[i].numberOfUnits,
-            accountNumber: data.sales[i].accountNumber,
-            adType: ads[data.sales[i].advertisementId].adType,
-            company: ads[data.sales[i].advertisementId].company,
-            itemName: ads[data.sales[i].advertisementId].itemName,
-            unitPrice: ads[data.sales[i].advertisementId].unitPrice
-          }
-          dataValues.push(result);
+      for(var i = 0; i < data.sales.length; i++) {
+        var result = {
+          transactionId: data.sales[i].transactionId,
+          dateTimeSold: data.sales[i].dateTimeSold,
+          advertisementId: data.sales[i].advertisementId,
+          numberOfUnits: data.sales[i].numberOfUnits,
+          accountNumber: data.sales[i].accountNumber,
+          adType: ads[data.sales[i].advertisementId].adType,
+          company: ads[data.sales[i].advertisementId].company,
+          itemName: ads[data.sales[i].advertisementId].itemName,
+          unitPrice: ads[data.sales[i].advertisementId].unitPrice
         }
-        data.transactions = dataValues;
-      })
-      .then(function() {
-        return res.status(200).json({
-          status: 'Loaded all sales data',
-          data: data.transactions
-        })
-      })
-      .catch(function(err) {
-        console.log(err);
-        return res.status(500).json({
-          status: 'Failed to load all sales data'
-        })
+        dataValues.push(result);
+      }
+      data.transactions = dataValues;
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Loaded all sales data',
+        data: data.transactions
       })
     })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to load all sales data'
+      })
+    })
+  })
 }
 
 exports.salesSearchUser = function(req, res) {
@@ -84,8 +119,8 @@ exports.salesSearchUser = function(req, res) {
     ["firstName like ?", '%' + req.body.query + '%'],
     ["lastName like ?", '%' + req.body.query + '%']
     ) })
-    .then(function(persons) {
-      data.persons = persons;
+  .then(function(persons) {
+    data.persons = persons;
 
       // Get all users from the persons
       var promiseArrayUser = [];
@@ -197,37 +232,37 @@ exports.salesSearchUser = function(req, res) {
           })
 
         })
-      })
+})
 
-    })
+})
 }
 
 exports.salesSearchItem = function(req, res) {
 
   var data = {};
   db.Sales.findAll()
-    .then(function(sales) {
-      data.sales = sales;
+  .then(function(sales) {
+    data.sales = sales;
 
-      var promise = [];
-      _.forEach(sales, function(sale) {
-        promise.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId, itemName: {$like: '%' + req.body.query + '%'} } }));
-      })
+    var promise = [];
+    _.forEach(sales, function(sale) {
+      promise.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId, itemName: {$like: '%' + req.body.query + '%'} } }));
+    })
 
-      Promise.all(promise).then(values => {
-        data.ads = _.compact(values);
+    Promise.all(promise).then(values => {
+      data.ads = _.compact(values);
 
-        if (data.ads.length > 0) {
-          var ads = _.keyBy(data.ads, 'advertisementId');
+      if (data.ads.length > 0) {
+        var ads = _.keyBy(data.ads, 'advertisementId');
 
-          console.log(ads);
+        console.log(ads);
 
-          var dataValues = [];
+        var dataValues = [];
 
-          for (var i = 0; i < data.sales.length; i++) {
+        for (var i = 0; i < data.sales.length; i++) {
 
-            if(ads[data.sales[i].advertisementId] != null){
-              var result = {
+          if(ads[data.sales[i].advertisementId] != null){
+            var result = {
               transactionId: data.sales[i].transactionId,
               dateTimeSold: data.sales[i].dateTimeSold,
               advertisementId: data.sales[i].advertisementId,
@@ -237,27 +272,27 @@ exports.salesSearchItem = function(req, res) {
               company: ads[data.sales[i].advertisementId].company,
               itemName: ads[data.sales[i].advertisementId].itemName,
               unitPrice: ads[data.sales[i].advertisementId].unitPrice
-              }
-              dataValues.push(result);
             }
+            dataValues.push(result);
           }
-          data.transactions = dataValues;
         }
+        data.transactions = dataValues;
+      }
 
-      })
-      .then(function() {
-        return res.status(200).json({
-          status: 'Loaded all sales data by item',
-          data: data.transactions
-        })
-      })
-      .catch(function(err) {
-        console.log(err);
-        return res.status(500).json({
-          status: 'Failed to load all sales data by item'
-        })
+    })
+    .then(function() {
+      return res.status(200).json({
+        status: 'Loaded all sales data by item',
+        data: data.transactions
       })
     })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Failed to load all sales data by item'
+      })
+    })
+  })
 }
 
 exports.salesSearchItemType = function(req, res) {
@@ -265,16 +300,16 @@ exports.salesSearchItemType = function(req, res) {
   var data = {};
 
   db.Sales.findAll()
-    .then(function(sales) {
-      data.sales = sales;
+  .then(function(sales) {
+    data.sales = sales;
 
-      var promise = [];
-      _.forEach(sales, function(sale) {
-        promise.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId, adType: {$like: '%' + req.body.query + '%'} } }));
-      })
+    var promise = [];
+    _.forEach(sales, function(sale) {
+      promise.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId, adType: {$like: '%' + req.body.query + '%'} } }));
+    })
 
-      Promise.all(promise).then(values => {
-        data.ads = _.compact(values);
+    Promise.all(promise).then(values => {
+      data.ads = _.compact(values);
 
         //console.log(data.ads)
 
@@ -302,41 +337,40 @@ exports.salesSearchItemType = function(req, res) {
         }
 
       })
-      .then(function() {
-        return res.status(200).json({
-          status: 'Loaded all sales data by itemType',
-          data: data.transactions
-        })
-      })
-      .catch(function(err) {
-        console.log(err);
-        return res.status(500).json({
-          status: 'Failed to load all sales data by itemType'
-        })
-      })
-    })
-}
-
-
-exports.companySearch = function(req, res) {
-
-  var data = {};
-  db.Advertisement.findAll({ where: {company: {$like: '%' + req.body.query + '%'} } })
-    .then(function(ads) {
-      data.ads = ads;
-    })
     .then(function() {
       return res.status(200).json({
-        status: 'Successfully retrieved ads by company name',
-        data: data
+        status: 'Loaded all sales data by itemType',
+        data: data.transactions
       })
     })
     .catch(function(err) {
       console.log(err);
       return res.status(500).json({
-        status: 'Failed to retrieve ads by company name'
+        status: 'Failed to load all sales data by itemType'
       })
     })
+  })
+}
+
+exports.companySearch = function(req, res) {
+
+  var data = {};
+  db.Advertisement.findAll({ where: {company: {$like: '%' + req.body.query + '%'} } })
+  .then(function(ads) {
+    data.ads = ads;
+  })
+  .then(function() {
+    return res.status(200).json({
+      status: 'Successfully retrieved ads by company name',
+      data: data
+    })
+  })
+  .catch(function(err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'Failed to retrieve ads by company name'
+    })
+  })
 }
 
 exports.getRichestUser = function(req, res) {
@@ -345,8 +379,8 @@ exports.getRichestUser = function(req, res) {
 
   // Get all sales
   db.Sales.findAll()
-    .then(function(sales) {
-      data.sales = sales;
+  .then(function(sales) {
+    data.sales = sales;
 
       // Get all ads from the sales
       var promise = [];
@@ -472,7 +506,7 @@ exports.getRichestUser = function(req, res) {
         })
       })
 
-    })
+})
 }
 
 exports.getBestEmployee = function(req, res) {
@@ -481,8 +515,8 @@ exports.getBestEmployee = function(req, res) {
 
   // Get all sales
   db.Sales.findAll()
-    .then(function(sales) {
-      data.sales = sales;
+  .then(function(sales) {
+    data.sales = sales;
 
       // Get all ads from sales
       var promise = [];
@@ -597,24 +631,24 @@ exports.getBestEmployee = function(req, res) {
 }
 
 exports.queryAllEmployees = function(req, res) {
-    var userArray = [];
-    var data = {};
-    var arrayOfPersons;
-    var arrayOfUsers;
-    var employees = [];
-    var array = [];
+  var userArray = [];
+  var data = {};
+  var arrayOfPersons;
+  var arrayOfUsers;
+  var employees = [];
+  var array = [];
 
-    db.Person.findAll({ where: Sequelize.or(
-      ["firstName like ?", '%' + req.body.query + '%'],
-      ["lastName like ?", '%' + req.body.query + '%']
-      ) })
-      .then(function(persons) {
-        arrayOfPersons = _.compact(persons);
-        _.forEach(persons, function(person) {
-          userArray.push(db.User.find({ where: {personId: person.personId} }))
-        })
-        Promise.all(userArray).then(usersArray => {
-          arrayOfUsers = _.compact(usersArray);
+  db.Person.findAll({ where: Sequelize.or(
+    ["firstName like ?", '%' + req.body.query + '%'],
+    ["lastName like ?", '%' + req.body.query + '%']
+    ) })
+  .then(function(persons) {
+    arrayOfPersons = _.compact(persons);
+    _.forEach(persons, function(person) {
+      userArray.push(db.User.find({ where: {personId: person.personId} }))
+    })
+    Promise.all(userArray).then(usersArray => {
+      arrayOfUsers = _.compact(usersArray);
           //console.log(usersArray);
           //console.log(arrayOfUsers);
 
@@ -625,24 +659,24 @@ exports.queryAllEmployees = function(req, res) {
               //console.log(arrayOfEmployees);
               //console.log(arrayOfPersons);
               //console.log(arrayOfUsers);
-            var compactEmployees = _.compact(arrayOfEmployees);
-            var people = _.keyBy(arrayOfPersons, 'personId');
-            var users = _.keyBy(arrayOfUsers, 'userId');
+              var compactEmployees = _.compact(arrayOfEmployees);
+              var people = _.keyBy(arrayOfPersons, 'personId');
+              var users = _.keyBy(arrayOfUsers, 'userId');
 
-            _.forEach(compactEmployees, function(employee) {
-              var result = {
-                employeeId: employee.employeeId,
-                email: users[employee.userId].email,
-                userId: employee.userId,
-                personId: users[employee.userId].personId,
-                firstName: people[users[employee.userId].personId].firstName,
-                lastName:  people[users[employee.userId].personId].lastName
-              }
-              employees.push(result);
+              _.forEach(compactEmployees, function(employee) {
+                var result = {
+                  employeeId: employee.employeeId,
+                  email: users[employee.userId].email,
+                  userId: employee.userId,
+                  personId: users[employee.userId].personId,
+                  firstName: people[users[employee.userId].personId].firstName,
+                  lastName:  people[users[employee.userId].personId].lastName
+                }
+                employees.push(result);
+              })
+
+              data.employees = employees;
             })
-
-            data.employees = employees;
-          })
           .then(function() {
             return res.status(200).json({
               status: 'Manager query for employees successful',
@@ -656,38 +690,38 @@ exports.queryAllEmployees = function(req, res) {
             })
           })
         })
-      })
+  })
 }
 
 exports.getEmployeeData = function(req, res) {
   var data = {};
   db.Employee.find({ where: {employeeId: req.body.employeeId} })
-    .then(function(employee) {
-      data.employeeId = employee.employeeId;
-      data.hourlyRate = employee.hourlyRate;
-      db.User.find({ where: {userId: employee.userId} })
-        .then(function(user) {
-          data.userId = user.userId;
-          db.Person.find({ where: {personId: user.personId} })
-            .then(function(person) {
-              data.firstName = person.firstName;
-              data.lastName = person.lastName;
-              data.personId = person.personId;
-            })
-            .then(function() {
-              return res.status(200).json({
-                status: 'Successfully retrieved employee information',
-                data: data
-              })
-            })
-            .catch(function(err) {
-              console.log(err);
-              return res.status(500).json({
-                status: 'Error retrieving employee information'
-              })
-            })
+  .then(function(employee) {
+    data.employeeId = employee.employeeId;
+    data.hourlyRate = employee.hourlyRate;
+    db.User.find({ where: {userId: employee.userId} })
+    .then(function(user) {
+      data.userId = user.userId;
+      db.Person.find({ where: {personId: user.personId} })
+      .then(function(person) {
+        data.firstName = person.firstName;
+        data.lastName = person.lastName;
+        data.personId = person.personId;
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Successfully retrieved employee information',
+          data: data
         })
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Error retrieving employee information'
+        })
+      })
     })
+  })
 }
 
 exports.updateEmployee = function(req, res) {
@@ -699,89 +733,89 @@ exports.updateEmployee = function(req, res) {
         personId: req.body.idObj.personId
       }
     })
-      .then(function() {
-        if (req.body.employeeObj) {
-          db.Employee.update(req.body.employeeObj, {
-            where: {
-              employeeId: req.body.idObj.employeeId
-            }
-          })
-            .then(function() {
-              return db.Person.find({ where: {personId: req.body.idObj.personId} })
-            })
-            .then(function(person) {
-              obj.personId = person.personId;
-              obj.firstName = person.firstName;
-              obj.lastName = person.lastName;
-              return db.Employee.find({ where: {employeeId: req.body.idObj.employeeId} })
-            })
-            .then(function(employee) {
-              obj.employeeId = employee.employeeId;
-              return res.status(200).json({
-                data: obj,
-                status: 'Update employee successful'
-              })
-            })
-            .catch(function(err) {
-              console.log(err);
-              return res.status(500).json({
-                status: 'Error updating employee'
-              })
-            })
-        } else {
-          db.Person.find({ where: {personId: req.body.idObj.personId} })
-            .then(function(person) {
-              obj.personId = person.personId;
-              obj.firstName = person.firstName;
-              obj.lastName = person.lastName;
-              return db.Employee.find({ where: {employeeId: req.body.idObj.employeeId} })
-            })
-            .then(function(employee) {
-              obj.employeeId = employee.employeeId;
-              return res.status(200).json({
-                data: obj,
-                status: 'Update employee successful'
-              })
-            })
-        }
-
-      })
-      .catch(function(err) {
-        console.log(err);
-        return res.status(200).json({
-          status: 'Error updating employee'
+    .then(function() {
+      if (req.body.employeeObj) {
+        db.Employee.update(req.body.employeeObj, {
+          where: {
+            employeeId: req.body.idObj.employeeId
+          }
         })
+        .then(function() {
+          return db.Person.find({ where: {personId: req.body.idObj.personId} })
+        })
+        .then(function(person) {
+          obj.personId = person.personId;
+          obj.firstName = person.firstName;
+          obj.lastName = person.lastName;
+          return db.Employee.find({ where: {employeeId: req.body.idObj.employeeId} })
+        })
+        .then(function(employee) {
+          obj.employeeId = employee.employeeId;
+          return res.status(200).json({
+            data: obj,
+            status: 'Update employee successful'
+          })
+        })
+        .catch(function(err) {
+          console.log(err);
+          return res.status(500).json({
+            status: 'Error updating employee'
+          })
+        })
+      } else {
+        db.Person.find({ where: {personId: req.body.idObj.personId} })
+        .then(function(person) {
+          obj.personId = person.personId;
+          obj.firstName = person.firstName;
+          obj.lastName = person.lastName;
+          return db.Employee.find({ where: {employeeId: req.body.idObj.employeeId} })
+        })
+        .then(function(employee) {
+          obj.employeeId = employee.employeeId;
+          return res.status(200).json({
+            data: obj,
+            status: 'Update employee successful'
+          })
+        })
+      }
+
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(200).json({
+        status: 'Error updating employee'
       })
+    })
   } else if (req.body.employeeObj) {
     db.Employee.update(req.body.employeeObj, {
       where: {
         employeeId: req.body.idObj.employeeId
       }
     })
-      .then(function() {
-        return db.Employee.find({ where: {employeeId: req.body.idObj.employeeId} })
+    .then(function() {
+      return db.Employee.find({ where: {employeeId: req.body.idObj.employeeId} })
+    })
+    .then(function(employee) {
+      obj.employeeId = employee.employeeId;
+      return db.Person.find({ where: {personId: req.body.idObj.personId} })
+    })
+    .then(function(person) {
+      obj.firstName = person.firstName,
+      obj.lastName = person.lastName,
+      obj.personId = person.personId
+    })
+    .then(function() {
+      return res.status(200).json({
+        data: obj,
+        status: 'Update employee successful'
       })
-      .then(function(employee) {
-        obj.employeeId = employee.employeeId;
-        return db.Person.find({ where: {personId: req.body.idObj.personId} })
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).json({
+        status: 'Error updating employee'
       })
-      .then(function(person) {
-        obj.firstName = person.firstName,
-        obj.lastName = person.lastName,
-        obj.personId = person.personId
-      })
-      .then(function() {
-        return res.status(200).json({
-          data: obj,
-          status: 'Update employee successful'
-        })
-      })
-      .catch(function(err) {
-        console.log(err);
-        return res.status(500).json({
-          status: 'Error updating employee'
-        })
-      })
+    })
   }
 }
 
@@ -789,29 +823,29 @@ exports.createEmployee = function(req, res) {
   var obj = {};
   // Check if employee with userId already exists
   db.Employee.find({ where: {userId: req.body.userId} })
-    .then(function(employee) {
+  .then(function(employee) {
       // Create new employee if none exists
       if(!employee) {
         var date = new Date();
         req.body.employeeObj.startDate = date;
         req.body.employeeObj.userId = req.body.userId;
         db.Employee.create(req.body.employeeObj)
-          .then(function() {
-            obj.result = true;
-            obj.message = "Employee successfully created."
-            return res.status(200).json({
-              status: 'Employee successfully created.',
-              data: obj
-            })
+        .then(function() {
+          obj.result = true;
+          obj.message = "Employee successfully created."
+          return res.status(200).json({
+            status: 'Employee successfully created.',
+            data: obj
           })
-          .catch(function(err) {
-            obj.result = false;
-            obj.message = "Error creating employee.";
-            return res.status(500).json({
-              status: 'Error creating employee.',
-              data: obj
-            })
+        })
+        .catch(function(err) {
+          obj.result = false;
+          obj.message = "Error creating employee.";
+          return res.status(500).json({
+            status: 'Error creating employee.',
+            data: obj
           })
+        })
       }
       // Indicate error otherwise
       else {
@@ -828,18 +862,18 @@ exports.createEmployee = function(req, res) {
 exports.deleteEmployee = function(req, res) {
   var data = {};
   db.Employee.find({ where: {employeeId: req.body.employeeId} })
-    .then(function(employee) {
-      return employee.destroy();
+  .then(function(employee) {
+    return employee.destroy();
+  })
+  .then(function() {
+    return res.status(200).json({
+      status: 'Successfully deleted employee'
     })
-    .then(function() {
-      return res.status(200).json({
-        status: 'Successfully deleted employee'
-      })
+  })
+  .catch(function(err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'Failed to delete employee'
     })
-    .catch(function(err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'Failed to delete employee'
-      })
-    })
+  })
 }
