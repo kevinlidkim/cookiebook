@@ -20,7 +20,7 @@
   <div ng-if="isMyPost(postIndex) || isGroupOwner()">
     <div class="btn-group">
      <button ng-show="!postEditPressed" type="button" class="btn btn-warning" ng-click="postEditPressed=!postEditPressed" ng-init="postEditPressed=false">Edit</button>
-     <button ng-show="postEditPressed" type="button" class="btn btn-success" ng-click="updateStatus(editStatus, post_Id, 'page'); postEditPressed=!postEditPressed">Submit</button>
+     <button ng-show="postEditPressed" type="button" class="btn btn-success" ng-click="updateStatus(editStatus, post_Id, 'groupPage'); postEditPressed=!postEditPressed">Submit</button>
      <button type="button" class="btn btn-danger" ng-click="deletePost(post_Id)">DELETE</button>
     </div>
 
@@ -47,7 +47,7 @@
 
         <div ng-if="isMyComment(post_Id,comment_Id) || isGroupOwner()">
           <button ng-show="!commentEditPressed" type="button" class="btn btn-warning" ng-click="commentEditPressed=!commentEditPressed" ng-init="commentEditPressed=false">Edit</button>
-          <button ng-show="commentEditPressed" type="button" class="btn btn-success" ng-click="updateComment(editComment, comment.commentId, groupPage); commentEditPressed=!commentEditPressed">Submit</button>
+          <button ng-show="commentEditPressed" type="button" class="btn btn-success" ng-click="updateComment(editComment, comment.commentId, 'groupPage'); commentEditPressed=!commentEditPressed">Submit</button>
           <button type="button" class="btn btn-danger" ng-click="deleteComment(comment.commentId)">DELETE</button> 
           <div ng-show="commentEditPressed" class="mdl-textfield mdl-js-textfield">
             <textarea class="mdl-textfield__input" type="text" ng-model="editComment" ng-init="editComment=comment.content"></textarea>
