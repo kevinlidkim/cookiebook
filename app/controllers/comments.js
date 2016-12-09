@@ -183,32 +183,32 @@ exports.commentedBy = function(req, res) {
 
       _.forEach(data.relations, function(relation) {
         trueComment[relation.comment] = [];
-        console.log('the relation');
-        console.log(relation);
+        // console.log('the relation');
+        // console.log(relation);
       })
 
-      console.log('RELATION');
+      // console.log('RELATION');
       // data.relations is commented on by current user;
-      console.log(data.relations);
-      console.log("VALUES");
+      // console.log(data.relations);
+      // console.log("VALUES");
       // values is users that commented?
-      console.log(values1);
+      // console.log(values1);
 
       _.forEach(data.relations, function(relation) {
         // this is the comment
-        console.log(relation.comment);
-        console.log('stuff start');
+        // console.log(relation.comment);
+        // console.log('stuff start');
         // trueComment[relation.comment].push(values1);
         _.forEach(values1, function(stuff) {
           console.log(stuff);
           if ((relation.user) == stuff) {
-            console.log('the user is ' + relation.user + ' and the stuff is ' + stuff);
+            // console.log('the user is ' + relation.user + ' and the stuff is ' + stuff);
             trueComment[relation.comment].push(stuff);
           }
         })
-        console.log('stuff end');
-        console.log(trueComment[relation.comment]);
-      })
+      //   console.log('stuff end');
+      //   console.log(trueComment[relation.comment]);
+      // })
 
 
       // trueComment[relation.comment].push(values1);
