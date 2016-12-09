@@ -41,7 +41,7 @@ angular.module('ManagerServ', []).factory('ManagerService', ['$q', '$timeout', '
     salesSearchItem : function(obj) {
       return $http.post('/salesSearchItem', obj)
         .success(function(data) {
-          console.log(data);
+          //console.log(data);
         })
         .error(function(data) {
           console.log(data);
@@ -50,7 +50,7 @@ angular.module('ManagerServ', []).factory('ManagerService', ['$q', '$timeout', '
     salesSearchItemType : function(obj) {
       return $http.post('/salesSearchItemType', obj)
         .success(function(data) {
-           console.log(data);
+           //console.log(data);
         })
         .error(function(data) {
           console.log(data);

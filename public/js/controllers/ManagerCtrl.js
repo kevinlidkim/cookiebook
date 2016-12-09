@@ -120,7 +120,6 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
         var adArray = ads.data.data.advertisement;
         var salesArray = ads.data.data.sales;
         var adPostedByArray = ads.data.data.adPostedBy;
-        console.log(adPostedByArray)
 
         for(var i =0 ; i < adArray.length; i++){
           allAdsId_UnitSold[adArray[i].advertisementId] = 0;
@@ -175,7 +174,6 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
         }
 
         $scope.storage.manager.top5adsEmpolyee = top5Ads;
-        console.log(top5Ads)
       })
   }
 
@@ -288,7 +286,6 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       ManagerService.salesSearchItemType(obj)
       .then(function(sales) {
 
-        console.log(sales)
 
         $scope.salesSearchItemType = sales.data.data;
 
@@ -323,7 +320,6 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
 
     ManagerService.getRichestUser()
     .then(function(data) {
-        // console.log(data.data.data);
         $scope.storage.richestUser = data.data.data;
       })
   }
@@ -351,7 +347,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       EmployeeService.searchAllCustomer(query)
       .then(function(data) {
         $scope.searchResults = data.data.data;
-        console.log($scope.searchResults);
+        //console.log($scope.searchResults);
         if($scope.searchResults.users.length == 0) {
           $scope.errorMessageCustomerSearchResults = $scope.noEntriesError;
           $scope.errorCustomerSearchResults = true;
@@ -390,7 +386,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
           $scope.errorMessageEmployeeSearchResults = $scope.noEntriesError;
           $scope.errorEmployeeSearchResults = true;
         }
-        console.log($scope.searchResults);
+        //console.log($scope.searchResults);
         $scope.searchedEmployee = true;
         $scope.employeeSearch = "";
       })
@@ -475,10 +471,10 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       employeeId: $scope.storage.employeeData.employeeId,
       personId: $scope.storage.employeeData.personId
     }
-    console.log(personObj);
+    //console.log(personObj);
     //console.log(personObj.zipCode);
     //console.log(typeof personObj.zipCode);
-    console.log(employeeObj);
+    //console.log(employeeObj);
 
     if(employeeObj) {
       $scope.error = false;
@@ -489,7 +485,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       }
       ManagerService.updateEmployee(obj)
       .then(function(data) {
-        console.log(data);
+        //console.log(data);
         $scope.storage.employeeData = data.data.data;
       })
       if($scope.employeePerson == null || $scope.employeePerson == undefined) {
@@ -535,7 +531,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
   $scope.prepAddEmployee = function(userId) {
     $scope.storage.newEmployeeUserId = userId;
     $scope.employeeCreated = false;
-    console.log("Prep add employee complete");
+    //console.log("Prep add employee complete");
   }
 
   $scope.createEmployee = function(userId) {
@@ -553,7 +549,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
       }
       ManagerService.createEmployee(obj)
       .then(function(data) {
-        console.log(data.data.data.message);
+        //console.log(data.data.data.message);
         if($scope.createEmployee == null || $scope.createEmployee == undefined) {
           $scope.createEmployee = {};
         }
@@ -574,7 +570,7 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
     }
     ManagerService.deleteEmployee(obj)
     .then(function(data) {
-      console.log(data);
+      //console.log(data);
       ManagerService.getBestEmployee()
       .then(function(data1) {
         $scope.storage.bestEmployee = data1.data.data;

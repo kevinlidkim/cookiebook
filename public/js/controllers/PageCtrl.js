@@ -10,7 +10,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.commented_On={};
   $scope.posted_By={};
   $scope.posted_By_PersonId=[];
-  //$scope.isMyComment={};
   $scope.groupSearch = "";
   $scope.searched = false;
 

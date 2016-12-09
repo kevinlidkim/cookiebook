@@ -255,8 +255,6 @@ exports.salesSearchItem = function(req, res) {
       if (data.ads.length > 0) {
         var ads = _.keyBy(data.ads, 'advertisementId');
 
-        console.log(ads);
-
         var dataValues = [];
 
         for (var i = 0; i < data.sales.length; i++) {
