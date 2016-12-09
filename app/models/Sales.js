@@ -40,6 +40,6 @@ module.exports = function(sequelize, DataTypes) {
   }, 
   {
     timestamps: false,
-    tableName: 'sales'
+    tableName: 'Sales'
   });
 };
