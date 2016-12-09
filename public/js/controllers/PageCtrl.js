@@ -119,7 +119,7 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   }
 
   $scope.updateStatus = function(editStatus, postId, origin) {
-
+    
     if (editStatus != "") {
       var data = {
         content: editStatus,
@@ -165,7 +165,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
 
             } else if(origin == "groupPage"){
               $scope.getGroupPage($scope.storage.group); 
-
             } 
             })
         });
