@@ -200,15 +200,11 @@ exports.salesSearchUser = function(req, res) {
       })
 
     })
-
 }
 
 exports.salesSearchItem = function(req, res) {
 
   var data = {};
-
-  console.log(req.body)
-
   db.Sales.findAll()
     .then(function(sales) {
       data.sales = sales;
@@ -263,6 +259,64 @@ exports.salesSearchItem = function(req, res) {
       })
     })
 }
+
+exports.salesSearchItemType = function(req, res) {
+
+  var data = {};
+
+  db.Sales.findAll()
+    .then(function(sales) {
+      data.sales = sales;
+
+      var promise = [];
+      _.forEach(sales, function(sale) {
+        promise.push(db.Advertisement.find({ where: {advertisementId: sale.advertisementId, adType: {$like: '%' + req.body.query + '%'} } }));
+      })
+
+      Promise.all(promise).then(values => {
+        data.ads = _.compact(values);
+
+        //console.log(data.ads)
+
+        if (data.ads.length > 0) {
+          var ads = _.keyBy(data.ads, 'advertisementId');
+          var dataValues = [];
+
+          for (var i = 0; i < data.sales.length; i++) {
+            if(ads[data.sales[i].advertisementId] != null){
+              var result = {
+                transactionId: data.sales[i].transactionId,
+                dateTimeSold: data.sales[i].dateTimeSold,
+                advertisementId: data.sales[i].advertisementId,
+                numberOfUnits: data.sales[i].numberOfUnits,
+                accountNumber: data.sales[i].accountNumber,
+                adType: ads[data.sales[i].advertisementId].adType,
+                company: ads[data.sales[i].advertisementId].company,
+                itemName: ads[data.sales[i].advertisementId].itemName,
+                unitPrice: ads[data.sales[i].advertisementId].unitPrice
+              }
+            }
+            dataValues.push(result);
+          }
+          data.transactions = _.compact(dataValues);
+        }
+
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Loaded all sales data by itemType',
+          data: data.transactions
+        })
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Failed to load all sales data by itemType'
+        })
+      })
+    })
+}
+
 
 exports.companySearch = function(req, res) {
 

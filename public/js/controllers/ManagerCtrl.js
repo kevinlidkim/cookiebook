@@ -87,17 +87,17 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
         .then(function(sales) {
           $scope.salesSearchItem = sales.data.data;
 
+          console.log(sales)
+
           if($scope.salesSearchItem != null){
 
             for(var i = 0; i < $scope.salesSearchItem.length; i++) {
               unitsSold += $scope.salesSearchItem[i].numberOfUnits;
               totalRevenue += $scope.salesSearchItem[i].unitPrice * $scope.salesSearchItem[i].numberOfUnits;
             }
-
+          }
             $scope.salesItemTotalSold = unitsSold;
             $scope.salesItemTotalRevenue = totalRevenue;
-
-          }
         })
       // ManagerService.salesSearchUser(obj)
       //   .then(function(results) {
@@ -122,6 +122,9 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
 
       ManagerService.salesSearchItemType(obj)
         .then(function(sales) {
+
+          console.log(sales)
+
           $scope.salesSearchItemType = sales.data.data;
           
           if($scope.salesSearchItemType != null){
@@ -130,11 +133,9 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
               unitsSold += $scope.salesSearchItemType[i].numberOfUnits;
               totalRevenue += $scope.salesSearchItemType[i].unitPrice * $scope.salesSearchItemType[i].numberOfUnits;
             }
-
+          }
             $scope.salesItemTypeTotalSold = unitsSold;
             $scope.salesItemTypeTotalRevenue = totalRevenue;
-
-          }
         })
       // ManagerService.salesSearchUser(obj)
       //   .then(function(results) {
