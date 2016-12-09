@@ -206,9 +206,9 @@ exports.commentedBy = function(req, res) {
             trueComment[relation.comment].push(stuff);
           }
         })
-      //   console.log('stuff end');
-      //   console.log(trueComment[relation.comment]);
-      // })
+        // console.log('stuff end');
+        // console.log(trueComment[relation.comment]);
+      })
 
 
       // trueComment[relation.comment].push(values1);
