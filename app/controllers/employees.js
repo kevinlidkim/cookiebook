@@ -73,6 +73,40 @@ exports.loadEmployeeAds = function(req, res) {
     })
 }
 
+exports.loadTop5AdsEmployee = function(req, res) {
+
+  var data ={};
+
+  db.Sales.findAll()
+  .then(function(sales){
+    data.sales = sales;
+
+    db.Advertisement.findAll()
+    .then(function(advertisement){
+      data.advertisement = advertisement;
+
+      db.AdPostedBy.findAll()
+      .then(function(adPostedBy){
+        data.adPostedBy = adPostedBy;
+
+      })
+      .then(function() {
+        return res.status(200).json({
+          status: 'Loaded top 5 ads employee',
+          data: data
+        })
+      })
+      .catch(function(err) {
+        console.log(err);
+        return res.status(500).json({
+          status: 'Failed Loaded top 5 ads employee'
+        })
+      })
+    })
+
+  })
+}
+
 exports.deleteEmployeeAd = function(req, res) {
 
   db.AdPostedBy.find({ where: {advertisement: req.body.advertisementId} })
@@ -344,7 +378,6 @@ exports.updateCustomer = function(req, res) {
           })
         })
     }
-
 }
 
 exports.getCustomerGroup = function(req, res) {
@@ -376,7 +409,6 @@ exports.getCustomerGroup = function(req, res) {
       })
 
     })
-
 }
 
 exports.getCustomerTransactions = function(req, res) {
@@ -441,7 +473,6 @@ exports.getCustomerTransactions = function(req, res) {
       })
 
     })
-
 }
 
 exports.createCustomer = function(req, res) {

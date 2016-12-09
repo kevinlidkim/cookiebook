@@ -101,6 +101,7 @@ module.exports = function(app, passport) {
 
   app.post('/isEmployee', users.isEmployee);
   app.post('/createAd', employees.createAd);
+  app.get('/loadTop5AdsEmployee', employees.loadTop5AdsEmployee);
   app.post('/loadEmployeeAds', employees.loadEmployeeAds);
   app.post('/deleteEmployeeAd', employees.deleteEmployeeAd);
   app.post('/loadSuggestedAds', employees.loadSuggestedAds);
@@ -110,9 +111,11 @@ module.exports = function(app, passport) {
 
   app.post('/isManager', users.isManager);
   app.get('/loadAllAds', managers.loadAllAds);
+  app.get('/loadTop5Ads', managers.loadTop5Ads);
   app.post('/loadMonthlyReport', managers.loadMonthlyReport);
   app.post('/salesSearchUser', managers.salesSearchUser);
   app.post('/salesSearchItem', managers.salesSearchItem);
+  app.post('/salesSearchItemType', managers.salesSearchItemType);
   app.post('/companySearch', managers.companySearch);
   app.get('/getRichestUser', managers.getRichestUser);
   app.get('/getBestEmployee', managers.getBestEmployee);

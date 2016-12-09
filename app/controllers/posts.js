@@ -24,8 +24,8 @@ exports.findAll2 = function(req, res) {
 
 exports.makePost = function(req, res) {
 
-  console.log("making post:")
-  console.log(req.body);
+  //console.log("making post:")
+  //console.log(req.body);
 
   db.Post.create(req.body)
     .then(function(post) {
@@ -56,7 +56,7 @@ exports.makePost = function(req, res) {
           }
         }).then(function(data) {
 
-          console.log("Successfully increased post Count in pageId: " + newRelation.page);
+          //console.log("Successfully increased post Count in pageId: " + newRelation.page);
 
         })
       })
@@ -130,18 +130,18 @@ exports.deletePost = function(req, res) {
             }).then(function(data) {
 
               postedOn.destroy();
-              console.log("Deleted postedOn relation.");
+              //console.log("Deleted postedOn relation.");
 
               if(likesPost != null){
 
                   likesPost.destroy();                         //SOMETIMES HAPPENS AFTER POST.DESTORY CALL? 
-                  console.log("delted likesPost relation");
+                  //console.log("delted likesPost relation");
 
               }
 
               post.destroy();
-              console.log("DELETED post");
-              console.log("Successfully decreased post Count in pageId: " + page);
+              //console.log("DELETED post");
+              //console.log("Successfully decreased post Count in pageId: " + page);
 
             })
           })

@@ -23,7 +23,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-var port = process.env.PORT || 8001; // set our port
+var port = process.env.PORT || 80; // set our port
 
 // get all data/stuff of the body (POST) parameters
 app.use(bodyParser.json()); // parse application/json 

@@ -35,10 +35,23 @@
     </form>
   </div>
 
-  <h2>List of Advertisements</h2>
-  <div ng-repeat="employeeAd in storage.employee.ads">
-    <p class="in-line_add">{{employeeAd.itemName}} ({{employeeAd.adType}}) by {{employeeAd.company}}</p>
-    <button type="submit" class="btn btn-default" ng-click="deleteEmployeeAd(employeeAd)">Delete</button>
-  </div>
 
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6" ng-init="loadTop5AdsEmployee()">
+        <h3>BestSelling Items</h3>
+        <div ng-repeat="ads in storage.employee.top5adsEmpolyee">
+          <p class="in-line_add">{{ads.itemName}} : {{ads.numberOfUnits}} sold</p>
+        </div>
+      </div>
+
+      <div class="col-md-6" >
+        <h3>List of Advertisements</h3>
+        <div ng-repeat="employeeAd in storage.employee.ads">
+          <p class="in-line_add">{{employeeAd.itemName}} ({{employeeAd.adType}}) by {{employeeAd.company}}</p>
+          <button type="submit" class="btn btn-default" ng-click="deleteEmployeeAd(employeeAd)">Delete</button>
+        </div>
+      </div>
+      </div>
+  </div>
 </div>

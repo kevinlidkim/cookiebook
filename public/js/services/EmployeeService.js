@@ -21,6 +21,16 @@ angular.module('EmployeeServ', []).factory('EmployeeService', ['$q', '$timeout',
           console.log(data);
         })
     },
+    
+    loadTop5Ads : function() {
+      return $http.get('/loadTop5AdsEmployee')
+      .success(function(data) {
+          //console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
 
     deleteEmployeeAd : function(obj) {
       return $http.post('/deleteEmployeeAd', obj)

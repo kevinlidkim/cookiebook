@@ -33,6 +33,76 @@ angular.module('EmployeeCtrl', []).controller('EmployeeController', ['$scope', '
       })
   }
 
+  $scope.loadTop5AdsEmployee = function() {
+
+    var allAdsId_UnitSold = [];
+    var allAdsName = [];
+    var top5Ads = [];
+    var employeeId = $scope.storage.employee.employeeId;
+
+    EmployeeService.loadTop5Ads()
+    .then(function(ads) {
+
+      var adArray = ads.data.data.advertisement;
+      var salesArray = ads.data.data.sales;
+      var adPostedByArray = ads.data.data.adPostedBy;
+
+      for(var i =0 ; i < adArray.length; i++){
+        allAdsId_UnitSold[adArray[i].advertisementId] = 0;
+      }
+
+      for(var i = 0; i < salesArray.length; i++) {
+
+        for(var j =0 ; j < adArray.length; j++){
+
+          if(salesArray[i].advertisementId == adArray[j].advertisementId){
+            allAdsId_UnitSold[adArray[j].advertisementId] += salesArray[i].numberOfUnits;
+            allAdsName[adArray[j].advertisementId] = adArray[j].itemName;
+          }
+        }
+      }
+
+      for(var i = 0; i < 5; i++){
+
+        var bestSellingAdId = 0;
+        var currBestSelling = 0;
+        var bestSellingCount = 0;
+
+        for(var j = 0; j < allAdsId_UnitSold.length; j++){
+
+          if(allAdsId_UnitSold[j] != null && allAdsId_UnitSold[j] > currBestSelling) {
+
+            for(var k = 0; k < adPostedByArray.length; k++) {
+                if(adPostedByArray[k].advertisement == j && employeeId == adPostedByArray[k].employee){ //&& is this emplyoee
+
+                  currBestSelling = allAdsId_UnitSold[j];
+                  bestSellingCount = allAdsId_UnitSold[j];
+                  bestSellingAdId = j;
+
+                }
+              }
+
+            }
+
+          }
+
+          if(allAdsName[bestSellingAdId] != null){
+            var bestSellingObj = {
+              itemId: bestSellingAdId,
+              itemName: allAdsName[bestSellingAdId],
+              numberOfUnits: bestSellingCount
+            }
+
+            allAdsId_UnitSold[bestSellingAdId] = 0;
+            top5Ads[i] = bestSellingObj;
+          }
+          
+        }
+
+        $scope.storage.employee.top5adsEmpolyee = top5Ads;
+      })
+  }
+
   $scope.deleteEmployeeAd = function(ad) {
     var employeeAd = ad;
     EmployeeService.deleteEmployeeAd(ad)

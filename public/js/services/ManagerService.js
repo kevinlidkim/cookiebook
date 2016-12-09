@@ -11,6 +11,15 @@ angular.module('ManagerServ', []).factory('ManagerService', ['$q', '$timeout', '
           console.log(data);
         })
     },
+    loadTop5Ads : function() {
+      return $http.get('/loadTop5Ads')
+      .success(function(data) {
+          //console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
     loadMonthlyReport : function(obj) {
       return $http.post('/loadMonthlyReport', obj)
         .success(function(data) {
@@ -32,7 +41,16 @@ angular.module('ManagerServ', []).factory('ManagerService', ['$q', '$timeout', '
     salesSearchItem : function(obj) {
       return $http.post('/salesSearchItem', obj)
         .success(function(data) {
-          // console.log(data);
+          //console.log(data);
+        })
+        .error(function(data) {
+          console.log(data);
+        })
+    },
+    salesSearchItemType : function(obj) {
+      return $http.post('/salesSearchItemType', obj)
+        .success(function(data) {
+           //console.log(data);
         })
         .error(function(data) {
           console.log(data);

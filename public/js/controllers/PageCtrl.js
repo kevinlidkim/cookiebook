@@ -10,7 +10,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
   $scope.commented_On={};
   $scope.posted_By={};
   $scope.posted_By_PersonId=[];
-  //$scope.isMyComment={};
   $scope.groupSearch = "";
   $scope.searched = false;
 
@@ -107,8 +106,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
         commentCount: 0,
         likes: 0
       };
-
-      console.log($scope.storage);
 
       PageService.postStatus(data)
         .then(function() {
@@ -252,9 +249,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
 
   $scope.postFriendComment = function(index, postId) {
 
-    console.log($scope.newFriendComment[index]);
-    console.log($scope.newFriendComment[index]);
-
     if ($scope.newFriendComment[index] !="" && $scope.newFriendComment[index]) {
       var data = {
         page: $scope.storage.friendPageId,
@@ -397,10 +391,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
           $scope.commented_On[postId] = arrayCommentedOn;
           $scope.commented_By[postId] = arrayCommentedBy;
 
-          console.log(arrayCommentedBy);
-          //console.log(data.data.data);
-
-          //$scope.comment_By_PersonId.postIndex[index] = personData.data.data.personId;
     })
   }
 
@@ -425,34 +415,6 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
 
     return false
   }
-
-  // $scope.getCommentedByName = function(postId, commentIndex) {
-
-  //   var fullName;
-
-  //   if(postId != null) {
-  //     var data = {
-  //       post: postId
-  //     }
-  //   }
-
-  //   PageService.commentedBy(data)
-  //       .then(function(data){
-
-  //         var arrayCommentedBy = data.data.data.arrayCommentedBy;
-
-  //         $scope.commented_By[postId] = arrayCommentedBy;
-
-  //   })
-  //   .then(function() {
-
-  //         fullName = $scope.commented_By[postId][commentIndex].firstName + " " + $scope.commented_By[postId][commentIndex].lastName;
-
-  //         console.log(fullName);
-
-  //         return fullName;
-  //   })
-  // }
 
   $scope.postGroupStatus = function() {
     if ($scope.newGroupStatus != "") {

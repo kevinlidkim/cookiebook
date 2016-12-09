@@ -97,7 +97,7 @@ exports.deleteComment = function(req, res) {
     })
     .then(function(commentedOn) {
 
-      console.log("commentId: " + commentedOn.comment);
+      //console.log("commentId: " + commentedOn.comment);
 
       db.Comment.find({
         where: {
@@ -127,18 +127,18 @@ exports.deleteComment = function(req, res) {
             }).then(function(data) {
 
               commentedOn.destroy();
-              console.log("Deleted commentedOn relation.");
+              //console.log("Deleted commentedOn relation.");
 
               if(LikesComment != null){
 
                   LikesComment.destroy();                         ///CHECK THESE FOR NULL BEFORE DELETEING 
-                  console.log("delted LikesComment relation");
+                  //console.log("delted LikesComment relation");
 
                 }
 
                 comment.destroy();
-                console.log("DELETED COMMENT");
-                console.log("Successfully decreased comment Count in PostId: " + req.body.post);
+                //console.log("DELETED COMMENT");
+                //console.log("Successfully decreased comment Count in PostId: " + req.body.post);
 
               })
           })
