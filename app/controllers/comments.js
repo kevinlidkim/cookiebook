@@ -160,21 +160,39 @@ exports.deleteComment = function(req, res) {
 
 exports.commentedBy = function(req, res) {
 
+  // console.log(req.body.post);
+
   var data = {};
   var promiseArrayRelations = [];
   var promiseArray = [];
   var commentedByArray = [];
+  var trueComment = [];
 
   db.CommentedOn.findAll({where: {post : req.body.post}})
   .then(function(relation){
+    data.relations = relation;
+
+    // console.log(relation);
 
     _.forEach(relation, function(relation) {
+      // console.log(relation.comment);
       promiseArrayRelations[relation.comment] = relation.user;
       promiseArray.push(db.User.find({ where: {userId: relation.user} }));
-    })  
+    })
 
-    Promise.all(promiseArrayRelations).then(values1 => {
+    Promise.all(_.compact(promiseArrayRelations)).then(values1 => {
       data.arrayCommentedOn = values1;
+
+      _.forEach(data.relations, function(relation) {
+        trueComment[relation.comment] = [];
+      })
+
+      _.forEach(data.relations, function(relation) {
+        trueComment[relation.comment].push(values1);
+      })
+
+      // trueComment[relation.comment].push(values1);
+      data.trueComment = trueComment;
 
       Promise.all(promiseArray).then(values => {
         _.forEach(values, function(values){

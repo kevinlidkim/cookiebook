@@ -384,11 +384,20 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
     PageService.commentedBy(data)
         .then(function(data){
 
-          var arrayCommentedOn = data.data.data.arrayCommentedOn;
+          // var arrayCommentedOn = data.data.data.arrayCommentedOn;
           var arrayCommentedBy = data.data.data.arrayCommentedBy;
+          var arrayCommentedOn = data.data.data.trueComment;
 
           $scope.commented_On[postId] = arrayCommentedOn;
           $scope.commented_By[postId] = arrayCommentedBy;
+
+          // console.log(data.data.data);
+          // console.log(arrayCommentedOn);
+
+          // console.log(data.data.data.trueComment[0]);
+
+          // console.log($scope.commented_By);
+          // console.log($scope.commented_On);
 
     })
   }
@@ -396,8 +405,13 @@ angular.module('PageCtrl', []).controller('PageController', ['$scope', '$localSt
 
   $scope.isMyComment = function(postId, commentId) {
 
+    console.log(postId + " and " + commentId);
+
     if($scope.commented_On[postId] != null){
-      if($scope.commented_On[postId][commentId] == $scope.storage.user.personId) {
+      // console.log($scope.storage.user.userId);
+      // console.log($scope.commented_On[postId][commentId][0]);
+      // console.log($scope.commented_On[postId][commentId][0].includes($scope.storage.user.userId));
+      if($scope.commented_On[postId][commentId][0].includes($scope.storage.user.userId)) {
         return true;
       }
     }

@@ -45,7 +45,7 @@
     <div class="mdl-card__supporting-text">
       <div class="comment_card_wide mdl-card mdl-shadow--2dp" ng-repeat="comment in posts.comments" ng-init="comment_Id=comment.commentId; commentIndex=$index">
 
-        <div ng-if="isMyComment(post_Id,comment_Id) || isGroupOwner()">
+        <div ng-if="isGroupOwner() || isMyComment(post_Id,comment_Id)">
           <button ng-show="!commentEditPressed" type="button" class="btn btn-warning" ng-click="commentEditPressed=!commentEditPressed" ng-init="commentEditPressed=false">Edit</button>
           <button ng-show="commentEditPressed" type="button" class="btn btn-success" ng-click="updateComment(editComment, comment.commentId, 'groupPage'); commentEditPressed=!commentEditPressed">Submit</button>
           <button type="button" class="btn btn-danger" ng-click="deleteComment(comment.commentId)">DELETE</button> 
