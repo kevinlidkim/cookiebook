@@ -18,6 +18,14 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
   $scope.customerCreated = false;
   $scope.employeeCreated = false;
 
+  $scope.searchFieldItemRevenue = "";
+  $scope.searchFieldItemTypeRevenue = "";
+  $scope.searchFieldCustomerRevenue = "";
+  $scope.searchedItemRevenue = false;
+  $scope.salesItemTotalSold = 0;
+  $scope.salesItemTotalRevenue = 0;
+
+
   $scope.loadSalesPage = function() {
     $scope.loadAllAds();
     $scope.getRichestUser();
@@ -60,6 +68,80 @@ angular.module('ManagerCtrl', []).controller('ManagerController', ['$scope', '$l
           $scope.salesSearchUser = results.data.data;
         })
     }
+  }
+
+  $scope.salesSearchItemRevenue = function() {
+
+    $scope.salesItemName = $scope.searchFieldItemRevenue;
+    var unitsSold = 0;
+    var totalRevenue = 0;
+
+    if ($scope.searchFieldItemRevenue && $scope.searchFieldItemRevenue != "") {
+      var obj = {
+        query: $scope.searchFieldItemRevenue
+      }
+
+      $scope.searchedItemRevenue = true;
+
+      ManagerService.salesSearchItem(obj)
+        .then(function(sales) {
+          $scope.salesSearchItem = sales.data.data;
+
+          if($scope.salesSearchItem != null){
+
+            for(var i = 0; i < $scope.salesSearchItem.length; i++) {
+              unitsSold += $scope.salesSearchItem[i].numberOfUnits;
+              totalRevenue += $scope.salesSearchItem[i].unitPrice * $scope.salesSearchItem[i].numberOfUnits;
+            }
+
+            $scope.salesItemTotalSold = unitsSold;
+            $scope.salesItemTotalRevenue = totalRevenue;
+
+          }
+        })
+      // ManagerService.salesSearchUser(obj)
+      //   .then(function(results) {
+      //     $scope.salesSearchUser = results.data.data;
+      //   })
+    }
+
+  }
+
+  $scope.salesSearchItemTypeRevenue = function() {
+
+    $scope.salesItemTypeName = $scope.searchFieldItemTypeRevenue;
+    var unitsSold = 0;
+    var totalRevenue = 0;
+
+    if ($scope.searchFieldItemTypeRevenue && $scope.searchFieldItemTypeRevenue != "") {
+      var obj = {
+        query: $scope.searchFieldItemTypeRevenue
+      }
+
+      $scope.searchedItemTypeRevenue = true;
+
+      ManagerService.salesSearchItemType(obj)
+        .then(function(sales) {
+          $scope.salesSearchItemType = sales.data.data;
+          
+          if($scope.salesSearchItemType != null){
+
+            for(var i = 0; i < $scope.salesSearchItemType.length; i++) {
+              unitsSold += $scope.salesSearchItemType[i].numberOfUnits;
+              totalRevenue += $scope.salesSearchItemType[i].unitPrice * $scope.salesSearchItemType[i].numberOfUnits;
+            }
+
+            $scope.salesItemTypeTotalSold = unitsSold;
+            $scope.salesItemTypeTotalRevenue = totalRevenue;
+
+          }
+        })
+      // ManagerService.salesSearchUser(obj)
+      //   .then(function(results) {
+      //     $scope.salesSearchUser = results.data.data;
+      //   })
+    }
+
   }
 
   $scope.companySearch = function() {
